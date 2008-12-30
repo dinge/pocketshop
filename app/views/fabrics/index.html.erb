@@ -1,0 +1,15 @@
+<%= navigation %>
+
+<ul>
+  <% @fabrics_array.each do |fabric| %>
+    <li>
+      <%= quick_view_for(fabric) %>
+    </li>
+  <% end %>
+</ul>
+
+
+
+
+<%#= @fabrics.first.class %>
+<%#= @fabrics_array.map(&:id).join('<br />') %>
