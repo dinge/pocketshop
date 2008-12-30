@@ -10,10 +10,8 @@ class FabricsController < ApplicationController
   end
 
   def create
-    # sssssssssssssss
     @fabric = Fabric.create(params[:fabric])
-    render :nothing => true
-    # redirect_to edit_fabric_path(@fabric)
+    redirect_to edit_fabric_path(@fabric)
   end
 
   def show
@@ -26,7 +24,7 @@ class FabricsController < ApplicationController
 
   def update
     @fabric = Fabric.find(params[:id])
-    @fabric.update_attributes(params[:fabric])    
+    @fabric.update_attributes(params[:fabric])
     redirect_to edit_fabric_path(@fabric)
   end
 
@@ -35,21 +33,5 @@ class FabricsController < ApplicationController
     @fabric.destroy
     redirect_to fabrics_path
   end
-
-
-
-
-  # def index
-  #   fabric = Fabric.create(:name => Time.now, :hallo => 'du')
-  #   @fabrics = Fabric.find(:all)
-  #   @fabrics_array = @fabrics.to_a
-  # end
-  # 
-  # def things
-  #   thing = Thing.new
-  #   thing.harras = Date.today.to_s
-  #   thing.save
-  #   @things = Thing.all
-  # end
 
 end
