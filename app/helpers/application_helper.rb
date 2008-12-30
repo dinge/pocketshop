@@ -1,6 +1,11 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
+  def navigation
+    link_to('list', fabrics_path) + ' ' +
+    link_to('new', new_fabric_path) + '<hr />'
+  end
+
   def quick_view_for(object)
     s = '<dl>'
     (object.class.field_names + [:id]).each do |field_name|
@@ -12,7 +17,7 @@ module ApplicationHelper
     s << " "
     s << link_to('edit', send("edit_#{object.class.name.underscore}_path", object))
     s << " "
-    s << link_to('destroy', send("#{object.class.name.underscore}_path", object), :method => :delete)
+    s << link_to('destroy', send("#{object.class.name.underscore}_path", object), :method => :delete, :confirm => 'sure ?')
     s
   end
 

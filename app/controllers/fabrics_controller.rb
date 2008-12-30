@@ -2,7 +2,6 @@ class FabricsController < ApplicationController
 
   def index
     @fabrics = Fabric.find(:all)
-    @fabrics_array = @fabrics.to_a
   end
 
   def new
