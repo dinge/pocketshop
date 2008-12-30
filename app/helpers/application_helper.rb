@@ -1,8 +1,8 @@
 module ApplicationHelper
 
   def navigation
-    link_to('list', fabrics_path) + ' ' +
-    link_to('new', new_fabric_path) + '<hr />'
+    link_to('list', concepts_path) + ' ' +
+    link_to('new', new_concept_path) + '<hr />'
   end
 
   def quick_view_for(object, options = {})

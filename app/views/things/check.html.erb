@@ -1,1 +1,36 @@
-<% $db %>
+<% 
+
+piece_1 = Piece.new do |p|
+  p.name = 'Piece_1'
+  p.type = 'text'
+end
+
+piece_2 = Piece.new do |p|
+  p.name = 'Piece_2'
+  p.type = 'text'
+end
+
+# concept = Concept.new do |f|
+#   f.name = "meine concept"
+#   f.pieces << piece_1
+#   f.pieces << piece_2
+# end
+
+concept = Concept.find('495a7048512fb43f00ef1ea3')
+concept.pieces = []
+
+concept.pieces << piece_1
+concept.pieces << piece_2
+
+concept.save
+
+concept = Concept.find('495a7048512fb43f00ef1ea3')
+%>
+
+<hr />
+
+<%= concept.id %>
+<%= concept.name %>
+<%= concept.updated_at %>
+<%= concept.pieces.map(&:name) %>
+<%= concept.pieces.map(&:type) %>
