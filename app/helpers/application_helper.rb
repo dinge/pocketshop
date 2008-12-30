@@ -1,4 +1,3 @@
-# Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
   def navigation
@@ -6,9 +5,11 @@ module ApplicationHelper
     link_to('new', new_fabric_path) + '<hr />'
   end
 
-  def quick_view_for(object)
+  def quick_view_for(object, options = {})
+    fields = options[:fields] || object.class.field_names + [:id]
+    
     s = '<dl>'
-    (object.class.field_names + [:id]).each do |field_name|
+    fields.each do |field_name|
       s << "<dt>#{field_name}</dt>"
       s << "<dd>#{object.send(field_name)}</dd>"
     end

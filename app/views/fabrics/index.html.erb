@@ -3,7 +3,7 @@
 <ul>
   <% @fabrics.each do |fabric| %>
     <li>
-      <%= quick_view_for(fabric) %>
+      <%= quick_view_for(fabric, :fields => [:name, :updated_at, :created_at]) %>
     </li>
   <% end %>
 </ul>
