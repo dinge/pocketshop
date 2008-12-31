@@ -1,7 +1,6 @@
 class Concept < XGen::Mongo::Base
+  collection_name :concepts
   fields :name, :created_at, :updated_at, :version
-
-  # has_one :plan
-  has_many :pieces, :class_name => 'Piece'
-
+  has_many :units, :class_name => 'Unit'
+  # has_many :embedded_concepts, :class_name => 'Concept'
 end
