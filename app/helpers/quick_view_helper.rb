@@ -100,7 +100,6 @@ module QuickViewHelper
     s << '</dl>'
   end
 
-
   def filter_field_names(object, field_names, options)
     if except = options[:except]
       field_names - except

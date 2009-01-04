@@ -61,3 +61,20 @@ legend {
 legend .object_control {
   font-size: .6em;
 }
+
+
+/* ----------------------- lists ------------------------------------------------*/
+
+dl{
+  margin: 0 0 1em;
+}
+
+dt {
+  color: #555;
+  font-weight: bold;
+}
+
+dd {
+  margin: 0px 20px;
+}
+   

@@ -1,4 +1,5 @@
 <a name="<%= unit.id || 'new_unit' %>"></a>  
+
 <% form_for "unit[#{unit.name}]", unit,
     :url => unit.new_record? ? concept_units_path(@concept) : concept_unit_path(@concept, unit),
     :html => { :method => unit.new_record? ? :post : :put } do |form| %>
@@ -22,6 +23,3 @@
   <% end %>
 
 <% end %>
-
-
-
