@@ -1,0 +1,33 @@
+<% form_for :unit, unit, 
+    :url => unit.new_record? ? concept_units_path : concept_unit_path,
+    :html => {:method => unit.new_record? ? :post : :put} do |form| %>
+
+  <%= quick_form_fields_for form, 
+        :except => [:type, :_plan] %>
+
+  <%= form.select :type, 
+        Unit::Plan::Base.available_plans.map(&:human_name),
+        { :selected => unit.new_record? ? '' : @unit.plan.class.human_name },
+        :disabled => unit.new_record? ? false : true %>
+
+  <%= form.submit %>
+<% end %>
+
+
+
+
+
+
+
+OLD VIEW 
+
+<%= quick_view_for([unit, @concept], :only => [:name, :required, :type]) %>
+
+<h4>fields</h4>
+<% unit.plan.field_names.each do |field_name| %>
+  <%= field_name %> : <%= unit.plan.send(field_name)  %><br />
+<% end %><br />
+
+<h4>presets</h4>
+<%= unit.plan.presets.to_json %>
+<hr />

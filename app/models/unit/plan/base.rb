@@ -2,6 +2,7 @@ class Unit
   module Plan
     class Base < XGen::Mongo::Subobject
       Presets = {}
+      @@available_plans = []
 
       def initialize(row = {})
         super(row)
@@ -16,6 +17,19 @@ class Unit
         self.class.field_names
       end
 
+      def self.available_plans
+        [
+          Unit::Plan::Text,
+          Unit::Plan::Integer,
+          Unit::Plan::Collection,
+          Unit::Plan::Boolean
+        ]
+      end
+
+      def self.human_name
+        name.gsub(/Unit::Plan::/, '')
+      end
+
       protected
 
       def set_presets
@@ -23,6 +37,7 @@ class Unit
           send("#{field_name}=", value) if send("#{field_name}").blank?
         end
       end
+
     end
   end
 end

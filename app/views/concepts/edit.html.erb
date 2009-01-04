@@ -1,6 +1,28 @@
 <%= navigation %>
 
 <% form_for @concept do |form| %>
-  <%= quick_form_fields_for(form) %>
-  <%= form.submit %>
+  <% field_set_tag "concept #{@concept.name}" do %>  
+
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+
+    <%= submit_button %>
+  <% end %>
 <% end %>
+
+<% unless @concept.new_record? %>
+  <%= link_to('(x)', concept_path(@concept), :method => :delete, :confirm => 'sure?') %>
+<% end %>
+
+<h3>units</h3>
+
+<%= link_to('new unit', "#new_unit") %> 
+<% @concept.units.each do |unit| %>
+  <%= link_to(unit.name, "##{unit.id}") %> 
+<% end %>
+
+
+<%= render :partial => @concept.units %>
+<hr />
+<h3>new unit</h3>
+<%= render :partial => Unit.new %>

@@ -1,0 +1,10 @@
+<% form_for :unit, @unit, :url => concept_units_path do |form| %>
+
+  <%= quick_form_fields_for form, 
+        :except => [:type, :_plan] %>
+
+  <%= form.select :type, 
+        Unit::Plan::Base.available_plans.map(&:human_name) %>
+
+  <%= form.submit %>
+<% end %>

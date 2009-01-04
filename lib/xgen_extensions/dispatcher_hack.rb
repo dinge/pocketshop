@@ -6,7 +6,7 @@ module ActionController
         @request = CgiRequest.new(cgi, session_options)
 
         @request.env['RAW_POST_DATA'] = nil # resetting this
-
+        @request.env['HTTP_IF_MODIFIED_SINCE'] = nil
         @response = CgiResponse.new(cgi)
         dispatch
       end

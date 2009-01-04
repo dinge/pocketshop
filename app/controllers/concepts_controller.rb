@@ -66,7 +66,7 @@ class ConceptsController < ApplicationController
   def destroy
     @concept.destroy
     respond_to do |format|
-      format.html { redirect_to concept_path }
+      format.html { redirect_to concepts_path }
       format.xml  { head :ok }
       format.json { head :ok }
     end
@@ -76,6 +76,6 @@ class ConceptsController < ApplicationController
   private
 
   def init_concept
-    @concept = Concept.find(params[:id])
+    @concept = Concept.find(params[:id]) rescue raise(ActiveRecord::RecordNotFound)
   end
 end

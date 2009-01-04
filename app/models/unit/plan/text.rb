@@ -8,6 +8,7 @@ class Unit
         :minimal_length => 1,
         :maximal_length => 1000
       }
+
     end
   end
 end

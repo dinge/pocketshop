@@ -27,12 +27,26 @@ module XGen
 
       # implemented missing attributes=() for update_attributes etc.
       # quick'n'dirty
+      # def attributes=(attributes_hash)
+      #   self.class.field_names.each do |field_name|
+      #     if attributes_hash.keys.include?(field_name.to_s)
+      #       send("#{field_name}=", attributes_hash[field_name])
+      #     end
+      #   end
+      # end
+
       def attributes=(attributes_hash)
-        self.class.field_names.each do |field_name|
-          if attributes_hash.keys.include?(field_name.to_s)
-            send("#{field_name}=", attributes_hash[field_name])
-          end
+        attributes_hash.each do |attribute_name, value|
+          init_ivar("@#{attribute_name}", value)
         end
+      end
+
+      def attributes
+        attributes_hash = {}
+        self.class.field_names.each do |field_name|
+          attributes_hash[field_name.to_s] = instance_variable_get("@#{field_name}")
+        end
+        attributes_hash
       end
 
     end

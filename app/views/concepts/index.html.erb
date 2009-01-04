@@ -3,7 +3,7 @@
 <ul>
   <% @concepts.each do |concept| %>
     <li>
-      <%= quick_view_for(concept, :fields => [:name, :updated_at, :created_at]) %>
+      <%= quick_view_for(concept, :only => [:name, :updated_at, :created_at]) %>
     </li>
   <% end %>
 </ul>

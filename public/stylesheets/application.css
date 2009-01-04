@@ -1,0 +1,12 @@
+html  {
+  text-align: center;
+}
+
+body {
+/*  font: 1em/1.4 Verdana, Arial, Helvetica, sans-serif;  */
+  margin: 1em auto;
+  width: 40em;
+  text-align: left;
+  padding: 0;
+  background: #eee;
+}
