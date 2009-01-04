@@ -1,9 +1,5 @@
-<%= navigation %>
+<%= collection_control_for %>
 
-<ul>
-  <% @concepts.each do |concept| %>
-    <li>
-      <%= quick_view_for(concept, :only => [:name, :updated_at, :created_at]) %>
-    </li>
-  <% end %>
-</ul>
+<% @concepts.each do |concept| %>
+  <%= quick_view_for(concept, :only => [:name, :updated_at, :created_at]) %>
+<% end %>

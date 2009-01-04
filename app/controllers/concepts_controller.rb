@@ -1,4 +1,5 @@
 class ConceptsController < ApplicationController
+  helper :units
   before_filter :init_concept, :only => [:show, :edit, :update, :destroy]
 
   def index

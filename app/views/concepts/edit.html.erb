@@ -1,7 +1,7 @@
-<%= navigation %>
+<%= collection_control_for %>
 
 <% form_for @concept do |form| %>
-  <% field_set_tag "concept #{@concept.name}" do %>  
+  <% field_set_tag @concept.name + styled_object_control_for(@concept) do %>  
 
     <%= form.label :name %>
     <%= form.text_field :name %>
@@ -10,17 +10,11 @@
   <% end %>
 <% end %>
 
-<% unless @concept.new_record? %>
-  <%= link_to('(x)', concept_path(@concept), :method => :delete, :confirm => 'sure?') %>
-<% end %>
-
 <h3>units</h3>
 
-<%= link_to('new unit', "#new_unit") %> 
-<% @concept.units.each do |unit| %>
-  <%= link_to(unit.name, "##{unit.id}") %> 
-<% end %>
-
+<%= control_list_container(
+      link_to('new unit', "#new_unit"), 
+      @concept.units.map{ |unit| link_to(unit.name, "##{unit.id}") } ) %>
 
 <%= render :partial => @concept.units %>
 <hr />

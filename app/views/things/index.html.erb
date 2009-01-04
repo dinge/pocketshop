@@ -1,0 +1,5 @@
+<%= collection_control_for %>
+
+<% @things.each do |thing| %>
+  <%= quick_view_for(thing, :except => Thing::InvisibleAttributesNames) %>
+<% end %>

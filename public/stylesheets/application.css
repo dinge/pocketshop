@@ -3,10 +3,61 @@ html  {
 }
 
 body {
-/*  font: 1em/1.4 Verdana, Arial, Helvetica, sans-serif;  */
+  font-family: 'Lucida Sans Unicode', 'Lucida Grande', 'Trebuchet MS', Verdana, Helvetica, Arial, sans-serif;
   margin: 1em auto;
   width: 40em;
   text-align: left;
   padding: 0;
   background: #eee;
+}
+
+
+/* ----------------------- links ------------------------------------------------*/
+
+a {
+  color: #420909;
+  text-decoration:none;
+  padding: 3px;
+}
+
+a:focus, a:hover, a:active {
+  text-decoration: none;
+  border: 1px solid #420909;
+  padding: 2px;
+}
+
+a.active {
+  border: 1px solid #420909;
+  padding: 2px;
+}
+
+
+/* ----------------------- headlines ------------------------------------------------*/
+
+h3 {
+  border-bottom: 2px #aaa dotted;
+}
+
+
+/* ----------------------- fieldsets ------------------------------------------------*/
+
+fieldset {
+  padding: 10px 30px;
+  margin: 0;
+  border: 1px solid #aaa;
+  background: #ddd;
+  margin: 10px 0px;
+}
+
+legend {
+  color: #000;
+  padding: 2px 15px;
+  margin: 0;
+  font-size: 1.4em;
+  font-weight: 400;
+  background: #aaa;
+}
+
+legend .object_control {
+  font-size: .6em;
 }

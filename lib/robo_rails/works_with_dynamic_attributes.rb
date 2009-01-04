@@ -41,7 +41,7 @@ module RoboRails
               build_attribute_reader_method(method)
               send(method)
 
-            elsif method.to_s =~ /([a-zA-Z0-9_]+)=/ && !symbolized_instance_variables.include?($1.to_sym)
+            elsif method.to_s =~ /([a-zA-Z0-9_]+)=/ #&& !symbolized_instance_variables.include?($1.to_sym)
               build_attribute_writer_method($1)
               send(method, *args)
 
