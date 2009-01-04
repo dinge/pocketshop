@@ -72,6 +72,9 @@ class ConceptsController < ApplicationController
     end
   end
 
+  def playground
+    
+  end
 
   private
 

@@ -1,13 +1,9 @@
 class ThingsController < ApplicationController
 
-  # before_filter :init_thing, :only => [:show, :edit, :update, :destroy]
+  before_filter :init_thing, :only => [:show, :edit, :update, :destroy]
 
   def index
-    Thing.delete_all
-    @thing = Thing.new(:name => 'fass', :age => rand(10))
-    @thing.save
-
-    @things = Thing.find(:all)#.to_a
+    @things = Thing.find(:all)
     respond_to do |format|
       format.html
       format.xml  { render :xml => @things }
@@ -42,13 +38,6 @@ class ThingsController < ApplicationController
   end
 
   def show
-    # thing = Thing.new('kamel')
-    # # thing.save
-    # thing.save
-    
-    @thing = Thing.find('kamel')
-
-
     respond_to do |format|
       format.html
       format.xml  { render :xml => @thing }
@@ -82,6 +71,16 @@ class ThingsController < ApplicationController
       format.json { head :ok }
     end
   end
+  
+  
+  def playground
+    Thing.delete_all
+    @thing = Thing.new(:name => 'fass', :age => rand(10))
+    @thing.save
+
+    @things = Thing.find(:all)#.to_a
+  end
+    
 
   private
 
