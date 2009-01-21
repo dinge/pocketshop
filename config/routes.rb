@@ -39,7 +39,7 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'index'
 
   map.resources :concepts, :has_many => [:units]
-  map.resources :things, :has_one => [:concept], :member => { :playground => :get }
+  map.resources :things, :has_one => [:concept], :collection => { :playground => :get }
 
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'

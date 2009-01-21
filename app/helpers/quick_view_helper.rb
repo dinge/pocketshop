@@ -5,7 +5,9 @@ module QuickViewHelper
     field_names = filter_field_names(object, object.class.field_names, options)
 
     content_tag(:fieldset) do
-      content_tag(:legend, object.name + ' ' + styled_object_control_for(object)) +
+      content_tag(:legend, link_to(object.name.to_s, send("edit_#{object.class.name.underscore}_path", object)) + 
+      ' ' +
+      styled_object_control_for(object)) +
       '<dl>' +
         field_names.map do |field_name|
           "<dt>#{field_name}</dt>" +
@@ -44,7 +46,8 @@ module QuickViewHelper
           link_to('(d)',
             send("#{first_part}_#{second_part}_path",
             object_or_objects.second, object_or_objects.first),
-            :method => :delete, :confirm => 'sure ?',
+            :method => :delete, 
+            :confirm => 'sure ?',
             :accesskey => 'd')
         ]
       end

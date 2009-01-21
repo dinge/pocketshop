@@ -3,7 +3,7 @@ class ThingsController < ApplicationController
   before_filter :init_thing, :only => [:show, :edit, :update, :destroy]
 
   def index
-    @things = Thing.find(:all)
+    @things = Thing.all
     respond_to do |format|
       format.html
       format.xml  { render :xml => @things }
@@ -22,6 +22,8 @@ class ThingsController < ApplicationController
 
   def create
     @thing = Thing.new(params[:thing])
+    @thing.class.collection_name('suppe')
+    # @thing.mal_sehen = Concept.find(:first)
 
     respond_to do |format|
       if @thing.save
@@ -71,16 +73,27 @@ class ThingsController < ApplicationController
       format.json { head :ok }
     end
   end
-  
-  
-  def playground
-    Thing.delete_all
-    @thing = Thing.new(:name => 'fass', :age => rand(10))
-    @thing.save
 
-    @things = Thing.find(:all)#.to_a
-  end
+
+  def playground
+    # Thing.delete_all
+    # @thing = Thing.new(:name => 'fass', :age => rand(10))
+    # @thing.save
+    # 
+    # @things = Thing.find(:all)#.to_a
+
+    10.times do
+      thing = Thing.new({:a => rand(100000), :b => rand(1000000) })
+      thing.class.collection_name("aaa.zzz_#{rand(2)}")
+      thing.save
+    end
+
+
+
     
+
+  end
+
 
   private
 

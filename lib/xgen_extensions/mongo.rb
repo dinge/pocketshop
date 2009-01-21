@@ -49,6 +49,10 @@ module XGen
         attributes_hash
       end
 
+      def self.all(options = {})
+        find(:all, options)
+      end
+
     end
   end
 end

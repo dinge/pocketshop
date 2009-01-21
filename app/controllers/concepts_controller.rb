@@ -3,7 +3,7 @@ class ConceptsController < ApplicationController
   before_filter :init_concept, :only => [:show, :edit, :update, :destroy]
 
   def index
-    @concepts = Concept.find(:all).to_a
+    @concepts = Concept.all
 
     respond_to do |format|
       format.html

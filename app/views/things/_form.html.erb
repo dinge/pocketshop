@@ -1,0 +1,30 @@
+<% form_for thing do |form| %>
+  <% field_set_tag 'New Thing' do %>
+
+    <%= form.label :concept %>
+    <%= form.select :concept,
+          Concept.all.map{|concept| [concept.name, concept.id]},
+          {:selected => thing.new_record? ? '' : thing.concept},
+          :disabled => thing.new_record? ? false : true %>
+
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+
+    <%= form.label :text %>
+    <%= form.text_area :text %>
+
+    <%= form.label :tags %>
+    <%= form.text_field :tags %>
+
+    <%= form.label :rating %>
+    <%= form.text_field :rating %>
+
+    <%= submit_button %>
+
+    <% unless thing.new_record? %>
+      <%= debug thing.mal_sehen.units.first.type %>
+      <%#= render :partial => 'thing_with_context_form', :locals => {:form => form, :thing => thing} %>
+    <% end %>
+
+  <% end %>
+<% end %>
