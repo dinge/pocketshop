@@ -1,1 +1,0 @@
-require 'xgen/rails/init'
