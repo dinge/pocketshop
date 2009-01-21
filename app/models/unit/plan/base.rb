@@ -1,6 +1,6 @@
 class Unit
   module Plan
-    class Base < XGen::Mongo::Subobject
+    class Base 
       Presets = {}
       @@available_plans = []
 
