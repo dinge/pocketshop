@@ -1,3 +1,6 @@
+[submodule "lib/neo4j"]
+        path = lib/neo4j
+        url = git://github.com/andreasronge/neo4j.git
 [submodule "vendor/plugins/neo4j"]
 	path = vendor/plugins/neo4j
 	url = git://github.com/andreasronge/neo4j.git
