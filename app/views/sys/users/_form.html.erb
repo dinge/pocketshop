@@ -1,0 +1,10 @@
+<% form_for @sys_user do |form| %>
+  <% field_set_with_control_for(@sys_user) do %>
+
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+
+    <%= submit_button %>
+
+  <% end %>
+<% end %>

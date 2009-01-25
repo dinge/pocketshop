@@ -5,8 +5,9 @@ module QuickViewHelper
     field_names = filter_field_names(object, object.class.property_names, options)
 
     content_tag(:fieldset) do
-      content_tag(:legend, link_to_object(object) +
-      object_control_for(object)) +
+      content_tag(:legend) do 
+        link_to_object(object) + object_control_for(object)
+      end +
       '<dl>' +
         field_names.map do |field_name|
           "<dt>#{field_name}</dt>" +
@@ -20,7 +21,7 @@ module QuickViewHelper
   def field_set_with_control_for(object)
     control = case object
       when Struct : 
-        klass_name = object.class.name.match("Neo4j::(.*)ValueObject")[1]
+        klass_name = object.class.name.match("Neo4j::(.*)ValueObject")[1].titleize
         "new #{klass_name}"
       else
         link_to_object(object) + object_control_for(object)
@@ -44,13 +45,13 @@ module QuickViewHelper
             object_or_objects.second, object_or_objects.first),
             :class => dom_class_for_active_object(:show, controller.action_name),
             :accesskey => 's') ,
-
+          
           link_to('(e)',
             send("edit_#{first_part}_#{second_part}_path",
             object_or_objects.second, object_or_objects.first),
             :class => dom_class_for_active_object(:edit, controller.action_name),
             :accesskey => 'e') ,
-
+          
           link_to('(d)',
             send("#{first_part}_#{second_part}_path",
             object_or_objects.second, object_or_objects.first),
@@ -61,23 +62,20 @@ module QuickViewHelper
       end
 
     else
-      first_part = object_or_objects.class.name.underscore
+      # first_part = object_or_objects.class.name.underscore
       object = object_or_objects
 
       control_list_container :class => [:object_control, dom_class(object)], :id => dom_id(object, :object_control) do
         [
-          link_to('s',
-            send("#{first_part}_path", object),
+          link_to('s', object,
             :class => dom_class_for_active_object(:show, controller.action_name),
             :accesskey => 's') ,
-
-          link_to('e',
-            send("edit_#{first_part}_path", object),
+          
+          link_to('e', File.join(url_for(object), 'edit'),
             :class => dom_class_for_active_object(:edit, controller.action_name),
             :accesskey => 'e') ,
-
-          link_to('d',
-            send("#{first_part}_path", object),
+          
+          link_to('d', object,
             :method => :delete, :confirm => 'sure ?',
             :accesskey => 'd')
         ]
@@ -86,17 +84,18 @@ module QuickViewHelper
   end
 
   def collection_control_for
+    base_path = File.join("/", controller.class.name.underscore.gsub(/_controller$/, ''))
+
     control_list_container :container => :div, 
       :class => [:collection_control, controller.controller_name], 
       :id => join_dom_id_elements(:collection_control, controller.controller_name) do
       [
-        link_to('list',
-          send("#{controller.controller_name}_path"),
+        link_to('list', base_path,
           :class => dom_class_for_active_object(:index, controller.action_name),
-          :accesskey => 'l') ,
-
+          :accesskey => 'l'),
+            
         link_to('new',
-          send("new_#{controller.controller_name.singularize}_path"),
+          File.join(base_path, 'new'),
           :class => dom_class_for_active_object(:new, controller.action_name),
           :accesskey => 'n')
       ]

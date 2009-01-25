@@ -18,8 +18,12 @@ module NavigationHelper
         link_to('tags',
           tags_path,
           :class => dom_class_for_active_object(:tags, controller.controller_name),
-          :accesskey => 't')
-          
+          :accesskey => 't'),
+
+        link_to('users',
+          sys_users_path,
+          :class => dom_class_for_active_object(:users, controller.controller_name),
+          :accesskey => 'u')
       ]
     end
   end
@@ -51,7 +55,7 @@ module NavigationHelper
   end
 
   def link_to_object(object)
-    link_to(object.name.to_s, send("edit_#{object.class.name.underscore}_path", object))
+    link_to(object.name.to_s, File.join(url_for(object), 'edit'))
   end
 
   def join_dom_classes_from_options!(options)
@@ -67,7 +71,7 @@ module NavigationHelper
   def footer_navigation
     control_list_container :container => :div, :id => :footer_navigation, :class => :navigation do
       [
-        "me: #{Me.now.name}",
+        "me: #{link_to(Me.now.name, me_index_path)}",
         "last action at: #{Me.now.last_action_at.to_formatted_s(:db)}"
       ]
     end

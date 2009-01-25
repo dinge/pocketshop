@@ -9,7 +9,7 @@
     <div class="document">
       <a name="top" />
       <%= main_navigation %>
-      <%= collection_control_for %>
+      <%= collection_control_for unless @discard_collection_conrtrol %>
       <div class="content">
         <div class="scope"><%= yield %></div>
         <%= scope_navigation %>

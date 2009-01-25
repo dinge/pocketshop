@@ -11,3 +11,7 @@
 
   <% end %>
 <% end %>
+
+<% if @concept.is_a?(Concept) %>
+  <%= @concept.tags.map(&:name) %>
+<% end %>  

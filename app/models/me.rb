@@ -1,7 +1,5 @@
 class Me
 
-  def self.now
-    Sys::User.current
-  end
+  cattr_accessor :now
 
 end

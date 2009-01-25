@@ -1,4 +1,11 @@
 class Thing
+  is_a_neo_node :with_meta_info => true,
+                :dynamic_properties => true
+  
+  property :name, :text
+  index :name, :text
+  
+  
   # collection_name :things
   # fields :name, :text, :created_at, :updated_at, :version, :rating, :tags
   # 

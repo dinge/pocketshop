@@ -3,7 +3,7 @@ class ThingsController < ApplicationController
   before_filter :init_thing, :only => [:show, :edit, :update, :destroy]
 
   def index
-    @things = Thing.all
+    @things = Thing.all.nodes
     respond_to do |format|
       format.html
       format.xml  { render :xml => @things }
@@ -12,7 +12,7 @@ class ThingsController < ApplicationController
   end
 
   def new
-    @thing = Thing.new
+    @thing = Thing.value_object.new
     respond_to do |format|
       format.html
       format.xml  { render :xml => @thing }
@@ -21,12 +21,10 @@ class ThingsController < ApplicationController
   end
 
   def create
-    @thing = Thing.new(params[:thing])
-    @thing.class.collection_name('suppe')
-    # @thing.mal_sehen = Concept.find(:first)
+    @thing = Thing.new
 
     respond_to do |format|
-      if @thing.save
+      if @thing.update(params[:thing])
         flash[:notice] = 'successfully created.'
         format.html { redirect_to edit_thing_path(@thing) }
         format.xml  { render :xml => @thing, :status => :created, :location => @thing }
@@ -52,7 +50,7 @@ class ThingsController < ApplicationController
 
   def update
     respond_to do |format|
-      if @thing.update_attributes(params[:thing])
+      if @thing.update(params[:thing])
         flash[:notice] = 'successfully updated.'
         format.html { redirect_to edit_thing_path(@thing) }
         format.xml  { head :ok }
@@ -66,7 +64,7 @@ class ThingsController < ApplicationController
   end
 
   def destroy
-    @thing.destroy
+    @thing.delete
     respond_to do |format|
       format.html { redirect_to things_path }
       format.xml  { head :ok }
@@ -74,31 +72,10 @@ class ThingsController < ApplicationController
     end
   end
 
-
-  def playground
-    # Thing.delete_all
-    # @thing = Thing.new(:name => 'fass', :age => rand(10))
-    # @thing.save
-    # 
-    # @things = Thing.find(:all)#.to_a
-
-    10.times do
-      thing = Thing.new({:a => rand(100000), :b => rand(1000000) })
-      thing.class.collection_name("aaa.zzz_#{rand(2)}")
-      thing.save
-    end
-
-
-
-    
-
-  end
-
-
   private
 
   def init_thing
-    @thing = Thing.find(params[:id])# rescue raise(ActiveRecord::RecordNotFound)
+    @thing = Thing.load(params[:id])
   end
 
 end

@@ -41,6 +41,11 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :concepts, :has_many => [:units], :collection => { :delete_all => :get }
   map.resources :things, :has_one => [:concept], :collection => { :playground => :get }
   map.resources :tags
+  map.resources :me
+
+  map.namespace :sys do |sys|
+    sys.resources :users
+  end
 
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'

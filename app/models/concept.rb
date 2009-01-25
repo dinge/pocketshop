@@ -7,7 +7,7 @@ class Concept
 
 
   has_n(:units)
-
+  has_n(:tags).to(Tag).relation(Tagging)
 
   # collection_name :concepts
   # fields :name, :text, :created_at, :updated_at, :version

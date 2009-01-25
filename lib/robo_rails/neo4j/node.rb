@@ -61,6 +61,16 @@ module RoboRails
           properties_info.keys
         end
 
+        # TODO: does'n scale, alle objects are loaded, but works for my test as interface
+        def first
+          all.nodes.to_a.first
+        end
+
+        def last
+          all.nodes.to_a.last
+        end
+
+
       end
 
 
