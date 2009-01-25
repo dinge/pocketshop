@@ -3,12 +3,15 @@ class ConceptsController < ApplicationController
   before_filter :init_concept, :only => [:show, :edit, :update, :destroy]
 
   def index
-    @concepts = Concept.all.nodes
-
-    respond_to do |format|
-      format.html
-      format.xml  { render :xml => @concepts }
-      format.json { render :json => @concepts }
+    @concepts = Concept.all.nodes.to_a
+    if @concepts.empty?
+      redirect_to new_concept_path
+    else
+      respond_to do |format|
+        format.html
+        format.xml  { render :xml => @concepts }
+        format.json { render :json => @concepts }
+      end
     end
   end
 

@@ -13,8 +13,20 @@ module NavigationHelper
         link_to('concepts',
           concepts_path,
           :class => dom_class_for_active_object(:concepts, controller.controller_name),
-          :accesskey => 'c')
+          :accesskey => 'c'),
+
+        link_to('tags',
+          tags_path,
+          :class => dom_class_for_active_object(:tags, controller.controller_name),
+          :accesskey => 't')
+          
       ]
+    end
+  end
+
+  def scope_navigation
+    content_tag :div, :class => :scope_navigation do
+      tags
     end
   end
 

@@ -4,7 +4,7 @@
 class ApplicationController < ActionController::Base
   # helper :all # include all helpers, all the time
 
-  helper :form, :navigation, :quick_view
+  helper :form, :navigation, :quick_view, :tag
 
 
   before_filter :update_current_users_last_action_at

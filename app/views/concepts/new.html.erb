@@ -1,13 +1,1 @@
-<% form_for @concept do |form| %>
-  <% field_set_tag 'New Concept' do %>
-
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-
-    <%= form.label :text %>
-    <%= form.text_area :text %>
-    
-    <%= submit_button %>
-
-  <% end %>
-<% end %>
+<%= render :partial => "form" %>

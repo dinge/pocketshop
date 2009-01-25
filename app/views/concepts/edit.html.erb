@@ -1,15 +1,4 @@
-<% form_for @concept do |form| %>
-  <% field_set_tag link_to_object(@concept) + object_control_for(@concept) do %>  
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-    
-    <%= form.label :text %>
-    <%= form.text_area :text %>
-
-    <%= submit_button %>
-  <% end %>
-<% end %>
-
+<%= render :partial => "form" %>
 <!-- <h3>units</h3> -->
 
 <%#= control_list_container(

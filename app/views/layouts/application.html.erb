@@ -10,7 +10,11 @@
       <a name="top" />
       <%= main_navigation %>
       <%= collection_control_for %>
-      <div class="content"><%= yield %></div>
+      <div class="content">
+        <div class="scope"><%= yield %></div>
+        <%= scope_navigation %>
+      </div>
+      <hr style="clear: both;" />
       <%= footer_navigation %>
     </div>
   </body>

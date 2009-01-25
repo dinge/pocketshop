@@ -2,7 +2,7 @@
 
 .document{
   margin: 1em auto;
-  width: 40em;
+  width: 760px;
 }
 
 .navigation{
@@ -15,7 +15,21 @@
 }
 
 .content{
+  
 }
+
+.scope{
+  width: 550px;
+  float: left;
+}
+
+.scope_navigation{
+  margin: 10px;
+  width: 180px;
+  float: right;
+  font-size: .8em;
+}
+
 
 #footer_navigation {
   font-size: 0.8em;
@@ -30,6 +44,6 @@
   font-size: 1.0em;
 }
 
-legend .object_control {
+legend .object_control{
   font-size: 0.6em;
 }

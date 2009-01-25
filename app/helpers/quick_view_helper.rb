@@ -17,6 +17,20 @@ module QuickViewHelper
 
   end
 
+  def field_set_with_control_for(object)
+    control = case object
+      when Struct : 
+        klass_name = object.class.name.match("Neo4j::(.*)ValueObject")[1]
+        "new #{klass_name}"
+      else
+        link_to_object(object) + object_control_for(object)
+    end
+    
+    field_set_tag(control) do
+      yield
+    end
+  end
+
 
   def object_control_for(object_or_objects)
     if object_or_objects.is_a?(Array)
