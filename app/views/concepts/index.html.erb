@@ -1,5 +1,3 @@
-<%= collection_control_for %>
-
 <% @concepts.each do |concept| %>
-  <%= quick_view_for(concept, :only => [:definition]) %>
+  <%= quick_view_for(concept, :only => [:text]) %>
 <% end %>

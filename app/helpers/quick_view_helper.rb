@@ -5,9 +5,8 @@ module QuickViewHelper
     field_names = filter_field_names(object, object.class.property_names, options)
 
     content_tag(:fieldset) do
-      content_tag(:legend, link_to(object.name.to_s, send("edit_#{object.class.name.underscore}_path", object)) + 
-      ' ' +
-      styled_object_control_for(object)) +
+      content_tag(:legend, link_to_object(object) +
+      object_control_for(object)) +
       '<dl>' +
         field_names.map do |field_name|
           "<dt>#{field_name}</dt>" +
@@ -18,11 +17,6 @@ module QuickViewHelper
 
   end
 
-  def styled_object_control_for(object_or_objects)
-    content_tag(:span, :class => :object_control) do
-      object_control_for(object_or_objects)
-    end
-  end
 
   def object_control_for(object_or_objects)
     if object_or_objects.is_a?(Array)
@@ -56,9 +50,9 @@ module QuickViewHelper
       first_part = object_or_objects.class.name.underscore
       object = object_or_objects
 
-      control_list_container do
+      control_list_container :class => [:object_control, dom_class(object)], :id => dom_id(object, :object_control) do
         [
-          link_to("s",
+          link_to('s',
             send("#{first_part}_path", object),
             :class => dom_class_for_active_object(:show, controller.action_name),
             :accesskey => 's') ,
@@ -78,7 +72,9 @@ module QuickViewHelper
   end
 
   def collection_control_for
-    control_list_container do
+    control_list_container :container => :div, 
+      :class => [:collection_control, controller.controller_name], 
+      :id => join_dom_id_elements(:collection_control, controller.controller_name) do
       [
         link_to('list',
           send("#{controller.controller_name}_path"),

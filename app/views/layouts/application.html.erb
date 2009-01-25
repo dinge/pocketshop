@@ -6,15 +6,12 @@
       <%= javascript_include_tag :defaults, 'slider' %>
   </head>
   <body>
-    <a name="top" />
-    <div id="main_navigation">
+    <div class="document">
+      <a name="top" />
       <%= main_navigation %>
-    </div>
-    <div>
-      <%= yield %>
-    </div>
-    <div id="footer">
-      me: <%= Me.now.name %> | last action: <%= Me.now.last_action_at.to_formatted_s(:db)  %>
+      <%= collection_control_for %>
+      <div class="content"><%= yield %></div>
+      <%= footer_navigation %>
     </div>
   </body>
 </html>

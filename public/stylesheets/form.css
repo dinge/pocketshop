@@ -32,13 +32,13 @@ textarea {
 
 label {
   display: block;
-  margin: 12px 10px 0;
-  font-weight: 700;
-  font-size: .9em;
+  margin: 5px 0px;
   float: left;
   clear: left;
   width: 70px;
-  text-align: right;
+
+  color: #555;
+  font-weight: bold;
 }
 
 button {
@@ -57,3 +57,14 @@ input[type=radio]:first-child  {
     margin-left: 10px;
 }
 */
+
+label .old_left {
+  display: block;
+  margin: 12px 10px 0;
+  font-weight: 700;
+  font-size: .9em;
+  float: left;
+  clear: left;
+  width: 70px;
+  text-align: right;
+}

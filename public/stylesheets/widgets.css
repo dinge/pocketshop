@@ -1,14 +1,35 @@
 /* core widgets */
 
-#footer {
-  padding: 10px;
-  background-color: #dddddd;
+.document{
+  margin: 1em auto;
+  width: 40em;
+}
+
+.navigation{
+  padding: 5px 5px;
+  background-color: #ddd;
+}
+
+#main_navigation {
+  font-size: 1.2em;
+}
+
+.content{
+}
+
+#footer_navigation {
   font-size: 0.8em;
 }
 
 
 /* more special */
 
+.collection_control{
+  padding: 10px 5px;
+  text-align: right;
+  font-size: 1.0em;
+}
+
 legend .object_control {
-  font-size: .6em;
+  font-size: 0.6em;
 }
