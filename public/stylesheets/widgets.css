@@ -1,0 +1,13 @@
+/* core widgets */
+
+#footer {
+  padding: 10px;
+  background-color: #dddddd;
+}
+
+
+/* more special */
+
+legend .object_control {
+  font-size: .6em;
+}

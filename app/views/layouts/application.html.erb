@@ -2,15 +2,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml"> 
   <head> 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />     
-      <%= stylesheet_link_tag 'application', 'form' %>
+      <%= stylesheet_link_tag 'application', 'widgets', 'form', :cache => true %>
       <%= javascript_include_tag :defaults, 'slider' %>
   </head>
   <body>
     <a name="top" />
-    <%= main_navigation %>
-    <hr />
-    <%= yield %>
-    <hr />
-    <%= Sys::User.current.name %>
+    <div id="main_navigation">
+      <%= main_navigation %>
+    </div>
+    <div>
+      <%= yield %>
+    </div>
+    <div id="footer">
+      me: <%= Me.now.name %> | last action: <%= Me.now.last_action_at.to_formatted_s(:db)  %>
+    </div>
   </body>
 </html>
