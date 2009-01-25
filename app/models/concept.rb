@@ -2,8 +2,8 @@ class Concept
   is_a_neo_node :with_meta_info => true
     # :dynamic_properties => true
   
-  property :name, :definition
-  index :name, :definition
+  property :name, :text
+  index :name, :text
 
 
   has_n(:units)
