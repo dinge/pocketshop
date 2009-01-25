@@ -3,7 +3,7 @@ class ConceptsController < ApplicationController
   before_filter :init_concept, :only => [:show, :edit, :update, :destroy]
 
   def index
-    @concepts = Concept.all
+    @concepts = Concept.all.nodes
 
     respond_to do |format|
       format.html
@@ -13,7 +13,7 @@ class ConceptsController < ApplicationController
   end
 
   def new
-    @concept = Concept.new
+    @concept = Concept.value_object.new
     respond_to do |format|
       format.html
       format.xml  { render :xml => @concept }
@@ -22,10 +22,10 @@ class ConceptsController < ApplicationController
   end
 
   def create
-    @concept = Concept.new(params[:concept])
+    @concept = Concept.new
 
     respond_to do |format|
-      if @concept.save
+      if @concept.update(params[:concept])
         flash[:notice] = 'successfully created.'
         format.html { redirect_to edit_concept_path(@concept) }
         format.xml  { render :xml => @concept, :status => :created, :location => @concept }
@@ -51,7 +51,7 @@ class ConceptsController < ApplicationController
 
   def update
     respond_to do |format|
-      if @concept.update_attributes(params[:concept])
+      if @concept.update(params[:concept])
         flash[:notice] = 'successfully updated.'
         format.html { redirect_to edit_concept_path(@concept) }
         format.xml  { head :ok }
@@ -65,12 +65,19 @@ class ConceptsController < ApplicationController
   end
 
   def destroy
-    @concept.destroy
+    @concept.delete
     respond_to do |format|
       format.html { redirect_to concepts_path }
       format.xml  { head :ok }
       format.json { head :ok }
     end
+  end
+
+  def delete_all
+    Concept.all.each do |concept|
+      concept.delete
+    end
+    redirect_to concepts_path
   end
 
   def playground
@@ -80,6 +87,7 @@ class ConceptsController < ApplicationController
   private
 
   def init_concept
-    @concept = Concept.find(params[:id]) rescue raise(ActiveRecord::RecordNotFound)
+    @concept = Concept.load(params[:id])
+    # Java::OrgNeo4jApiCore::NotFoundException
   end
 end

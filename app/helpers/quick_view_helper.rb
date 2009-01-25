@@ -2,7 +2,7 @@ module QuickViewHelper
 
   def quick_view_for(object_or_objects, options = {})
     object = object_or_objects.is_a?(Array) ? object_or_objects.first : object_or_objects
-    field_names = filter_field_names(object, object.class.field_names, options)
+    field_names = filter_field_names(object, object.class.property_names, options)
 
     content_tag(:fieldset) do
       content_tag(:legend, link_to(object.name.to_s, send("edit_#{object.class.name.underscore}_path", object)) + 
@@ -94,7 +94,7 @@ module QuickViewHelper
   end
 
   def quick_form_fields_for(form, options = {})
-    field_names = filter_field_names(form.object, form.object.class.field_names, options)
+    field_names = filter_field_names(form.object, form.object.class.property_names, options)
     s = '<dl>'
     field_names.each do |field_name|
       s << "<dt>#{field_name}</dt>"
@@ -109,7 +109,8 @@ module QuickViewHelper
     elsif only = options[:only]
       only
     else
-      field_names + (object.is_a?(XGen::Mongo::Subobject) ? [] : [:id])
+      field_names
+      # field_names + (object.is_a?(XGen::Mongo::Subobject) ? [] : [:id])
     end
   end
 

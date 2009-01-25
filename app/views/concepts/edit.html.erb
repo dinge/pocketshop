@@ -2,12 +2,11 @@
 
 <% form_for @concept do |form| %>
   <% field_set_tag @concept.name + styled_object_control_for(@concept) do %>  
-
     <%= form.label :name %>
     <%= form.text_field :name %>
     
-    <%= form.label :text %>
-    <%= form.text_area :text %>
+    <%= form.label :definition %>
+    <%= form.text_area :definition %>
 
     <%= submit_button %>
   <% end %>
@@ -19,7 +18,7 @@
       link_to('new unit', "#new_unit"), 
       @concept.units.map{ |unit| link_to(unit.name, "##{unit.id}") } ) %>
 
-<%= render :partial => @concept.units %>
+<%#= render :partial => @concept.units %>
 <hr />
 <h3>new unit</h3>
-<%= render :partial => Unit.new %>
+<%#= render :partial => Unit.new %>

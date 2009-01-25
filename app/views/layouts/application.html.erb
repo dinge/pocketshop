@@ -11,6 +11,6 @@
     <hr />
     <%= yield %>
     <hr />
-    <%= DateTime.now %> <%= Time.now.to_i * rand(100) %>
+    <%= Sys::User.current.name %>
   </body>
 </html>
