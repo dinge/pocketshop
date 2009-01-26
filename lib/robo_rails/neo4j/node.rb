@@ -54,23 +54,24 @@ module RoboRails
           node
         end
 
-        # overwriting something from parent class, seems to work ..
+        # overwriting something from a parent class, seems to work ..
         alias :load :l
 
         def property_names
           properties_info.keys
         end
 
-        # TODO: does'n scale, find a better way, all objects are loaded, but works for my test as interface
-        def first
-          all.nodes.to_a.first
+        def all_nodes
+          all.nodes
         end
 
-        # TODO: does'n scale, find a better way, all objects are loaded, but works for my test as interface
-        def last
-          all.nodes.to_a.last
+        def first_node
+          all.nodes.min
         end
 
+        def last_node
+          all.nodes.max
+        end
 
       end
 
@@ -91,6 +92,9 @@ module RoboRails
           "#{id}-#{name}"
         end
 
+        def <=>(other)
+          neo_node_id <=> other.neo_node_id 
+        end
 
         private
 
