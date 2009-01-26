@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 
 
   def init_me
-    Me.now = Sys::User.first  #Sys::User.load(4118)
+    Me.now = Sys::User.first_node  #Sys::User.load(4118)
   end
 
   def reset_me
