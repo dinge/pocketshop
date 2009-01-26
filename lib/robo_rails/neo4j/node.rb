@@ -61,11 +61,12 @@ module RoboRails
           properties_info.keys
         end
 
-        # TODO: does'n scale, alle objects are loaded, but works for my test as interface
+        # TODO: does'n scale, find a better way, all objects are loaded, but works for my test as interface
         def first
           all.nodes.to_a.first
         end
 
+        # TODO: does'n scale, find a better way, all objects are loaded, but works for my test as interface
         def last
           all.nodes.to_a.last
         end
@@ -75,14 +76,6 @@ module RoboRails
 
 
       module SingletonMethodsExtensions
-
-        def property?(prop_name)
-          if property = properties_info[prop_name.to_sym]
-            property[:defined] == true
-          else
-            false
-          end
-        end
 
       end
 
