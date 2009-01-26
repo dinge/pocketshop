@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
 
 
   def init_me
-    Me.now = Sys::User.first_node  #Sys::User.load(4118)
+    Me.now = Local::User.first_node || Local::User.new{ |user| user.name = 'lars' }
   end
 
   def reset_me

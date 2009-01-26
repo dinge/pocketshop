@@ -1,5 +1,5 @@
-<% form_for @concept do |form| %>
-  <% field_set_with_control_for @concept do %>
+<% form_for @local_concept do |form| %>
+  <% field_set_with_control_for @local_concept do %>
 
     <%= form.label :name %>
     <%= form.text_field :name %>
@@ -12,6 +12,6 @@
   <% end %>
 <% end %>
 
-<% if @concept.is_a?(Concept) %>
-  <%= @concept.tags.map(&:name) %>
+<% if @local_concept.is_a?(Local::Concept) %>
+  <%= @local_concept.tags.map(&:name) %>
 <% end %>  

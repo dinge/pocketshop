@@ -1,4 +1,4 @@
-class Sys::User
+class Local::User
   is_a_neo_node :with_meta_info => true
 
   property :name
