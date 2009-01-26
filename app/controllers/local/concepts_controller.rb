@@ -3,14 +3,14 @@ class Local::ConceptsController < ApplicationController
   before_filter :init_local_concept, :only => [:show, :edit, :update, :destroy]
 
   def index
-    @local_local_concepts = Local::Concept.all.nodes.to_a
-    if @local_local_concepts.empty?
+    @local_concepts = Local::Concept.all.nodes.to_a
+    if @local_concepts.empty?
       redirect_to new_local_concept_path
     else
       respond_to do |format|
         format.html
-        format.xml  { render :xml => @local_local_concepts }
-        format.json { render :json => @local_local_concepts }
+        format.xml  { render :xml => @local_concepts }
+        format.json { render :json => @local_concepts }
       end
     end
   end
@@ -81,10 +81,6 @@ class Local::ConceptsController < ApplicationController
       local_concept.delete
     end
     redirect_to local_concept_path
-  end
-
-  def playground
-    
   end
 
   private
