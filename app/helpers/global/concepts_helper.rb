@@ -1,0 +1,2 @@
+module Global::ConceptsHelper
+end

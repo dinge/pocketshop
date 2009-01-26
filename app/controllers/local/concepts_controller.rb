@@ -4,14 +4,11 @@ class Local::ConceptsController < ApplicationController
 
   def index
     @local_concepts = Local::Concept.all.nodes.to_a
-    if @local_concepts.empty?
-      redirect_to new_local_concept_path
-    else
-      respond_to do |format|
-        format.html
-        format.xml  { render :xml => @local_concepts }
-        format.json { render :json => @local_concepts }
-      end
+    @local_concept = Local::Concept.value_object.new
+    respond_to do |format|
+      format.html
+      format.xml  { render :xml => @local_concepts }
+      format.json { render :json => @local_concepts }
     end
   end
 
@@ -70,7 +67,7 @@ class Local::ConceptsController < ApplicationController
   def destroy
     @local_concept.delete
     respond_to do |format|
-      format.html { redirect_to local_concept_path }
+      format.html { redirect_to local_concepts_path }
       format.xml  { head :ok }
       format.json { head :ok }
     end
