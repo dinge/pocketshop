@@ -65,10 +65,12 @@ module RoboRails
           all.nodes
         end
 
+        # not sure if this is the best way
         def first_node
           all.nodes.min
         end
 
+        # not sure if this is the best way
         def last_node
           all.nodes.max
         end
@@ -130,6 +132,17 @@ module RoboRails
         def set_property_with_hooks(name, value)
           set_property_without_hooks(name.to_s, value)
           update_date_and_version
+        end
+
+        # overwrite in super to allows properties in arguments
+        #  p = Person.new(:name => 'peter', :age => 20)
+        def initialize(*args)
+          if (properties = args.first).is_a?(Hash)
+            super
+            update(properties)
+          else
+            super(*args)
+          end
         end
 
 
