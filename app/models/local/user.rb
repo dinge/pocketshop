@@ -12,6 +12,15 @@ class Local::User
     Me.now = self
   end
 
+  def self.valid_login?(name, password)
+    matches = Local::User.find(:name => name)
+    if matches.size == 1 && matches[0].password == password
+      matches[0]
+    else
+      false
+    end
+  end
+
   # me.traverse.outgoing(:friends,:projects).depth(:all).filter {|tp| ... }
   # has_n()
   # has_n(:creations).relation(Sys::Priv::Creation)

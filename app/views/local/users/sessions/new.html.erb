@@ -1,0 +1,11 @@
+<% form_for @local_user, :url => local_users_sessions_path  do |form|%>
+  
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+
+    <%= form.label :password %>
+    <%= form.text_field :password %>
+
+    <%= submit_button 'login' %>
+  
+<% end %>

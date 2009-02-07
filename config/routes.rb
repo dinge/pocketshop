@@ -43,9 +43,13 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :me
 
   map.namespace :local do |local|
+    local.namespace :users do |user|
+      user.resources :sessions
+    end
     local.resources :users
     local.resources :concepts
   end
+
 
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'

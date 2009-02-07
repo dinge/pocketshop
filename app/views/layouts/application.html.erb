@@ -8,14 +8,14 @@
   <body>
     <div class="document">
       <a name="top" />
-      <%= main_navigation %>
-      <%= collection_control_for unless @discard_collection_conrtrol %>
+      <%= main_navigation if Me.someone? %>
+      <%= collection_control_for if Me.someone? && !@discard_collection_control %>
       <div class="content">
         <div class="scope"><%= yield %></div>
-        <%= scope_navigation %>
+        <%= scope_navigation if Me.someone? %>
       </div>
       <hr style="clear: both;" />
-      <%= footer_navigation %>
+      <%= footer_navigation if Me.someone? %>
     </div>
   </body>
 </html>

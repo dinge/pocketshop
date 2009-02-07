@@ -1,7 +1,7 @@
 class MeController < ApplicationController
 
   def index
-    @discard_collection_conrtrol = true
+    @discard_collection_control = true
   end
 
 end

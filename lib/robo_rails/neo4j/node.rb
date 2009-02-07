@@ -103,7 +103,7 @@ module RoboRails
         end
 
         def <=>(other)
-          neo_node_id <=> other.neo_node_id 
+          neo_node_id <=> other.neo_node_id
         end
 
         def update!(struct_or_hash)

@@ -7,9 +7,13 @@ class ApplicationController < ActionController::Base
 
   # before_filter :setup_neodb
 
-
   def init_me
-    Me.now = Local::User.first_node || Local::User.new(:name => 'lars')
+    if session[:local_user_id] && local_user = Local::User.load(session[:local_user_id])
+      local_user.is_me_now
+    else
+      redirect_to new_local_users_session_path
+    end
+    # Me.now = Local::User.first_node || Local::User.new(:name => 'lars')
   end
 
   def reset_me
@@ -17,8 +21,23 @@ class ApplicationController < ActionController::Base
   end
 
   def update_current_users_last_action
-    Me.now.update!(:last_action => params, :last_action_at => DateTime.now)
+    # Me.now.update!(:last_action => params, :last_action_at => DateTime.now)
   end
+
+
+
+
+  def start_local_session_with(local_user)
+    local_user.is_me_now
+    session[:local_user_id] = local_user.id
+  end
+  
+  def stop_local_session
+    reset_me
+    session[:local_user_id] = nil
+  end
+
+
 
 
   # Uncomment the :secret if you're not using the cookie session store

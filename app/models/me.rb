@@ -6,4 +6,12 @@ class Me
     self.now = nil
   end
 
+  def self.someone?
+    now.is_a?(Local::User)
+  end
+  
+  def self.name
+    now.name
+  end
+  
 end
