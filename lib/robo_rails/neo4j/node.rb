@@ -20,6 +20,7 @@ module RoboRails
         def include_neo_node_mixins(options)
           include ::Neo4j::NodeMixin
           include ::Neo4j::DynamicAccessorMixin if options[:dynamic_properties]
+          extend ::Neo4j::TransactionalMixin
 
           class_eval do
             extend SingletonMethods
@@ -86,6 +87,13 @@ module RoboRails
 
       module InstanceMethods
 
+        def self.included(base)
+          base.class_eval do
+            transactional :update!
+          end
+        end
+
+
         def id
           neo_node_id
         end
@@ -96,6 +104,10 @@ module RoboRails
 
         def <=>(other)
           neo_node_id <=> other.neo_node_id 
+        end
+
+        def update!(struct_or_hash)
+          update(struct_or_hash)
         end
 
         private
@@ -123,7 +135,6 @@ module RoboRails
 
         def self.included(base)
           base.class_eval do
-            extend ::Neo4j::TransactionalMixin
             alias_method_chain :set_property, :hooks
             transactional :set_property_with_hooks, :set_property_without_hooks
           end

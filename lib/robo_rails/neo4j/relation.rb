@@ -98,11 +98,13 @@ module RoboRails
         end
 
         def created_at_with_typecast
-          DateTime.parse(get_property('created_at'))
+          return nil if (created_date = get_property('created_at')).blank?
+          DateTime.parse(created_date)
         end
 
         def updated_at_with_typecast
-          DateTime.parse(get_property('updated_at'))
+          return nil if (updated_date = get_property('updated_at')).blank?
+          DateTime.parse(updated_date)
         end
 
       end

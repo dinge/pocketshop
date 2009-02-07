@@ -1,11 +1,16 @@
 class Local::User
   is_a_neo_node :with_meta_info => true
 
-  property :name
+  property :name, :password
   index :name
 
+  property :last_action, :type => Hash
   property :last_action_at, :type => DateTime
 
+
+  def is_me_now
+    Me.now = self
+  end
 
   # me.traverse.outgoing(:friends,:projects).depth(:all).filter {|tp| ... }
   # has_n()
