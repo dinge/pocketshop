@@ -11,9 +11,9 @@ class ApplicationController < ActionController::Base
     if session[:local_user_id] && local_user = Local::User.load(session[:local_user_id])
       local_user.is_me_now
     else
+      reset_me
       redirect_to new_local_users_session_path
     end
-    # Me.now = Local::User.first_node || Local::User.new(:name => 'lars')
   end
 
   def reset_me

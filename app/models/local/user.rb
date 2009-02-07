@@ -12,7 +12,7 @@ class Local::User
     Me.now = self
   end
 
-  def self.valid_login?(name, password)
+  def self.authentificated_user(name, password)
     matches = Local::User.find(:name => name)
     if matches.size == 1 && matches[0].password == password
       matches[0]
