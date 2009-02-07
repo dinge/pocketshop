@@ -12,12 +12,12 @@ module RoboRails
       module ClassMethods
 
         def is_a_neo_node(options = {})
-          include_neo_mixins(options)
+          include_neo_node_mixins(options)
         end
 
         private
 
-        def include_neo_mixins(options)
+        def include_neo_node_mixins(options)
           include ::Neo4j::NodeMixin
           include ::Neo4j::DynamicAccessorMixin if options[:dynamic_properties]
 
@@ -25,9 +25,6 @@ module RoboRails
             extend SingletonMethods
             extend SingletonMethodsExtensions
           end
-
-          include InstanceMethods
-          include InstanceMethodExtensions
 
           if options[:with_meta_info]
             class_eval do
@@ -40,6 +37,9 @@ module RoboRails
               index :version
             end
           end
+
+          include InstanceMethods
+          include InstanceMethodExtensions
 
         end
 

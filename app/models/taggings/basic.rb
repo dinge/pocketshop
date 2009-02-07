@@ -1,7 +1,6 @@
-class Tagging
+class Taggings::Basic
   is_a_neo_relation :with_meta_info => true
 
-  # include Neo4j::RelationMixin
-  
   property :name
+
 end
