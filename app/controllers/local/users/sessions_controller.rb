@@ -1,5 +1,6 @@
 class Local::Users::SessionsController < ApplicationController
-  skip_before_filter :init_me
+  skip_before_filter :redirect_to_login
+  before_filter :redirect_to_root, :if => Proc.new{ Me.someone? }, :except => :destroy
 
   def new
     @local_user = Local::User.value_object.new
@@ -19,6 +20,13 @@ class Local::Users::SessionsController < ApplicationController
 
   def destroy
     stop_local_session
+    redirect_to root_path
+  end
+
+
+  private
+
+  def redirect_to_root
     redirect_to root_path
   end
 

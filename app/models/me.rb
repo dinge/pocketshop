@@ -10,8 +10,12 @@ class Me
     now.is_a?(Local::User)
   end
 
-  def self.name
-    now.name
+  def self.none?
+    !someone?
+  end
+
+  def self.update_last_action(controller_request)
+    now.update!(:last_action => controller_request.query_parameters, :last_action_at => DateTime.now)
   end
 
 end
