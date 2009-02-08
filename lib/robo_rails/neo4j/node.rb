@@ -76,6 +76,16 @@ module RoboRails
           all.nodes.max
         end
 
+        def find_first(query=nil, &block)
+          matches = find(query, &block)
+          matches.size > 0 ? matches[0] : nil
+        end
+
+        def find_first!(query=nil, &block)
+          find_first(query, &block) ||
+            raise(RoboRails::Neo4j::NotFoundException.new("can't find #{self.name} with query #{query.inspect}"))
+        end
+
       end
 
 

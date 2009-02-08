@@ -1,7 +1,6 @@
 class ApplicationController < ActionController::Base
   helper :form, :navigation, :quick_view, :tag
 
-  # before_filter :reset_me
   before_filter :init_me
   before_filter :redirect_to_login, :if => Proc.new{ Me.none? }
 
@@ -10,15 +9,15 @@ class ApplicationController < ActionController::Base
 
   # before_filter :setup_neodb
 
-  def reset_me
-    Me.reset
-  end
-
   def init_me
     reset_me
     if session[:local_user_id] && local_user = Local::User.load(session[:local_user_id])
       local_user.is_me_now
     end
+  end
+
+  def reset_me
+    Me.reset
   end
 
   def redirect_to_login
@@ -46,6 +45,9 @@ class ApplicationController < ActionController::Base
     response.status.to_i / 100 == 3
   end
 
+  def redirect_to_root
+    redirect_to root_path
+  end
 
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => 'ca7b3922b69a338bbbc85f5b3ee487cf'
@@ -53,12 +55,6 @@ class ApplicationController < ActionController::Base
   filter_parameter_logging :password
 
 end
-
-
-
-
-
-
 
 
 

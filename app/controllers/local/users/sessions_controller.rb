@@ -7,9 +7,9 @@ class Local::Users::SessionsController < ApplicationController
   end
 
   def create
-    if @local_user = Local::User.authentificated_user(params[:local_user][:name], params[:local_user][:password])
+    if @local_user = Local::User.by_credentials(params[:local_user][:name], params[:local_user][:password])
       start_local_session_with(@local_user)
-      redirect_to root_path
+      redirect_to root_path #@local_user.last_action || root_path 
     else
       @local_user = Local::User.value_object.new
       @local_user.name = params[:local_user][:name]
@@ -24,10 +24,5 @@ class Local::Users::SessionsController < ApplicationController
   end
 
 
-  private
-
-  def redirect_to_root
-    redirect_to root_path
-  end
 
 end
