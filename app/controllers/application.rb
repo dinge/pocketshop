@@ -2,16 +2,16 @@ class ApplicationController < ActionController::Base
   helper :form, :navigation, :quick_view, :tag
 
   before_filter :init_me
-  before_filter :update_current_users_last_action
+  before_filter :update_current_users_last_action, :if => Proc.new{ Me.someone? }
   after_filter :reset_me
 
   # before_filter :setup_neodb
 
   def init_me
+    reset_me
     if session[:local_user_id] && local_user = Local::User.load(session[:local_user_id])
       local_user.is_me_now
     else
-      reset_me
       redirect_to login_path
     end
   end
@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   end
 
   def update_current_users_last_action
-    # Me.now.update!(:last_action => params, :last_action_at => DateTime.now)
+    Me.now.update!(:last_action => params, :last_action_at => DateTime.now)
   end
 
 
