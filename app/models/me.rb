@@ -9,9 +9,9 @@ class Me
   def self.someone?
     now.is_a?(Local::User)
   end
-  
+
   def self.name
     now.name
   end
-  
+
 end
