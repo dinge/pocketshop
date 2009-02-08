@@ -2,7 +2,7 @@ class Local::Users::SessionsController < ApplicationController
   skip_before_filter :init_me
 
   def new
-    @local_user ||= Local::User.value_object.new
+    @local_user = Local::User.value_object.new
   end
 
   def create
@@ -10,6 +10,8 @@ class Local::Users::SessionsController < ApplicationController
       start_local_session_with(@local_user)
       redirect_to root_path
     else
+      @local_user = Local::User.value_object.new(:name => params[:local_user][:name])
+      @local_user.name = params[:local_user][:name]
       stop_local_session
       render :action => "new"
     end

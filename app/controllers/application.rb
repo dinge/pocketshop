@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
       local_user.is_me_now
     else
       reset_me
-      redirect_to new_local_users_session_path
+      redirect_to login_path
     end
   end
 

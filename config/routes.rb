@@ -42,6 +42,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :tags
   map.resources :me
 
+  map.login '/login', :controller => 'local/users/sessions', :action => 'new'
+  map.logout '/logout', :controller => 'local/users/sessions', :action => 'destroy'
+
   map.namespace :local do |local|
     local.namespace :users do |user|
       user.resources :sessions
