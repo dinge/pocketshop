@@ -7,7 +7,7 @@ class Local::User
   property :password # needed for Local::User.value_object.new, attr_accessors owerwritten
   index :name
 
-  property :last_action, :type => Hash
+  property :last_action, :type => String
   property :last_action_at, :type => DateTime
 
   def is_me_now
@@ -24,7 +24,7 @@ class Local::User
   end
 
   # setter for encrypted password
-  def password=(password) # :nodoc:
+  def password=(password)
     @password = password.to_s.strip
     return if @password.blank?
     self.salt_for_password = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{rand.to_s}--")
