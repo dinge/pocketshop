@@ -155,7 +155,7 @@ module RoboRails
           update_date_and_version
         end
 
-        # overwrite in super to allows properties in arguments
+        # overwrite in super to allow hash properties in arguments
         #  p = Person.new(:name => 'peter', :age => 20)
         def initialize(*args)
           if (properties = args.first).is_a?(Hash)

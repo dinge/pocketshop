@@ -1,13 +1,15 @@
 class ApplicationController < ActionController::Base
-  helper :form, :navigation, :quick_view, :tag
-
   before_filter :init_me
   before_filter :redirect_to_login, :if => Proc.new{ Me.none? }
 
   after_filter :update_my_last_action, :if => Proc.new{ Me.someone? }
   after_filter :reset_me
 
-  # before_filter :setup_neodb
+  helper :form, :navigation, :quick_view, :tag
+
+  filter_parameter_logging :password
+  protect_from_forgery # :secret => 'ca7b3922b69a338bbbc85f5b3ee487cf'
+
 
   def init_me
     reset_me
@@ -36,9 +38,11 @@ class ApplicationController < ActionController::Base
 
 
   def update_my_last_action
-    if request.get? && !redirect? && !request.head?
-      Me.update_last_action(request)
-    end
+    Me.update_last_action(request) if update_last_action?
+  end
+
+  def update_last_action?
+    request.get? && !redirect? && !request.head?
   end
 
   def redirect?
@@ -49,14 +53,10 @@ class ApplicationController < ActionController::Base
     redirect_to root_path
   end
 
-  # Uncomment the :secret if you're not using the cookie session store
-  protect_from_forgery # :secret => 'ca7b3922b69a338bbbc85f5b3ee487cf'
-
-  filter_parameter_logging :password
-
 end
 
 
+# before_filter :setup_neodb
 
 # def setup_neodb
 #   @db_id = rand(2)
