@@ -144,7 +144,7 @@ describe "RoboRails::Neo4j::Node is_a_neo_node with special options" do
     @other_thing.should respond_to(:version)
   end
 
-  it "should increment the version field with every update" do
+  it "should increment the version property with every update" do
     old_version = @other_thing.version
     @other_thing.tieger = "hungrig"
     @other_thing.version.should be old_version + 1
@@ -178,7 +178,7 @@ describe "RoboRails::Neo4j::Node instance methods" do
     # something.name.should == 'harras'
   end
 
-  it "new_record? should be return false" do
+  it "should return false calling new_record?" do
     something = SomeThing.new
     something.new_record?.should be false
   end
