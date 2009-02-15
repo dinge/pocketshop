@@ -18,7 +18,7 @@ module NavigationHelper
         link_to('tags',
           tags_path,
           :class => dom_class_for_active_object(:tags, controller.controller_name),
-          :accesskey => 't'),
+          :accesskey => 'a'),
 
         link_to('users',
           local_users_path,
@@ -72,7 +72,7 @@ module NavigationHelper
     control_list_container :container => :div, :id => :footer_navigation, :class => :navigation do
       [
        "me: #{link_to(Me.now.name, me_index_path)}",
-        "last action: #{ url_for(Me.now.last_action) }",
+        "last action: #{ link_to(Me.now.last_action, Me.now.last_action) }",
         "last action at: #{ Me.now.last_action_at.to_formatted_s(:db) }",
         link_to('logout', logout_path, :method => :delete)
       ]

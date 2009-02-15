@@ -26,6 +26,7 @@ class TagsController < ApplicationController
 
   def create
     @tag = Tag.new
+    my.creations << @tag
 
     respond_to do |format|
       if @tag.update(params[:tag])

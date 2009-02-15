@@ -120,6 +120,10 @@ module RoboRails
           update(struct_or_hash)
         end
 
+        def new_record?
+          false
+        end
+
         private
 
         def update_date_and_version

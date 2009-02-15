@@ -1,14 +1,18 @@
-require 'digest/sha1'
-
 class Local::User
   is_a_neo_node :with_meta_info => true
 
-  property :name, :encrypted_password, :salt_for_password 
+  property :name, :encrypted_password, :salt_for_password
   property :password # needed for Local::User.value_object.new, attr_accessors owerwritten
   index :name
 
   property :last_action, :type => String
   property :last_action_at, :type => DateTime
+
+  has_n(:created_tags).to(Tag).relation(Acl::Created)
+  has_n(:created_things).to(Thing).relation(Acl::Created)
+  has_n(:created_concepts).to(Local::Concept).relation(Acl::Created)
+
+  # has_n(:creations).relation(Acl::Creation)
 
   def is_me_now
     Me.now = self
@@ -41,6 +45,7 @@ class Local::User
   def has_password?(password)
     encrypted_password == self.class.encrypt_password(salt_for_password, password)
   end
+
 
 end
 

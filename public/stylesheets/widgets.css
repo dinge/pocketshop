@@ -15,7 +15,7 @@
 }
 
 .content{
-  
+
 }
 
 .scope{
@@ -45,5 +45,9 @@
 }
 
 legend .object_control{
+  font-size: 0.6em;
+}
+
+.node_meta_info {
   font-size: 0.6em;
 }
