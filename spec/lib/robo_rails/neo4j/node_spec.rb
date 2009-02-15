@@ -33,6 +33,7 @@ describe "RoboRails::Neo4j::Node class methods" do
   it_should_behave_like "RoboRails::Neo4j::Node"
 
   it "should be available for all objects" do
+    Object.included_modules.should include(RoboRails::Neo4j::Node)
     Object.should respond_to(:is_a_neo_node)
   end
 
@@ -46,6 +47,7 @@ describe "RoboRails::Neo4j::Node class methods" do
   end
 
   it "should mixin neo4j node" do
+    SomeThing.included_modules.should include(Neo4j::NodeMixin)
     SomeThing.new.should be_a_kind_of(Neo4j::NodeMixin)
   end
 
