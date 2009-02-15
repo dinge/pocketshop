@@ -9,9 +9,9 @@ Spec::Runner.configure do |config|
   # If you're not using ActiveRecord you should remove these
   # lines, delete config/database.yml and disable :active_record
   # in your config/boot.rb
-  config.use_transactional_fixtures = true
-  config.use_instantiated_fixtures  = false
-  config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
+  # config.use_transactional_fixtures = true
+  # config.use_instantiated_fixtures  = false
+  # config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
 
   # == Fixtures
   #
@@ -42,6 +42,64 @@ Spec::Runner.configure do |config|
   # config.mock_with :rr
   #
   # == Notes
-  # 
+  #
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
+end
+
+
+#
+# Helper methods for specs
+# copied from neo4j.rb spec
+#
+
+require 'fileutils'
+require 'tmpdir'
+
+# suppress all warnings
+$NEO_LOGGER.level = Logger::ERROR
+
+NEO_STORAGE = Dir::tmpdir + "/neo_storage"
+LUCENE_INDEX_LOCATION = Dir::tmpdir + "/lucene"
+
+
+def delete_db
+  # make sure we finish all transactions
+  Neo4j::Transaction.current.finish if Neo4j::Transaction.running?
+
+  # delete all configuration
+  Lucene::Config.delete_all
+
+  # delete db on filesystem
+  FileUtils.rm_rf Neo4j::Config[:storage_path]  # NEO_STORAGE
+  FileUtils.rm_rf Lucene::Config[:storage_path] unless Lucene::Config[:storage_path].nil?
+end
+
+
+def start_neo4j
+  Lucene::Config[:storage_path] = LUCENE_INDEX_LOCATION
+  Neo4j::Config[:storage_path] = NEO_STORAGE
+
+  # set default configuration
+  Lucene::Config[:store_on_file] = true
+  Neo4j::Config[:storage_path] = NEO_STORAGE
+
+  # start neo
+  Neo4j.start
+end
+
+
+def stop_neo4j
+  Neo4j.stop
+  delete_db
+end
+
+
+def undefine_class(*clazz_syms)
+  clazz_syms.each do |clazz_sym|
+    Object.instance_eval do
+      begin
+        remove_const clazz_sym
+      end if const_defined? clazz_sym
+    end
+  end
 end

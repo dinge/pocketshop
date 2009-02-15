@@ -98,11 +98,10 @@ module RoboRails
       module InstanceMethods
 
         def self.included(base)
-          base.class_eval do
-            transactional :update!
-          end
+          # base.class_eval do
+          #   transactional :update!
+          # end
         end
-
 
         def id
           neo_node_id
@@ -117,7 +116,9 @@ module RoboRails
         end
 
         def update!(struct_or_hash)
-          update(struct_or_hash)
+          ::Neo4j::Transaction.run do
+            update(struct_or_hash)
+          end
         end
 
         def new_record?
