@@ -32,6 +32,10 @@ end
 describe "RoboRails::Neo4j::Node class methods" do
   it_should_behave_like "RoboRails::Neo4j::Node"
 
+  it "should be available for all objects" do
+    Object.should respond_to(:is_a_neo_node)
+  end
+
   it "should load a node" do
     SomeThing.load(1).should == @some_things.first
   end
