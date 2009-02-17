@@ -49,7 +49,7 @@ end
 
 #
 # Helper methods for specs
-# copied from neo4j.rb spec
+# based from neo4j.rb spec
 #
 
 require 'fileutils'
@@ -61,38 +61,34 @@ $NEO_LOGGER.level = Logger::ERROR
 NEO_STORAGE = Dir::tmpdir + "/neo_storage"
 LUCENE_INDEX_LOCATION = Dir::tmpdir + "/lucene"
 
-
-def delete_db
-  # make sure we finish all transactions
-  Neo4j::Transaction.current.finish if Neo4j::Transaction.running?
-
-  # delete all configuration
-  Lucene::Config.delete_all
-
-  # delete db on filesystem
-  FileUtils.rm_rf Neo4j::Config[:storage_path]  # NEO_STORAGE
-  FileUtils.rm_rf Lucene::Config[:storage_path] unless Lucene::Config[:storage_path].nil?
-end
-
-
 def start_neo4j
   Lucene::Config[:storage_path] = LUCENE_INDEX_LOCATION
-  Neo4j::Config[:storage_path] = NEO_STORAGE
-
-  # set default configuration
   Lucene::Config[:store_on_file] = true
   Neo4j::Config[:storage_path] = NEO_STORAGE
 
-  # start neo
+  delete_neo4jdb_files
   Neo4j.start
 end
 
-
 def stop_neo4j
   Neo4j.stop
-  delete_db
+  reset_neo4j
 end
 
+def reset_neo4j
+  # make sure we finish all transactions
+  Neo4j::Transaction.current.finish if Neo4j::Transaction.running?
+  # delete all configuration
+  Lucene::Config.delete_all
+  delete_neo4jdb_files
+end
+
+def delete_neo4jdb_files
+  FileUtils.rm_rf(Neo4j::Config[:storage_path]) if File.exists?(Neo4j::Config[:storage_path])
+  if !Lucene::Config[:storage_path].nil? && File.exists?(Lucene::Config[:storage_path])
+    FileUtils.rm_rf Lucene::Config[:storage_path]
+  end
+end
 
 def undefine_class(*clazz_syms)
   clazz_syms.each do |clazz_sym|
