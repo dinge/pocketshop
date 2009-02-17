@@ -116,10 +116,18 @@ describe "a neo node instance", ' in general' do
     (@some_things.second <=> @some_things.second).should be 0
   end
 
-  it "should raise an exception when update! fails, the properties should then not be changed" do
-    something = SomeThing.new(:name => 'harras')
-    lambda { something.update!(:name => 'dieter', :non_existing_property => 'nono') }.should raise_error(NoMethodError)
-    something.name.should == 'harras'
+  context "should raise an exception when trying to update!" do
+    it "with a non existing property, the properties should then not be changed" do
+      something = SomeThing.new(:name => 'harras')
+      lambda { something.update!(:name => 'dieter', :non_existing_property => 'nono') }.should raise_error(NoMethodError)
+      something.name.should == 'harras'
+    end
+
+    it "with something other awfull, the properties should then not be changed" do
+      something = SomeThing.new(:name => 'harras')
+      lambda { something.update!(:name => 'dieter', :age => DateTime.now) }.should raise_error(NoMethodError)
+      something.name.should == 'harras'
+    end
   end
 
   it "should not raise an exception when update! works, the properties should then be changed" do
