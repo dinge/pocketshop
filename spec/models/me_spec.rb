@@ -15,49 +15,73 @@ describe Me do
     stop_neo4j
   end
 
+  context "someone is Me.now" do
+    it "calling someone? should return true" do
+      Me.now = @user_stub
+      Me.should be_someone
+    end
 
-  # it "should set Me.now to nil calling reset" do
-  #   Me.now = @user_stub
-  #   Me.now.should be @user_stub
-  #   Me.reset
-  #   Me.now.should be nil
-  # end
-  # 
-  # it "should return true if Me.now is someone calling someone?" do
-  #   Me.now = @user_stub
-  #   Me.someone?.should be true
-  #   Me.none?.should be false
-  # end
-  # 
-  # it "should return false if Me.now is no one calling someone?" do
-  #   Me.someone?.should be false
-  #   Me.none?.should be true
-  # end
-  # 
-  # it "should save some information" do
-  #   controller_request = mock "ActionController::Request"
-  #   controller_request.stub!(:query_parameters).and_return('/my/last/request')
-  # 
-  #   Me.now = Local::User.new
-  #   Me.update_last_action(controller_request)
-  #   Me.now.last_action.should == '/my/last/request'
-  #   # Me.now.last_action_at.to_s.should == DateTime.now.to_s
-  # end
+    it "calling none? should return false" do
+      Me.now = @user_stub
+      Me.should_not be_none
+    end
+
+    it "calling reset should set Me.now to nil" do
+      Me.now = @user_stub
+      Me.now.should be @user_stub
+      Me.reset
+      Me.now.should be_nil
+    end
+  end
+
+  context "none is Me.now" do
+    it "calling someone? should return false" do
+      Me.should_not be_someone
+    end
+
+    it "calling none? should return true" do
+      Me.should be_none
+    end
+  end
+
+
+  it "should save some information" do
+    pending "does not work correctly now"
+    # controller_request = mock("ActionController::Request")
+    # controller_request.stub!(:query_parameters).and_return('/my/last/request')
+    #
+    # Me.now = Local::User.new
+    #
+    # Me.update_last_action(controller_request)
+    # Me.now.last_action.should == '/my/last/request'
+    # Me.now.last_action_at.to_s.should == DateTime.now.to_s
+  end
 
 end
 
 
-describe "my" do
+describe "global my" do
   before(:all) do
     start_neo4j
+
     Me.now = Local::User.new
-  
-    @my_tags = (1..3).map do |i|
-      Tag.new(:name => "tag_#{i}")
+    undefine_class :Ding
+
+    class Ding
+      is_a_neo_node
+      property :name
     end
 
-    @my_tags.each do |tag|
-      Me.now.created_tags << tag
+    class Local::User
+      has_n(:created_dings).to(Tag).relation(Acl::Created)
+    end
+
+    @my_dings = (1..3).map do |i|
+      Ding.new(:name => "ding_#{i}")
+    end
+
+    @my_dings.each do |ding|
+      Me.now.created_dings << ding
     end
   end
 
@@ -65,28 +89,36 @@ describe "my" do
     stop_neo4j
   end
 
-  it "my should by Me.now" do
+
+  it "should be globally available" do
+    Object.should respond_to(:my)
+  end
+
+  it "should by Me.now" do
     my.should be Me.now
   end
 
-  it "should return my number of things calling my.count_my" do
-    my.count_my(:created_tags).should be 3
-  end
-
-  it "should return an inspect dump of my tags calling my.dump_my" do
-    my.dump_my(:created_tags).should be_kind_of(String)
-    # my.dump_my(:created_tags).should == Me.now.created_tags.to_a.inspect
-  end
-
-  it "should return my node's names calling my.dump_my_names " do
-    @my_tags.each do |tag|
-      my.dump_my_names(:created_tags).should include(tag.name)
+  context "for debugging and knowledge generation" do
+    it "calling count_my(:created_dings) should return the number of dings" do
+      count_my(:created_dings).should be 3
     end
-  end
-  
-  it "should return my node's classes calling my.dump_my_classes " do
-    @my_tags.each do |tag|
-      my.dump_my_classes(:created_tags).should include(tag.class)
+
+    it "calling my.dump_my(:created_dings) should return an inspect dump of my dings" do
+      dump_my(:created_dings).should be_a_kind_of(String)
+    end
+
+    it "calling my.dump_names_of_my(:created_dings) should return my dings' names" do
+      @my_dings.each do |ding|
+        dump_names_of_my(:created_dings).should include(ding.name)
+        ding.should be_a_instance_of(Ding)
+      end
+    end
+
+    it "calling my.dump_classes_of_my(:created_dings) should return my dings' classes" do
+      @my_dings.each do |ding|
+        dump_classes_of_my(:created_dings).should include(ding.class)
+        ding.should be_a_instance_of(Ding)
+      end
     end
   end
 

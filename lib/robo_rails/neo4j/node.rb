@@ -121,7 +121,7 @@ module RoboRails
               update(hash)
             end
           else 
-            raise NoMethodError
+            raise NoMethodError.new("#{self.name} does not have all of this properties #{hash.keys.join(',')}")
           end
         end
 

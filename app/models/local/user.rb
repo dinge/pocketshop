@@ -3,6 +3,8 @@ class Local::User
 
   property :name, :encrypted_password, :salt_for_password
   property :password # needed for Local::User.value_object.new, attr_accessors owerwritten
+  def password; nil; end
+
   index :name
 
   property :last_action, :type => String
@@ -27,15 +29,13 @@ class Local::User
     end
   end
 
-  # setter for encrypted password
+  # attr_writer for encrypted password
   def password=(password)
     @password = password.to_s.strip
     return if @password.blank?
     self.salt_for_password = self.class.generate_salt
     self.encrypted_password = self.class.encrypt_password(self.salt_for_password, @password)
   end
-
-  def password; nil; end
 
   # build encrypted password
   def self.encrypt_password(salt, password) # :nodoc:
@@ -50,9 +50,7 @@ class Local::User
     encrypted_password == self.class.encrypt_password(salt_for_password, password)
   end
 
-
 end
-
 
   # me.traverse.outgoing(:friends,:projects).depth(:all).filter {|tp| ... }
   # has_n()

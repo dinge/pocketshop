@@ -42,14 +42,12 @@ class Object
     my.send(what).to_a.inspect
   end
 
-  def dump_my_names(what)
+  def dump_names_of_my(what)
     my.send(what).map(&:name)
   end
 
-  def dump_my_classes(what)
+  def dump_classes_of_my(what)
     my.send(what).map(&:class)
   end
 
 end
-
-
