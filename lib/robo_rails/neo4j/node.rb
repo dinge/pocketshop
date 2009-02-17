@@ -115,9 +115,13 @@ module RoboRails
           neo_node_id <=> other.neo_node_id
         end
 
-        def update!(struct_or_hash)
-          ::Neo4j::Transaction.run do
-            update(struct_or_hash)
+        def update!(hash)
+          if hash.keys.all?{ |key| property?(key) }
+            ::Neo4j::Transaction.run do
+              update(hash)
+            end
+          else 
+            raise NoMethodError
           end
         end
 

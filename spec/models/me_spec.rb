@@ -16,33 +16,33 @@ describe Me do
   end
 
 
-  it "should set Me.now to nil calling reset" do
-    Me.now = @user_stub
-    Me.now.should be @user_stub
-    Me.reset
-    Me.now.should be nil
-  end
-
-  it "should return true if Me.now is someone calling someone?" do
-    Me.now = @user_stub
-    Me.someone?.should be true
-    Me.none?.should be false
-  end
-
-  it "should return false if Me.now is no one calling someone?" do
-    Me.someone?.should be false
-    Me.none?.should be true
-  end
-
-  it "should save some information" do
-    controller_request = mock "ActionController::Request"
-    controller_request.stub!(:query_parameters).and_return('/my/last/request')
-
-    Me.now = Local::User.new
-    Me.update_last_action(controller_request)
-    Me.now.last_action.should == '/my/last/request'
-    # Me.now.last_action_at.to_s.should == DateTime.now.to_s
-  end
+  # it "should set Me.now to nil calling reset" do
+  #   Me.now = @user_stub
+  #   Me.now.should be @user_stub
+  #   Me.reset
+  #   Me.now.should be nil
+  # end
+  # 
+  # it "should return true if Me.now is someone calling someone?" do
+  #   Me.now = @user_stub
+  #   Me.someone?.should be true
+  #   Me.none?.should be false
+  # end
+  # 
+  # it "should return false if Me.now is no one calling someone?" do
+  #   Me.someone?.should be false
+  #   Me.none?.should be true
+  # end
+  # 
+  # it "should save some information" do
+  #   controller_request = mock "ActionController::Request"
+  #   controller_request.stub!(:query_parameters).and_return('/my/last/request')
+  # 
+  #   Me.now = Local::User.new
+  #   Me.update_last_action(controller_request)
+  #   Me.now.last_action.should == '/my/last/request'
+  #   # Me.now.last_action_at.to_s.should == DateTime.now.to_s
+  # end
 
 end
 
