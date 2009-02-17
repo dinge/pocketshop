@@ -48,7 +48,7 @@ describe "RoboRails::Neo4j::Node class methods" do
 
   it "should mixin neo4j node" do
     SomeThing.included_modules.should include(Neo4j::NodeMixin)
-    SomeThing.new.should be_a_kind_of(Neo4j::NodeMixin)
+    @some_thing.should be_a_kind_of(Neo4j::NodeMixin)
   end
 
   it "should return it's property names" do
@@ -60,7 +60,7 @@ describe "RoboRails::Neo4j::Node class methods" do
   it "should load all nodes of this class" do
     SomeThing.all_nodes.to_a.size.should == 3
     SomeThing.all_nodes.each do |thing|
-      thing.should be_instance_of(SomeThing)
+      thing.should be_an_instance_of(SomeThing)
     end
   end
 
@@ -78,11 +78,11 @@ describe "RoboRails::Neo4j::Node class methods" do
     #puts    SomeThing.find_first(:name => "name_2").name
     # SomeThing.find_first(:name => "name_2").should == @some_things.second
   end
-
+  
   it "should return nil if non mathing is found" do
     SomeThing.find_first(:name => "nothing").should == nil
   end
-
+  
   it "should fire an exception if non mathing is found" do
     lambda { SomeThing.find_first!(:name => "nothing") }.should raise_error(RoboRails::Neo4j::NotFoundException)
   end
@@ -125,7 +125,7 @@ describe "RoboRails::Neo4j::Node is_a_neo_node with special options" do
   end
 
   it "should have the property created_at returning a DateTime" do
-    @other_thing.created_at.should be_instance_of(DateTime)
+    @other_thing.created_at.should be_an_instance_of(DateTime)
   end
 
   it "should return the date and time it was created" do
@@ -134,7 +134,7 @@ describe "RoboRails::Neo4j::Node is_a_neo_node with special options" do
   end
 
   it "should have the property updated_at returning a DateTime" do
-    @other_thing.updated_at.should be_instance_of(DateTime)
+    @other_thing.updated_at.should be_an_instance_of(DateTime)
   end
 
   it "should return the date and time it was updated" do
@@ -186,7 +186,7 @@ describe "RoboRails::Neo4j::Node instance methods" do
 
   it "should return false calling new_record?" do
     something = SomeThing.new
-    something.new_record?.should be false
+    something.should_not be_a_new_record
   end
 
   it "should be possible to instantize a node woth properties as arguments hash" do
