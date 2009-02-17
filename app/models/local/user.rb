@@ -34,11 +34,11 @@ class Local::User
     @password = password.to_s.strip
     return if @password.blank?
     self.salt_for_password = self.class.generate_salt
-    self.encrypted_password = self.class.encrypt_password(self.salt_for_password, @password)
+    self.encrypted_password = self.class.encrypt_password_with_salt(@password, self.salt_for_password)
   end
 
   # build encrypted password
-  def self.encrypt_password(salt, password) # :nodoc:
+  def self.encrypt_password_with_salt(password, salt)
     Digest::SHA1.hexdigest("#{salt}#{password}#{salt}")
   end
 
@@ -47,7 +47,7 @@ class Local::User
   end
 
   def has_this_password?(password)
-    encrypted_password == self.class.encrypt_password(salt_for_password, password)
+    encrypted_password == self.class.encrypt_password_with_salt(password, salt_for_password)
   end
 
 end
