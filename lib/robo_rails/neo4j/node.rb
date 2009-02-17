@@ -12,12 +12,6 @@ module RoboRails
       module ClassMethods
 
         def is_a_neo_node(options = {})
-          include_neo_node_mixins(options)
-        end
-
-        private
-
-        def include_neo_node_mixins(options)
           include ::Neo4j::NodeMixin
           include ::Neo4j::DynamicAccessorMixin if options[:dynamic_properties]
           extend ::Neo4j::TransactionalMixin
@@ -41,7 +35,6 @@ module RoboRails
 
           include InstanceMethods
           include InstanceMethodExtensions
-
         end
 
       end
@@ -120,7 +113,7 @@ module RoboRails
             ::Neo4j::Transaction.run do
               update(hash)
             end
-          else 
+          else
             raise NoMethodError.new("#{self.name} does not have all of this properties #{hash.keys.join(',')}")
           end
         end
