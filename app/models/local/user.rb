@@ -1,5 +1,5 @@
 class Local::User
-  is_a_neo_node :with_meta_info => true
+  is_a_neo_node :meta_info => true
 
   property :name, :encrypted_password, :salt_for_password
   property :password # needed for Local::User.value_object.new, attr_accessors owerwritten

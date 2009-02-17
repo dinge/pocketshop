@@ -21,7 +21,7 @@ module RoboRails
             extend SingletonMethodsExtensions
           end
 
-          if options[:with_meta_info]
+          if options[:meta_info]
             class_eval do
               property :created_at, :type => DateTime
               property :updated_at, :type => DateTime

@@ -11,7 +11,7 @@ describe RoboRails::Neo4j::Node, :shared => true do
     end
 
     class OtherThing
-      is_a_neo_node :with_meta_info => true,
+      is_a_neo_node :meta_info => true,
                     :dynamic_properties => true
     end
 

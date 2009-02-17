@@ -90,7 +90,7 @@ describe "global my" do
   end
 
 
-  it "should be globally available" do
+  it "should be globaly available" do
     Object.should respond_to(:my)
   end
 
