@@ -260,9 +260,10 @@ describe "a neo node instance", ' from a class' do
 
     it "should update and return the DateTime it was updated" do
       last_update_at = @otherthing.updated_at
-      sleep 1
+      sleep 2
       @otherthing.suppe = "lecker"
-      # @otherthing.updated_at.to_s.should == DateTime.now.to_s
+
+      @otherthing.updated_at.should be_close(DateTime.now, 0.00002)
       @otherthing.updated_at.to_s.should_not == last_update_at.to_s
     end
 
