@@ -14,7 +14,6 @@ module RoboRails
         def is_a_neo_node(options = {})
           include ::Neo4j::NodeMixin
           include ::Neo4j::DynamicAccessorMixin if options[:dynamic_properties]
-          extend ::Neo4j::TransactionalMixin
 
           class_eval do
             extend SingletonMethods
@@ -83,18 +82,10 @@ module RoboRails
 
 
       module SingletonMethodsExtensions
-
       end
 
 
-
       module InstanceMethods
-
-        def self.included(base)
-          # base.class_eval do
-          #   transactional :update!
-          # end
-        end
 
         def id
           neo_node_id
@@ -148,13 +139,14 @@ module RoboRails
         def self.included(base)
           base.class_eval do
             alias_method_chain :set_property, :hooks
-            transactional :set_property_with_hooks, :set_property_without_hooks
           end
         end
 
         def set_property_with_hooks(name, value)
-          set_property_without_hooks(name.to_s, value)
-          update_date_and_version
+          ::Neo4j::Transaction.run do
+            set_property_without_hooks(name.to_s, value)
+            update_date_and_version
+          end
         end
 
         # overwrite in super to allow hash properties in arguments

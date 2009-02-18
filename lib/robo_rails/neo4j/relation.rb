@@ -12,12 +12,6 @@ module RoboRails
       module ClassMethods
 
         def is_a_neo_relation(options = {})
-          include_neo_relation_mixins(options)
-        end
-
-        private
-
-        def include_neo_relation_mixins(options)
           include ::Neo4j::RelationMixin
           attr_reader :internal_r
 
@@ -26,38 +20,35 @@ module RoboRails
             extend SingletonMethodsExtensions
           end
 
+          include InstanceMethods
+          include InstanceMethodExtensions
+
           if options[:meta_info]
             class_eval do
               property :created_at
               property :updated_at
               property :version
+
+              alias_method_chain :created_at, :typecast
+              alias_method_chain :updated_at, :typecast
             end
           end
 
-          include InstanceMethods
-          include InstanceMethodExtensions
-
         end
-
       end
 
 
       module SingletonMethods
-
       end
-
 
       module SingletonMethodsExtensions
-
       end
-
 
       module InstanceMethods
 
         def id
           neo_relation_id
         end
-
 
         private
 
@@ -79,22 +70,19 @@ module RoboRails
       end
 
 
-
       module InstanceMethodExtensions
 
         def self.included(base)
           base.class_eval do
-            extend ::Neo4j::TransactionalMixin
             alias_method_chain :set_property, :hooks
-            alias_method_chain :created_at, :typecast
-            alias_method_chain :updated_at, :typecast
-            transactional :set_property_with_hooks, :set_property_without_hooks
           end
         end
 
         def set_property_with_hooks(name, value)
-          set_property_without_hooks(name.to_s, value)
-          update_date_and_version
+          ::Neo4j::Transaction.run do
+            set_property_without_hooks(name.to_s, value)
+            update_date_and_version
+          end
         end
 
         def created_at_with_typecast
