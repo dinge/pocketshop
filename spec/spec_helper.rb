@@ -2,6 +2,7 @@
 # from the project root directory.
 ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
+
 require 'spec'
 require 'spec/rails'
 
@@ -44,6 +45,12 @@ Spec::Runner.configure do |config|
   # == Notes
   #
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
+end
+
+
+
+def fixed_datetime
+  DateTime.now.change(:year => 2000, :month => 1, :day => 1, :hour => 10, :min => 56, :sec => 12 )
 end
 
 

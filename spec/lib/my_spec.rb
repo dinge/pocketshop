@@ -13,7 +13,7 @@ describe "global my" do
 
     class User
       is_a_neo_node
-      has_n(:created_dings).to(Tag).relation(Acl::Created)
+      has_n(:dings).to(Tag).relation(Acl::Created)
     end
 
     Me.now = User.new
@@ -23,7 +23,7 @@ describe "global my" do
     end
 
     @my_dings.each do |ding|
-      Me.now.created_dings << ding
+      Me.now.dings << ding
     end
   end
 
@@ -36,29 +36,33 @@ describe "global my" do
     Object.should respond_to(:my)
   end
 
-  it "should by Me.now" do
+  it "should be Me.now" do
     my.should be Me.now
   end
 
+  it "my.dings should return the same as My.now.dings " do
+    my.dings.to_a.should == Me.now.dings.to_a
+  end
+
   context "for debugging and knowledge generation" do
-    it "calling count_my(:created_dings) should return the number of dings" do
-      count_my(:created_dings).should be 3
+    it "calling count_my(:dings) should return the number of dings" do
+      count_my(:dings).should be 3
     end
 
-    it "calling my.dump_my(:created_dings) should return an inspect dump of my dings" do
-      dump_my(:created_dings).should be_a_kind_of(String)
+    it "calling dump_my(:dings) should return an inspect dump of my dings" do
+      dump_my(:dings).should be_a_kind_of(String)
     end
 
-    it "calling my.dump_names_of_my(:created_dings) should return my dings' names" do
+    it "calling dump_names_of_my(:dings) should return my dings' names" do
       @my_dings.each do |ding|
-        dump_names_of_my(:created_dings).should include(ding.name)
+        dump_names_of_my(:dings).should include(ding.name)
         ding.should be_a_instance_of(Ding)
       end
     end
 
-    it "calling my.dump_classes_of_my(:created_dings) should return my dings' classes" do
+    it "calling dump_classes_of_my(:dings) should return my dings' classes" do
       @my_dings.each do |ding|
-        dump_classes_of_my(:created_dings).should include(ding.class)
+        dump_classes_of_my(:dings).should include(ding.class)
         ding.should be_a_instance_of(Ding)
       end
     end
