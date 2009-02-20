@@ -1,8 +1,3 @@
-  # Lucene::Config[:storage_path] = File.join(Rails.root, 'tmp', 'lucene')
-  # Neo4j::Config[:storage_path] = File.join(Rails.root, 'tmp', 'neo4j')
-
-Lucene::Config[:store_on_file] = true
-
 neo4j_base_path = if Rails.env.development?
   File.join(Rails.root, 'tmp')
 elsif Rails.env.production?
@@ -17,6 +12,7 @@ elsif Rails.env.production?
   end
 end
 
+Lucene::Config[:store_on_file] = true
 Lucene::Config[:storage_path] = File.join(neo4j_base_path, 'lucene')
 Neo4j::Config[:storage_path] = File.join(neo4j_base_path, 'neo4j')
 
