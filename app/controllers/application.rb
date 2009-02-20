@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   before_filter :init_me
   before_filter :redirect_to_login, :if => Proc.new{ Me.none? }
 
-  after_filter :update_my_last_action, :if => Proc.new{ Me.someone? }
+  # after_filter :update_my_last_action, :if => Proc.new{ Me.someone? }
   after_filter :reset_me
 
   helper :form, :navigation, :quick_view, :tag, :things

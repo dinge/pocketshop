@@ -73,7 +73,7 @@ module NavigationHelper
       [
        "me: #{link_to(Me.now.name, me_index_path)}",
         "last action: #{ link_to(Me.now.last_action, Me.now.last_action) }",
-        "last action at: #{ Me.now.last_action_at.to_formatted_s(:db) }",
+        # "last action at: #{ Me.now.last_action_at.to_formatted_s(:db) }",
         link_to('logout', logout_path, :method => :delete)
       ]
     end
