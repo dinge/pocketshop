@@ -31,6 +31,6 @@ namespace :deploy do
   end
   desc "Starting rails app with jetty_rails"
   task :start, :roles => :app do
-    run "cd #{current_path} && #{try_runner} nohup script/spin", :pty => true
+    run "cd #{current_path} && #{try_runner} nohup script/start_jetty", :pty => true
   end
 end
