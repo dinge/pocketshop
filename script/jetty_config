@@ -1,0 +1,11 @@
+#!/bin/bash
+# --- START SETTINGS TO EDIT ---
+#add the JRE bin directory to path
+PATH=$PATH:/usr/lib/jvm/java-6-sun-1.6.0.12/jre/bin/
+#Base directory for deployment
+BASE_DIR=/home/railshost/apps/dingbank
+#Jruby executable to use
+JRUBY=/usr/bin/jruby
+# --- END SETTINGS TO EDIT ---
+
+PID_FILE=$BASE_DIR/shared/tmp/pids/jetty_rails.pid

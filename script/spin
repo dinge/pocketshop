@@ -1,0 +1,12 @@
+#!/bin/sh
+. script/jetty_config
+TIMESTAMP=$(date +%Y%m%d-%h:%m:%s)
+#check that previous process has been stopped correctly
+if [[ -f $BASE_DIR/shared/tmp/pids/jetty_rails.pid ]] && ps ax | grep -f $BASE_DIR/shared/tmp/pids/jetty_rails.pid  >/dev/null 2>&1 ; then
+  echo "We could have the previous process still running! $(cat $PID_FILE )" >&1
+  exit 1
+fi
+
+cd  $BASE_DIR/current
+$JRUBY --server -S jetty_rails -c config/jetty_rails.yml > log/$TIMESTAMP_jetty_rails.log &
+echo $! > $BASE_DIR/shared/tmp/pids/jetty_rails.pid
