@@ -12,3 +12,4 @@ fi
 cd  $BASE_DIR/current
 $JRUBY --server -S jetty_rails -c config/jetty_rails.yml > $LOGFILE &
 echo $! > $BASE_DIR/shared/pids/jetty_rails.pid
+echo "Starting Jetty process with pid $(cat $PID_FILE)"
