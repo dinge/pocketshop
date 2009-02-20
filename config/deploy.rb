@@ -18,6 +18,7 @@ role :db,  "roboterliebe.de", :primary => true
 
 
 
+# based on http://blog.raphinou.com/2008/12/capistrano-deployment-for-jetty-rails.html
 namespace :deploy do
   desc "Restarting jetty_rails"
   task :restart, :roles => :app, :except => { :no_release => true } do
