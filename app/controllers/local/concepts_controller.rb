@@ -23,7 +23,7 @@ class Local::ConceptsController < ApplicationController
 
   def create
     @local_concept = Local::Concept.new
-    Me.now.creations << @local_concept
+    my.created_concepts << @local_concept
 
     respond_to do |format|
       if @local_concept.update(params[:local_concept])

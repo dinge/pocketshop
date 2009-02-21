@@ -22,7 +22,8 @@ class ThingsController < ApplicationController
 
   def create
     @thing = Thing.new
-
+    my.created_things << @thing
+    
     respond_to do |format|
       if @thing.update(params[:thing])
         flash[:notice] = 'successfully created.'

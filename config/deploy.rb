@@ -17,6 +17,10 @@ role :web, "roboterliebe.de"
 role :db,  "roboterliebe.de", :primary => true
 
 
+# check more at
+# http://github.com/guides/deploying-with-capistrano
+# set :deploy_via, :remote_cache
+# set :git_shallow_clone, 1
 
 # based on http://blog.raphinou.com/2008/12/capistrano-deployment-for-jetty-rails.html
 namespace :deploy do
