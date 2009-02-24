@@ -34,7 +34,7 @@ def recent_specs_by_number(number_of_specs)
 
   (apps + libs + specs).sort_by do |path, spec|
     File.mtime(path)
-  end.reverse.map(&:last)[0, number_of_specs]
+  end.reverse.map(&:last).uniq[0, number_of_specs]
 end
 
 
