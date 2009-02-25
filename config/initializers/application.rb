@@ -4,7 +4,7 @@ require 'my'
 require 'digest/sha1'
 
 # require 'ruby_extensions'
-
+require 'ding_dealer/guid'
 
 Object.class_eval do
   include My
