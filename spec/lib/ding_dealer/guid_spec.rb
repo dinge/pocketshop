@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 describe "a global uuid", 'is part of the things uri' do
 
   it "version 2 should be the default version" do
-    DingDealer::Guid.version.should be 2
+    DingDealer::Guid.version.should be 3
   end
 
 
@@ -193,7 +193,7 @@ describe "version 3 coder" do
   describe "encoding" do
     context "a string" do
       it "should return a encoded string" do
-        DingDealer::Guid.encode('harras fass harras').should == "aGFycmFzIGZhc3MgaGFycmFzv3"
+        DingDealer::Guid.encode('harras fass harras').should == "aGFycmFzIGZhc3MgaGFycmFzzv3"
       end
 
       it "a decoded and encoded string should be the same " do
@@ -204,7 +204,7 @@ describe "version 3 coder" do
     context "a hash" do
       before(:all) do
         @hash = {:u => 'harras@example.com', :t => "20080823121212", :i => "6987", :c => 'Ziege'}
-        @encoded = "dTpoYXJyYXNAZXhhbXBsZS5jb206dDoyMDA4MDgyMzEyMTIxMjppOjY5ODc6YzpaaWVnZQ==v3"
+        @encoded = "dTpoYXJyYXNAZXhhbXBsZS5jb206dDoyMDA4MDgyMzEyMTIxMjppOjY5ODc6YzpaaWVnZQxv3"
       end
 
       it "a decoded and encoded hash should be the same " do

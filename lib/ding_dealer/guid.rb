@@ -4,11 +4,11 @@ module DingDealer
     cattr_accessor :version
     attr_reader :version
 
-    @@version = 2
+    @@version = 3
 
     class InvalidVersionFormat < StandardError; end
     class InvalidCoderVersion < StandardError; end
-
+    class InvalidGuid < StandardError; end
 
     def initialize(version = @@version)
       self.version = version
@@ -106,15 +106,34 @@ end
 module DingDealer
   class Guid
 
-    # simple modified base64 encoding, slightly modified to fit rfc3548
+    # simple modified base64 encoding, slightly modified to fit rfc3548 + encoding trailing =s
     class VersionedCoder3
       def self.encode(string)
-        Base64.encode64s(string).tr("+/","-_")
+        encode_special_chars( Base64.encode64s(string) )
       end
 
       def self.decode(string)
-        Base64.decode64(string.tr("-_","+/"))
+        Base64.decode64( decode_special_chars( string ) )
       end
+
+      def self.encode_special_chars(encodable)
+        case encodable.tr("+/","-_")
+        when /^([a-zA-Z0-9]+)==$/ then "#{$1}x"
+        when /^([a-zA-Z0-9]+)=$/  then "#{$1}y"
+        when /^([a-zA-Z0-9]+)$/   then "#{$1}z"
+        else raise
+        end
+      end
+
+      def self.decode_special_chars(decodable)
+        case decodable.tr("-_","+/")
+        when /^([a-zA-Z0-9]+)x$/ then "#{$1}=="
+        when /^([a-zA-Z0-9]+)y$/ then "#{$1}="
+        when /^([a-zA-Z0-9]+)z$/ then $1
+        else raise DingDealer::Guid::InvalidGuid.new("something is wrong with #{decodable}")
+        end
+      end
+
     end
 
   end
