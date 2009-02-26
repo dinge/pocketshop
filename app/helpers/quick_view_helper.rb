@@ -20,7 +20,7 @@ module QuickViewHelper
 
   def field_set_with_control_for(object)
     control = case object
-      when Struct : 
+      when Struct
         klass_name = object.class.name.match("Neo4j::(.*)ValueObject")[1].titleize
         "new #{klass_name}"
       else

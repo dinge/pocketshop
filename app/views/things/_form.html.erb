@@ -1,5 +1,5 @@
 <% form_for thing do |form| %>
-  <% field_set_tag 'New Thing' do %>
+  <% field_set_with_control_for thing do %>
 
     <%#= form.label :concept %>
     <%#= form.select :concept,
