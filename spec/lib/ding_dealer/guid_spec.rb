@@ -26,11 +26,11 @@ describe "a global uuid", 'is part of the things uri' do
     context "a hash" do
       it "should accept a hash for encoding", 'by internally cnverting it to a json' do
         guid = DingDealer::Guid.new
-        guid.encode(:a => 1, :b => 2).should == "2:b:1:av1"
+        guid.encode(:a => 1, :b => 2).should == "2-b-1-av1"
       end
 
       it "should encode using it's class methods" do
-        DingDealer::Guid.encode(:a => 1, :b => 2).should == "2:b:1:av1"
+        DingDealer::Guid.encode(:a => 1, :b => 2).should == "2-b-1-av1"
       end
     end
   end
@@ -55,14 +55,14 @@ describe "a global uuid", 'is part of the things uri' do
     context "to a hash" do
       it "should decode to a hash", 'no version number have to be given in decodable using the instance method, default is used' do
         guid = DingDealer::Guid.new
-        decoded = guid.decode_to_hash( "2:b:1:a" )
+        decoded = guid.decode_to_hash( "2-b-1-a" )
         decoded.should == {'a' => '1', 'b' => '2'}
         decoded[:a].should == "1"
         decoded[:b].should == "2"
       end
 
       it "should decode using it's class methods", 'version number ist parsed' do
-        DingDealer::Guid.decode_to_hash( "2:b:1:av1" ) == {'a' => '1', 'b' => '2'}
+        DingDealer::Guid.decode_to_hash( "2-b-1-av1" ) == {'a' => '1', 'b' => '2'}
       end
     end
   end
@@ -161,7 +161,7 @@ describe "version 2 coder" do
     context "a hash" do
       before(:each) do
         @hash = {:u => 'harras@example.com', :t => "20080823121212", :i => "6987", :c => 'Ziege'}
-        @encoded = "753a686172726173406578616d706c652e636f6d3a743a32303038303832333132313231323a693a363938373a633a5a69656765v2"
+        @encoded = "752d686172726173406578616d706c652e636f6d2d742d32303038303832333132313231322d692d363938372d632d5a69656765v2"
       end
 
       it "a decoded and encoded hash should be the same " do
@@ -204,7 +204,7 @@ describe "version 3 coder" do
     context "a hash" do
       before(:all) do
         @hash = {:u => 'harras@example.com', :t => "20080823121212", :i => "6987", :c => 'Ziege'}
-        @encoded = "dTpoYXJyYXNAZXhhbXBsZS5jb206dDoyMDA4MDgyMzEyMTIxMjppOjY5ODc6YzpaaWVnZQxv3"
+        @encoded = "dS1oYXJyYXNAZXhhbXBsZS5jb20tdC0yMDA4MDgyMzEyMTIxMi1pLTY5ODctYy1aaWVnZQxv3"
       end
 
       it "a decoded and encoded hash should be the same " do

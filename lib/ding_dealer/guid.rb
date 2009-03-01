@@ -16,7 +16,7 @@ module DingDealer
 
     def encode(encodable)
       encoded = case encodable
-      when Hash then @versioned_coder_klass.encode(encodable.to_a.join(':'))
+      when Hash then @versioned_coder_klass.encode(encodable.to_a.join('-'))
       # when Hash then @versioned_coder_klass.encode(encodable.to_json.gsub(' ',''))
       when String then @versioned_coder_klass.encode(encodable)
       end
@@ -28,7 +28,7 @@ module DingDealer
     end
 
     def decode_to_hash(decodable)
-      HashWithIndifferentAccess[*@versioned_coder_klass.decode(decodable).split(':')]
+      HashWithIndifferentAccess[*@versioned_coder_klass.decode(decodable).split('-')]
       # HashWithIndifferentAccess.new( ActiveSupport::JSON.decode( @versioned_coder_klass.decode(decodable) ) )
     end
 
