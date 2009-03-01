@@ -78,6 +78,16 @@ module RoboRails
             raise(RoboRails::Neo4j::NotFoundException.new("can't find #{self.name} with query #{query.inspect}"))
         end
 
+
+        def load_by_guid!(guid)
+          decoded = DingDealer::Guid.decode_to_hash(guid)
+          node = load(decoded[:i].to_i)
+          node = load(5)
+          if node.created_at.strftime('%Y%m%d%H%M%S') != decoded[:t] || node.class.name != decoded[:c]
+            raise RoboRails::Neo4j::NotFoundException
+          end
+          node
+        end
       end
 
 
@@ -94,6 +104,18 @@ module RoboRails
         def to_param
           "#{id}-#{name}"
         end
+
+        def to_guid
+          DingDealer::Guid.encode(
+            :i => id,
+            :t => created_at.strftime('%Y%m%d%H%M%S'),
+            :c => self.class.name,
+            :u => 'x@xxx.de',
+            :r => rand(9999999) )
+        end
+
+        # alias :to_param :to_guid
+
 
         def <=>(other)
           neo_node_id <=> other.neo_node_id

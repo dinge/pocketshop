@@ -85,6 +85,5 @@ class Local::ConceptsController < ApplicationController
 
   def init_local_concept
     @local_concept = Local::Concept.load(params[:id])
-    # Java::OrgNeo4jApiCore::NotFoundException
   end
 end
