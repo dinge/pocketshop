@@ -10,37 +10,22 @@ module RoboRails
       end
 
       module ClassMethods
+        def is_a_neo_node(opts = {}, &block)
+          cattr_accessor :options
+          self.options = Struct.new(:meta_info, :dynamic_properties, :validations).new
+          yield if block_given?
 
-        def is_a_neo_node(options = {})
           include ::Neo4j::NodeMixin
-          include ::Neo4j::DynamicAccessorMixin if options[:dynamic_properties]
-
-          class_eval do
-            extend SingletonMethods
-            extend SingletonMethodsExtensions
-          end
-
-          if options[:meta_info]
-            class_eval do
-              property :created_at, :type => DateTime
-              property :updated_at, :type => DateTime
-              property :version
-
-              index :created_at, :type => DateTime
-              index :updated_at, :type => DateTime
-              index :version
-            end
-          end
-
+          include ::Neo4j::DynamicAccessorMixin if options.dynamic_properties
+          extend  SingletonMethods
+          include MetaInfoExtensions            if options.meta_info
           include InstanceMethods
-          include InstanceMethodExtensions
+          include NodeValidations               if options.validations
         end
-
       end
 
 
       module SingletonMethods
-
         def l(neo_node_id)
           node = ::Neo4j.load(neo_node_id)
           raise RoboRails::Neo4j::NotFoundException unless node.is_a?(self)
@@ -78,24 +63,30 @@ module RoboRails
             raise(RoboRails::Neo4j::NotFoundException.new("can't find #{self.name} with query #{query.inspect}"))
         end
 
-
-        def load_by_guid!(guid)
-          decoded = DingDealer::Guid.decode_to_hash(guid)
-          node = load(decoded[:i].to_i)
-          node = load(5)
-          if node.created_at.strftime('%Y%m%d%H%M%S') != decoded[:t] || node.class.name != decoded[:c]
-            raise RoboRails::Neo4j::NotFoundException
-          end
-          node
-        end
-      end
-
-
-      module SingletonMethodsExtensions
+        # def load_by_guid!(guid)
+        #   decoded = DingDealer::Guid.decode_to_hash(guid)
+        #   node = load(decoded[:i].to_i)
+        #   node = load(5)
+        #   if node.created_at.strftime('%Y%m%d%H%M%S') != decoded[:t] || node.class.name != decoded[:c]
+        #     raise RoboRails::Neo4j::NotFoundException
+        #   end
+        #   node
+        # end
       end
 
 
       module InstanceMethods
+        # overwrite in super to allow hash properties in arguments
+        #  p = Person.new(:name => 'peter', :age => 20)
+        def initialize(*args)
+          @errors = ActiveRecord::Errors.new(self) if self.class.options.validations
+          if (properties = args.first).is_a?(Hash)
+            super
+            update(properties)
+          else
+            super(*args)
+          end
+        end
 
         def id
           neo_node_id
@@ -104,18 +95,6 @@ module RoboRails
         def to_param
           "#{id}-#{name}"
         end
-
-        def to_guid
-          DingDealer::Guid.encode(
-            :i => id,
-            :t => created_at.strftime('%Y%m%d%H%M%S'),
-            :c => self.class.name,
-            :u => 'x@xxx.de',
-            :r => rand(9999999) )
-        end
-
-        # alias :to_param :to_guid
-
 
         def <=>(other)
           neo_node_id <=> other.neo_node_id
@@ -135,31 +114,31 @@ module RoboRails
           false
         end
 
-        private
 
-        def update_date_and_version
-          if self.class.property?(:created_at) && created_at.blank?
-            set_property_without_hooks('created_at', DateTime.now)
-          end
+        # def to_guid
+        #   DingDealer::Guid.encode(
+        #     :i => id,
+        #     :t => created_at.strftime('%Y%m%d%H%M%S'),
+        #     :c => self.class.name,
+        #     :u => 'x@xxx.de',
+        #     :r => rand(9999999) )
+        # end
 
-          if self.class.property?(:updated_at)
-            set_property_without_hooks('updated_at', DateTime.now)
-          end
-
-          if self.class.property?(:version)
-            version = self.version || 0
-            set_property_without_hooks('version', version += 1)
-          end
-        end
-
+        # alias :to_param :to_guid
       end
 
 
 
-      module InstanceMethodExtensions
-
+      module MetaInfoExtensions
         def self.included(base)
           base.class_eval do
+            property :created_at, :type => DateTime
+            property :updated_at, :type => DateTime
+            property :version
+            index :created_at, :type => DateTime
+            index :updated_at, :type => DateTime
+            index :version
+
             alias_method_chain :set_property, :hooks
           end
         end
@@ -171,20 +150,32 @@ module RoboRails
           end
         end
 
-        # overwrite in super to allow hash properties in arguments
-        #  p = Person.new(:name => 'peter', :age => 20)
-        def initialize(*args)
-          if (properties = args.first).is_a?(Hash)
-            super
-            update(properties)
-          else
-            super(*args)
+        private
+
+        def update_date_and_version
+          set_property_without_hooks('created_at', DateTime.now) if created_at.blank?
+          set_property_without_hooks('updated_at', DateTime.now)
+
+          current_version = self.version || 0
+          set_property_without_hooks('version', current_version += 1)
+        end
+      end
+
+
+
+      module NodeValidations
+        def self.included(base)
+          base.class_eval do
+            include ActiveRecord::Validations
+            attr_accessor :errors
           end
         end
 
-
+        # stubbing some needed methods from ActiveRecord
+        def save; end
+        def save!; end
+        def update_attribute; end
       end
-
 
     end
   end

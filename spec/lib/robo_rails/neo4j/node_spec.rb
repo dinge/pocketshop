@@ -11,8 +11,11 @@ describe RoboRails::Neo4j::Node, :shared => true do
     end
 
     class OtherThing
-      is_a_neo_node :meta_info => true,
-                    :dynamic_properties => true
+      is_a_neo_node do
+        options.meta_info = true
+        options.dynamic_properties = true
+        options.validations = true
+      end
     end
 
     @somethings = (1..3).map do |i|
@@ -33,6 +36,7 @@ describe "every object should be able to be a neo node" do
   it_should_behave_like "RoboRails::Neo4j::Node"
 
   before(:all) do
+    undefine_class :SomeNakedClass
     class SomeNakedClass; end
   end
 
@@ -73,6 +77,14 @@ describe "a neo node class" do
     SomeThing.property_names.should include(:age)
   end
 
+  it "should be configurable via options" do
+    OtherThing.options.should be_a_kind_of(Struct)
+    OtherThing.options.meta_info.should be_true
+    OtherThing.options.dynamic_properties.should be_true
+    OtherThing.options.validations.should be_true
+    SomeThing.options.validations.should_not be_true
+  end
+
   describe "loading a collection of nodes" do
     it "they should be all nodes of this class" do
       SomeThing.all_nodes.to_a.size.should be @somethings.size
@@ -107,6 +119,16 @@ describe "a neo node class" do
 
       it "should be able to load it's last created node" do
         SomeThing.last_node.should == @somethings.last
+      end
+    end
+
+    context "with enabled validations" do
+      it "should include ActiveRecord's validations" do
+        undefine_class :SomeNakedClass
+        class SomeNakedClass; end
+        OtherThing.included_modules.should include(ActiveRecord::Validations)
+        OtherThing.should respond_to(:validates_presence_of)
+        SomeNakedClass.included_modules.should_not include(ActiveRecord::Validations)
       end
     end
 
@@ -234,48 +256,72 @@ describe "a neo node instance", ' from a class' do
   end
 
 
-  context "with enabled dynamic_properties" do
-    it "should have dynamic properties" do
-      @otherthing.should_not respond_to(:any_dynamic_property)
-      @otherthing.should_not respond_to(:any_dynamic_property=)
+  describe "with enabled special options" do
+    context "like dynamic_properties" do
+      it "should have dynamic properties" do
+        @otherthing.should_not respond_to(:any_dynamic_property)
+        @otherthing.should_not respond_to(:any_dynamic_property=)
 
-      @otherthing.any_dynamic_property = "suppe" # uses method_missing
-      @otherthing.any_dynamic_property.should == 'suppe'
+        @otherthing.any_dynamic_property = "suppe" # uses method_missing
+        @otherthing.any_dynamic_property.should == 'suppe'
+      end
     end
+
+    context "like meta_info" do
+      it "should have the property created_at returning a DateTime" do
+        @otherthing.created_at.should be_an_instance_of(DateTime)
+      end
+
+      it "should return the DateTime it was created" do
+        @otherthing.created_at.day.should == DateTime.now.day
+        @otherthing.created_at.hour.should == DateTime.now.hour
+      end
+
+      it "should return the DateTime it was updated" do
+        @otherthing.updated_at.should be_an_instance_of(DateTime)
+      end
+
+      it "should update and return the DateTime it was updated" do
+        last_update_at = @otherthing.updated_at
+        sleep 2
+        @otherthing.suppe = "lecker"
+
+        @otherthing.updated_at.should be_close(DateTime.now, 0.00002)
+        @otherthing.updated_at.to_s.should_not == last_update_at.to_s
+      end
+
+      it "should return a integer as version" do
+        @otherthing.should respond_to(:version)
+        @otherthing.version.should be_a_kind_of(Integer)
+      end
+
+      it "should increment the version property with every update" do
+        old_version = @otherthing.version
+        @otherthing.tieger = "hungrig"
+        @otherthing.version.should be old_version + 1
+      end
+    end
+
+    context "like validations" do
+      it "should have methods from ActiveRecord::Validations" do
+        undefine_class :SomeNakedClass
+        class SomeNakedClass
+          is_a_neo_node do
+            options.validations = true
+          end
+        end
+
+        @naked = SomeNakedClass.new
+
+        @naked.errors.should be_a_kind_of(ActiveRecord::Errors)
+        @naked.should respond_to(:errors)
+        @naked.should respond_to(:valid?)
+        
+        @something.should_not respond_to(:errors)
+      end
+    end
+
   end
 
-  context "with enabled meta_info" do
-    it "should have the property created_at returning a DateTime" do
-      @otherthing.created_at.should be_an_instance_of(DateTime)
-    end
 
-    it "should return the DateTime it was created" do
-      @otherthing.created_at.day.should == DateTime.now.day
-      @otherthing.created_at.hour.should == DateTime.now.hour
-    end
-
-    it "should return the DateTime it was updated" do
-      @otherthing.updated_at.should be_an_instance_of(DateTime)
-    end
-
-    it "should update and return the DateTime it was updated" do
-      last_update_at = @otherthing.updated_at
-      sleep 2
-      @otherthing.suppe = "lecker"
-
-      @otherthing.updated_at.should be_close(DateTime.now, 0.00002)
-      @otherthing.updated_at.to_s.should_not == last_update_at.to_s
-    end
-
-    it "should return a integer as version" do
-      @otherthing.should respond_to(:version)
-      @otherthing.version.should be_a_kind_of(Integer)
-    end
-
-    it "should increment the version property with every update" do
-      old_version = @otherthing.version
-      @otherthing.tieger = "hungrig"
-      @otherthing.version.should be old_version + 1
-    end
-  end
 end
