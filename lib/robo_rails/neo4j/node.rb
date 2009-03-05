@@ -168,6 +168,19 @@ module RoboRails
           base.class_eval do
             include ActiveRecord::Validations
             attr_accessor :errors
+
+            # needed if not valid after validation
+            def self.self_and_descendents_from_active_record
+              []
+            end
+
+            def self.human_name
+              self.name.humanize
+            end
+
+            def self.human_attribute_name(attribute_name)
+              attribute_name.to_s
+            end
           end
         end
 
