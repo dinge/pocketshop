@@ -8,7 +8,7 @@ class Concept
   property :name, :text
   index :name, :text
 
-  has_one(:creator).from(Local::User, :created_concepts)
+  has_one(:creator).from(User, :created_concepts)
   has_n(:tags).from(Tag, :tagged_concepts)
 
 

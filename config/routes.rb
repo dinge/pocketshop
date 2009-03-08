@@ -17,7 +17,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # Sample resource route with sub-resources:
   #   map.resources :products, :has_many => [ :comments, :sales ], :has_one => :seller
-  
+
   # Sample resource route with more complex sub-resources
   #   map.resources :products do |products|
   #     products.resources :comments
@@ -38,22 +38,20 @@ ActionController::Routing::Routes.draw do |map|
 
   map.root :controller => 'index'
 
-  map.resources :things, :has_one => [:concept], :collection => { :playground => :get }
+  map.resources :things
   map.resources :tags
   map.resources :concepts
   map.resources :me
+  map.resources :users
 
-  map.login '/login', :controller => 'local/users/sessions', :action => 'new'
-  map.logout '/logout', :controller => 'local/users/sessions', :action => 'destroy'
+  map.login '/login', :controller => 'local/sessions', :action => 'new'
+  map.logout '/logout', :controller => 'local/sessions', :action => 'destroy'
 
   map.namespace :local do |local|
-    local.namespace :users do |user|
-      user.resources :sessions
-    end
-    local.resources :users
+    local.resources :sessions
   end
 
 
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
+  # map.connect ':controller/:action/:id'
+  # map.connect ':controller/:action/:id.:format'
 end

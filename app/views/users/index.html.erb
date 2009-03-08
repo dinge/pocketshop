@@ -1,0 +1,4 @@
+<% @users.each do |user| %>
+  <%= quick_view_for(user, :only => [:name, :last_action_at]) %>
+<% end %>
+

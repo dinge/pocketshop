@@ -1,11 +1,11 @@
-class Local::User
+class User
   is_a_neo_node do
     options.meta_info = true
     options.validations = true
   end
 
   property :name, :encrypted_password, :salt_for_password
-  property :password # needed for Local::User.value_object.new, attr_accessors owerwritten
+  property :password # needed for User.value_object.new, attr_accessors owerwritten
   def password; nil; end
 
   index :name

@@ -10,7 +10,7 @@ class Thing
 
   validates_presence_of  :name
 
-  has_one(:creator).from(Local::User, :created_things)
+  has_one(:creator).from(User, :created_things)
 
 
 

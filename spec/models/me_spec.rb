@@ -8,7 +8,7 @@ describe Me do
 
   before(:each) do
     Me.now = nil
-    @user_stub = mock_model(Local::User, :name => 'haina')
+    @user_stub = mock_model(User, :name => 'haina')
   end
 
   after(:all) do
@@ -50,7 +50,7 @@ describe Me do
     # controller_request = mock("ActionController::Request")
     # controller_request.stub!(:query_parameters).and_return('/my/last/request')
     #
-    # Me.now = Local::User.new
+    # Me.now = User.new
     #
     # Me.update_last_action(controller_request)
     # Me.now.last_action.should == '/my/last/request'

@@ -7,7 +7,7 @@ class Me
   end
 
   def self.someone?
-    now.is_a?(Local::User)
+    now.is_a?(User)
   end
 
   def self.none?
@@ -22,7 +22,7 @@ class Me
   # shorthand for some shell games
   if Rails.env.development?
     def Me.lars!
-      Local::User.first_node.is_me_now
+      User.first_node.is_me_now
     end
   end
 

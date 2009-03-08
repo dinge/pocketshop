@@ -13,8 +13,8 @@ class ApplicationController < ActionController::Base
 
   def init_me
     reset_me
-    if session[:local_user_id] && local_user = Local::User.load(session[:local_user_id])
-      local_user.is_me_now
+    if session[:user_id] && user = User.load(session[:user_id])
+      user.is_me_now
     end
   end
 
@@ -26,14 +26,14 @@ class ApplicationController < ActionController::Base
     redirect_to login_path
   end
 
-  def start_local_session_with(local_user)
-    local_user.is_me_now
-    session[:local_user_id] = local_user.id
+  def start_local_session_with(user)
+    user.is_me_now
+    session[:user_id] = user.id
   end
 
   def stop_local_session
     reset_me
-    session[:local_user_id] = nil
+    session[:user_id] = nil
   end
 
 

@@ -1,4 +1,5 @@
-<% form_for @local_user, :url => local_users_sessions_path  do |form| %>
+<% form_for @user do |form| %>
+  <% field_set_with_control_for(@user) do %>
 
     <%= form.label :name %>
     <%= form.text_field :name %>
@@ -6,6 +7,7 @@
     <%= form.label :password %>
     <%= form.password_field :password %>
 
-    <%= submit_button 'login' %>
+    <%= submit_button %>
 
+  <% end %>
 <% end %>

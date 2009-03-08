@@ -4,19 +4,19 @@ describe "global my" do
   before(:all) do
     start_neo4j
 
-    undefine_class :Ding, :User
+    undefine_class :Ding, :SpecialUser
 
     class Ding
       is_a_neo_node
       property :name
     end
 
-    class User
+    class SpecialUser
       is_a_neo_node
       has_n(:dings).to(Tag).relation(Acl::Created)
     end
 
-    Me.now = User.new
+    Me.now = SpecialUser.new
 
     @my_dings = (1..3).map do |i|
       Ding.new(:name => "ding_#{i}")
