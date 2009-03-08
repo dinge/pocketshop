@@ -11,7 +11,7 @@ module NavigationHelper
           :accesskey => 't'),
 
         link_to('concepts',
-          local_concepts_path,
+          concepts_path,
           :class => dom_class_for_active_object(:concepts, controller.controller_name),
           :accesskey => 'c'),
 

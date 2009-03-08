@@ -1,8 +1,8 @@
-class Local::Concept
+class Concept
   is_a_neo_node do
     options.meta_info = true
     options.validations = true
-    # options.dynamic_properties = true
+    options.dynamic_properties = true
   end
 
   property :name, :text

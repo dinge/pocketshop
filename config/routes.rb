@@ -40,6 +40,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :things, :has_one => [:concept], :collection => { :playground => :get }
   map.resources :tags
+  map.resources :concepts
   map.resources :me
 
   map.login '/login', :controller => 'local/users/sessions', :action => 'new'
@@ -50,7 +51,6 @@ ActionController::Routing::Routes.draw do |map|
       user.resources :sessions
     end
     local.resources :users
-    local.resources :concepts
   end
 
 
