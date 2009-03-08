@@ -13,9 +13,13 @@ class User
   property :last_action, :type => String
   property :last_action_at, :type => DateTime
 
+  validates_presence_of :name, :password
+
+
   has_n(:created_tags).to(Tag).relation(Acl::Created)
   has_n(:created_things).to(Thing).relation(Acl::Created)
   has_n(:created_concepts).to(Concept).relation(Acl::Created)
+  has_n(:created_teams).to(Team).relation(Acl::Created)
 
   # has_n(:creations).relation(Acl::Creation)
 

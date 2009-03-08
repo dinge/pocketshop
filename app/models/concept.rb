@@ -12,6 +12,8 @@ class Concept
   has_n(:tags).from(Tag, :tagged_concepts)
 
 
+  validates_presence_of :name
+
   # has_n(:units)
   # has_n(:tags).to(Tag).relation(Tagging)
 
