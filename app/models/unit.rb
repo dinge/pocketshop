@@ -1,8 +1,8 @@
 class Unit
-  is_a_neo_node :meta_info => true
-
-  property :name, :definition
-  index :name, :definition
+  # is_a_neo_node :meta_info => true
+  # 
+  # property :name, :definition
+  # index :name, :definition
 
 
   # fields :name, :type, :_plan, :required, :created_at, :updated_at

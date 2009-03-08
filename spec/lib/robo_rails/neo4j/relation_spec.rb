@@ -10,7 +10,10 @@ describe RoboRails::Neo4j::Relation, :shared => true do
     end
 
     class ComplexRelation
-      is_a_neo_relation :meta_info => true
+      is_a_neo_relation do
+        options.meta_info = true
+      end
+
       property :name
     end
 

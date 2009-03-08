@@ -10,7 +10,7 @@ module RoboRails
       end
 
       module ClassMethods
-        def is_a_neo_node(opts = {}, &block)
+        def is_a_neo_node
           cattr_accessor :options
           self.options = Struct.new(:meta_info, :dynamic_properties, :validations).new
           yield if block_given?

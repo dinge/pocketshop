@@ -10,70 +10,38 @@ module RoboRails
       end
 
       module ClassMethods
-
-        def is_a_neo_relation(options = {})
+        def is_a_neo_relation
           include ::Neo4j::RelationMixin
           attr_reader :internal_r
 
-          class_eval do
-            extend SingletonMethods
-            extend SingletonMethodsExtensions
-          end
+          cattr_accessor :options
+          self.options = Struct.new(:meta_info).new
+          yield if block_given?
 
           include InstanceMethods
-          include InstanceMethodExtensions
-
-          if options[:meta_info]
-            class_eval do
-              property :created_at
-              property :updated_at
-              property :version
-
-              alias_method_chain :created_at, :typecast
-              alias_method_chain :updated_at, :typecast
-            end
-          end
-
+          include MetaInfoExtensions  if options.meta_info
         end
       end
 
 
-      module SingletonMethods
-      end
-
-      module SingletonMethodsExtensions
-      end
 
       module InstanceMethods
-
         def id
           neo_relation_id
         end
-
-        private
-
-        def update_date_and_version
-          if respond_to?(:created_at) && created_at.blank?
-            set_property_without_hooks('created_at', DateTime.now.to_s)
-          end
-
-          if respond_to?(:updated_at)
-            set_property_without_hooks('updated_at', DateTime.now.to_s)
-          end
-
-          if respond_to?(:version)
-            version = self.version || 0
-            set_property_without_hooks('version', version += 1)
-          end
-        end
-
       end
 
 
-      module InstanceMethodExtensions
-
+      module MetaInfoExtensions
         def self.included(base)
           base.class_eval do
+            property :created_at
+            property :updated_at
+            property :version
+
+            alias_method_chain :created_at, :typecast
+            alias_method_chain :updated_at, :typecast
+
             alias_method_chain :set_property, :hooks
           end
         end
@@ -95,6 +63,23 @@ module RoboRails
           DateTime.parse(updated_date)
         end
 
+
+        private
+
+        def update_date_and_version
+          if respond_to?(:created_at) && created_at.blank?
+            set_property_without_hooks('created_at', DateTime.now.to_s)
+          end
+
+          if respond_to?(:updated_at)
+            set_property_without_hooks('updated_at', DateTime.now.to_s)
+          end
+
+          if respond_to?(:version)
+            version = self.version || 0
+            set_property_without_hooks('version', version += 1)
+          end
+        end
       end
 
     end

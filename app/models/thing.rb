@@ -13,10 +13,6 @@ class Thing
   has_one(:creator).from(User, :created_things)
 
 
-
-
-
-
   # has_n(:basic_tags).from(Tag)
 
   # collection_name :things
