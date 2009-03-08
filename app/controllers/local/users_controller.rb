@@ -25,10 +25,13 @@ class Local::UsersController < ApplicationController
   end
 
   def create
-    @local_user = Local::User.new
+    Neo4j::Transaction.run do
+      @local_user = Local::User.new
+      @local_user.update(params[:local_user])
+    end
 
     respond_to do |format|
-      if @local_user.update(params[:local_user])
+      if @local_user.valid?
         flash[:notice] = 'successfully created.'
         format.html { redirect_to edit_local_user_path(@local_user) }
         format.xml  { render :xml => @local_user, :status => :created, :location => @local_user }

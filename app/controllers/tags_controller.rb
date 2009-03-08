@@ -25,16 +25,20 @@ class TagsController < ApplicationController
   end
 
   def create
-    @tag = Tag.new
-    my.created_tags << @tag
+    Neo4j::Transaction.run do
+      @tag = Tag.new
+      @tag.update(params[:tag])
+      my.created_tags << @tag
+    end
 
     respond_to do |format|
-      if @tag.update(params[:tag])
+      if @tag.valid?
         flash[:notice] = 'successfully created.'
         format.html { redirect_to edit_tag_path(@tag) }
         format.xml  { render :xml => @tag, :status => :created, :location => @tag }
         format.json { render :json => @tag, :status => :created, :location => @tag }
       else
+        flash[:error] = 'not saved !'
         format.html { render :action => :new }
         format.xml  { render :xml => @tag.errors, :status => :unprocessable_entity }
         format.json { render :json => @tag.errors, :status => :unprocessable_entity }
@@ -54,13 +58,16 @@ class TagsController < ApplicationController
   end
 
   def update
+    @tag.update(params[:tag])
+
     respond_to do |format|
-      if @tag.update(params[:tag])
+      if @tag.valid?
         flash[:notice] = 'successfully updated.'
         format.html { redirect_to edit_tag_path(@tag) }
         format.xml  { head :ok }
         format.json { head :ok }
       else
+        flash[:error] = 'not saved !'
         format.html { render :action => :edit }
         format.xml  { render :xml => @tag.errors, :status => :unprocessable_entity }
         format.json { render :json => @tag.errors, :status => :unprocessable_entity }

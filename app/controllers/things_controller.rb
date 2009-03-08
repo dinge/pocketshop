@@ -21,11 +21,14 @@ class ThingsController < ApplicationController
   end
 
   def create
-    @thing = Thing.new
-    my.created_things << @thing
+    Neo4j::Transaction.run do
+      @thing = Thing.new
+      @thing.update(params[:thing])
+      my.created_things << @thing
+    end
     
     respond_to do |format|
-      if @thing.update(params[:thing])
+      if @thing.valid?
         flash[:notice] = 'successfully created.'
         format.html { redirect_to edit_thing_path(@thing) }
         format.xml  { render :xml => @thing, :status => :created, :location => @thing }
@@ -35,6 +38,7 @@ class ThingsController < ApplicationController
         format.xml  { render :xml => @thing.errors, :status => :unprocessable_entity }
         format.json { render :json => @thing.errors, :status => :unprocessable_entity }
       end
+
     end
   end
 

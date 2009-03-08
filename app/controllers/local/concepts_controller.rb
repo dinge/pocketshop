@@ -22,11 +22,14 @@ class Local::ConceptsController < ApplicationController
   end
 
   def create
-    @local_concept = Local::Concept.new
-    my.created_concepts << @local_concept
+    Neo4j::Transaction.run do
+      @local_concept = Local::Concept.new
+      @local_concept.update(params[:local_concept])
+      my.created_concepts << @local_concept
+    end
 
     respond_to do |format|
-      if @local_concept.update(params[:local_concept])
+      if @local_concept.valid?
         flash[:notice] = 'successfully created.'
         format.html { redirect_to edit_local_concept_path(@local_concept) }
         format.xml  { render :xml => @local_concept, :status => :created, :location => @local_concept }
