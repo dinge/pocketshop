@@ -1,2 +1,0 @@
-module Sys::UsersHelper
-end
