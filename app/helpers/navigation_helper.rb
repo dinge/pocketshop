@@ -23,7 +23,11 @@ module NavigationHelper
         link_to('users',
           users_path,
           :class => dom_class_for_active_object(:users, controller.controller_name),
-          :accesskey => 'u')
+          :accesskey => 'u'),
+
+        link_to('teams',
+          teams_path,
+          :class => dom_class_for_active_object(:teams, controller.controller_name))
       ]
     end
   end

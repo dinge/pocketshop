@@ -1,0 +1,9 @@
+<% form_for @team do |form| %>
+  <% field_set_with_control_for(@team) do %>
+
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+
+    <%= submit_button %>
+  <% end %>
+<% end %>

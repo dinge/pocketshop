@@ -38,11 +38,12 @@ ActionController::Routing::Routes.draw do |map|
 
   map.root :controller => 'index'
 
+  map.resources :users
+  map.resources :teams
+  map.resources :concepts
   map.resources :things
   map.resources :tags
-  map.resources :concepts
   map.resources :me
-  map.resources :users
 
   map.login '/login', :controller => 'local/sessions', :action => 'new'
   map.logout '/logout', :controller => 'local/sessions', :action => 'destroy'

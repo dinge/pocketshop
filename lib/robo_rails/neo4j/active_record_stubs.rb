@@ -20,6 +20,7 @@ unless defined?(ActiveRecord)
 
       # needed for script/generate
       cattr_accessor :pluralize_table_names
+      cattr_accessor :timestamped_migrations
     end
   end
 
