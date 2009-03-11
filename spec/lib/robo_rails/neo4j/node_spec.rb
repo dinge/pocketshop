@@ -12,9 +12,9 @@ describe RoboRails::Neo4j::Node, :shared => true do
 
     class OtherThing
       is_a_neo_node do
-        options.meta_info = true
-        options.dynamic_properties = true
-        options.validations = true
+        db.meta_info = true
+        db.dynamic_properties = true
+        db.validations = true
       end
     end
 
@@ -77,12 +77,12 @@ describe "a neo node class" do
     SomeThing.property_names.should include(:age)
   end
 
-  it "should be configurable via options" do
-    OtherThing.options.should be_a_kind_of(Struct)
-    OtherThing.options.meta_info.should be_true
-    OtherThing.options.dynamic_properties.should be_true
-    OtherThing.options.validations.should be_true
-    SomeThing.options.validations.should_not be_true
+  it "db options should be configurable" do
+    OtherThing.db.should be_a_kind_of(Struct)
+    OtherThing.db.meta_info.should be_true
+    OtherThing.db.dynamic_properties.should be_true
+    OtherThing.db.validations.should be_true
+    SomeThing.db.validations.should_not be_true
   end
 
   describe "loading a collection of nodes" do
@@ -229,7 +229,7 @@ end
 describe "a neo node instance", ' from a class' do
   it_should_behave_like "RoboRails::Neo4j::Node"
 
-  describe "without any special options" do
+  describe "without any special db options" do
     context 'like enabled dynamic_properties' do
       it "should not have dynamic properties" do
         @something.should_not respond_to(:unexisting_property)
@@ -256,7 +256,7 @@ describe "a neo node instance", ' from a class' do
   end
 
 
-  describe "with enabled special options" do
+  describe "with enabled special db options" do
     context "like dynamic_properties" do
       it "should have dynamic properties" do
         @otherthing.should_not respond_to(:any_dynamic_property)
@@ -307,7 +307,7 @@ describe "a neo node instance", ' from a class' do
         undefine_class :SomeNakedClass
         class SomeNakedClass
           is_a_neo_node do
-            options.validations = true
+            db.validations = true
           end
         end
 

@@ -11,7 +11,7 @@ describe RoboRails::Neo4j::Relation, :shared => true do
 
     class ComplexRelation
       is_a_neo_relation do
-        options.meta_info = true
+        db.meta_info = true
       end
 
       property :name
@@ -95,7 +95,7 @@ describe "a neo relation instance", ' from a class' do
   end
 
 
-  context "without any special options" do
+  context "without any special db options" do
 
     before(:each) do
       @something.simple_relations << SomeThing.new

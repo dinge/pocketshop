@@ -14,12 +14,12 @@ module RoboRails
           include ::Neo4j::RelationMixin
           attr_reader :internal_r
 
-          cattr_accessor :options
-          self.options = Struct.new(:meta_info).new
+          cattr_accessor :db
+          self.db = Struct.new(:meta_info).new
           yield if block_given?
 
           include InstanceMethods
-          include MetaInfoExtensions  if options.meta_info
+          include MetaInfoExtensions  if db.meta_info
         end
       end
 
@@ -30,6 +30,7 @@ module RoboRails
           neo_relation_id
         end
       end
+
 
 
       module MetaInfoExtensions

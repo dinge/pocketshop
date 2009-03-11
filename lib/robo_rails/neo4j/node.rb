@@ -11,16 +11,17 @@ module RoboRails
 
       module ClassMethods
         def is_a_neo_node
-          cattr_accessor :options
-          self.options = Struct.new(:meta_info, :dynamic_properties, :validations).new
+          cattr_accessor :db, :acl
+          self.db = Struct.new(:meta_info, :dynamic_properties, :validations).new
+          self.acl = Struct.new(:default_visibility).new
           yield if block_given?
 
           include ::Neo4j::NodeMixin
-          include ::Neo4j::DynamicAccessorMixin if options.dynamic_properties
+          include ::Neo4j::DynamicAccessorMixin if db.dynamic_properties
           extend  SingletonMethods
-          include MetaInfoExtensions            if options.meta_info
+          include MetaInfoExtensions            if db.meta_info
           include InstanceMethods
-          include NodeValidations               if options.validations
+          include NodeValidations               if db.validations
         end
       end
 
@@ -79,7 +80,7 @@ module RoboRails
         # overwrite in super to allow hash properties in arguments
         #  p = Person.new(:name => 'peter', :age => 20)
         def initialize(*args)
-          @errors = ActiveRecord::Errors.new(self) if self.class.options.validations
+          @errors = ActiveRecord::Errors.new(self) if self.class.db.validations
           if (properties = args.first).is_a?(Hash)
             super
             update(properties)

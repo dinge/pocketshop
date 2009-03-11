@@ -1,9 +1,11 @@
 class Thing
   is_a_neo_node do
-    options.meta_info = true
-    options.dynamic_properties = true
-    options.validations = true
+    db.meta_info = true
+    db.dynamic_properties = true
+    db.validations = true
+    acl.default_visibility = true
   end
+
 
   property :name, :text
   index :name, :text
@@ -13,11 +15,26 @@ class Thing
   has_one(:creator).from(User, :created_things)
 
 
-  # has_n(:basic_tags).from(Tag)
+  def visible_for?(user)
+    creator == user
+  end
 
+  def changeable_for?(user)
+    creator == user
+  end
+
+  def destroyable_for?(user)
+    creator == user
+  end
+
+  def self.creatable_for?(user)
+    Me.someone?
+  end
+
+
+  # has_n(:basic_tags).from(Tag)
   # collection_name :things
   # fields :name, :text, :created_at, :updated_at, :version, :rating, :tags
-  #
   #
   # works_with_dynamic_attributes
   #

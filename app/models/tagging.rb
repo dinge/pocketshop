@@ -1,6 +1,6 @@
 class Tagging
   is_a_neo_relation do
-    options.meta_info = true
+    db.meta_info = true
   end
 
   property :name

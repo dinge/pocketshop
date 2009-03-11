@@ -1,7 +1,7 @@
 class User
   is_a_neo_node do
-    options.meta_info = true
-    options.validations = true
+    db.meta_info = true
+    db.validations = true
   end
 
   property :name, :encrypted_password, :salt_for_password
