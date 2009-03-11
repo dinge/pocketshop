@@ -15,6 +15,7 @@ describe RoboRails::Neo4j::Node, :shared => true do
         db.meta_info = true
         db.dynamic_properties = true
         db.validations = true
+        acl.default_visibility = true
       end
     end
 
@@ -83,6 +84,12 @@ describe "a neo node class" do
     OtherThing.db.dynamic_properties.should be_true
     OtherThing.db.validations.should be_true
     SomeThing.db.validations.should_not be_true
+  end
+
+  it "acl options should be configurable" do
+    OtherThing.acl.should be_a_kind_of(Struct)
+    OtherThing.acl.default_visibility.should be_true
+    SomeThing.acl.default_visibility.should be_false
   end
 
   describe "loading a collection of nodes" do
@@ -229,7 +236,7 @@ end
 describe "a neo node instance", ' from a class' do
   it_should_behave_like "RoboRails::Neo4j::Node"
 
-  describe "without any special db options" do
+  describe "without any special options" do
     context 'like enabled dynamic_properties' do
       it "should not have dynamic properties" do
         @something.should_not respond_to(:unexisting_property)
@@ -253,6 +260,7 @@ describe "a neo node instance", ' from a class' do
         lambda { @something.version }.should raise_error(NoMethodError)
       end
     end
+
   end
 
 

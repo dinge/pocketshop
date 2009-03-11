@@ -12,8 +12,8 @@ module RoboRails
       module ClassMethods
         def is_a_neo_node
           cattr_accessor :db, :acl
-          self.db = Struct.new(:meta_info, :dynamic_properties, :validations).new
-          self.acl = Struct.new(:default_visibility).new
+          self.db = Struct.new(:meta_info, :dynamic_properties, :validations).new(false, false, false)
+          self.acl = Struct.new(:default_visibility).new(false)
           yield if block_given?
 
           include ::Neo4j::NodeMixin
