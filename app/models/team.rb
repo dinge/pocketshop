@@ -1,7 +1,9 @@
 class Team
   is_a_neo_node do
-    db.meta_info = true
-    db.validations = true
+    db do
+      meta_info true
+      validations true
+    end
   end
 
   property :name

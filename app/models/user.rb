@@ -1,7 +1,7 @@
 class User
   is_a_neo_node do
-    db.meta_info = true
-    db.validations = true
+    db.meta_info true
+    db.validations true
   end
 
   property :name, :encrypted_password, :salt_for_password
@@ -20,6 +20,9 @@ class User
   has_n(:created_things).to(Thing).relation(Acl::Created)
   has_n(:created_concepts).to(Concept).relation(Acl::Created)
   has_n(:created_teams).to(Team).relation(Acl::Created)
+  has_n(:created_users).to(Team).relation(Acl::Created)
+
+  has_one(:creator).from(User, :created_users)
 
   # has_n(:creations).relation(Acl::Creation)
 

@@ -1,9 +1,11 @@
 class Thing
   is_a_neo_node do
-    db.meta_info = true
-    db.dynamic_properties = true
-    db.validations = true
-    acl.default_visibility = true
+    db do
+      meta_info true
+      validations true
+      dynamic_properties true
+    end
+    acl.default_visibility true
   end
 
 

@@ -1,8 +1,10 @@
 class Concept
   is_a_neo_node do
-    db.meta_info = true
-    db.validations = true
-    db.dynamic_properties = true
+    db do
+      meta_info true
+      validations true
+      dynamic_properties true
+    end
   end
 
   property :name, :text
