@@ -10,16 +10,44 @@ module RoboRails
       end
 
       module ClassMethods
-        def is_a_neo_relation
+        def is_a_neo_relation(&block)
           include ::Neo4j::RelationMixin
           attr_reader :internal_r
 
-          cattr_accessor :db
-          self.db = Struct.new(:meta_info).new
-          yield if block_given?
+          Dsl.new(self).evaluate_dsl(&block)
+          #
+          # cattr_accessor :db
+          # self.db = Struct.new(:meta_info).new
+          # yield if block_given?
 
           include InstanceMethods
-          include MetaInfoExtensions  if db.meta_info
+          include MetaInfoExtensions  if neo_relation_env.db.meta_info
+        end
+      end
+
+
+      class Dsl
+        def initialize(relation_klass)
+          @relation_klass = relation_klass
+          setup_dsl
+        end
+
+        def setup_dsl
+          @relation_klass.class_eval do
+            class_inheritable_accessor :neo_relation_env
+          end
+
+          @relation_klass.neo_relation_env = dingsl_accessor do
+            db  dingsl_accessor(:meta_info => false)
+            dsl
+          end
+
+          @relation_klass.neo_relation_env.dsl = self
+        end
+
+        def evaluate_dsl(&block)
+          @relation_klass.neo_relation_env.instance_eval(&block) if block_given?
+          self
         end
       end
 

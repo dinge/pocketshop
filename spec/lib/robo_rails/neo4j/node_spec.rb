@@ -12,10 +12,12 @@ describe RoboRails::Neo4j::Node, :shared => true do
 
     class OtherThing
       is_a_neo_node do
-        db.meta_info = true
-        db.dynamic_properties = true
-        db.validations = true
-        acl.default_visibility = true
+        db do
+          meta_info true
+          dynamic_properties true
+          validations true
+        end
+        acl.default_visibility true
       end
     end
 
@@ -79,17 +81,17 @@ describe "a neo node class" do
   end
 
   it "db options should be configurable" do
-    OtherThing.db.should be_a_kind_of(Struct)
-    OtherThing.db.meta_info.should be_true
-    OtherThing.db.dynamic_properties.should be_true
-    OtherThing.db.validations.should be_true
-    SomeThing.db.validations.should_not be_true
+    OtherThing.neo_node_env.db.should be_a_kind_of(DingDealer::Struct)
+    OtherThing.neo_node_env.db.meta_info.should be_true
+    OtherThing.neo_node_env.db.dynamic_properties.should be_true
+    OtherThing.neo_node_env.db.validations.should be_true
+    SomeThing.neo_node_env.db.validations.should_not be_true
   end
 
   it "acl options should be configurable" do
-    OtherThing.acl.should be_a_kind_of(Struct)
-    OtherThing.acl.default_visibility.should be_true
-    SomeThing.acl.default_visibility.should be_false
+    OtherThing.neo_node_env.acl.should be_a_kind_of(DingDealer::Struct)
+    OtherThing.neo_node_env.acl.default_visibility.should be_true
+    SomeThing.neo_node_env.acl.default_visibility.should be_false
   end
 
   describe "loading a collection of nodes" do
@@ -315,7 +317,7 @@ describe "a neo node instance", ' from a class' do
         undefine_class :SomeNakedClass
         class SomeNakedClass
           is_a_neo_node do
-            db.validations = true
+            db.validations true
           end
         end
 
@@ -324,7 +326,7 @@ describe "a neo node instance", ' from a class' do
         @naked.errors.should be_a_kind_of(ActiveRecord::Errors)
         @naked.should respond_to(:errors)
         @naked.should respond_to(:valid?)
-        
+
         @something.should_not respond_to(:errors)
       end
     end

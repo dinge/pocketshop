@@ -10,20 +10,45 @@ module RoboRails
       end
 
       module ClassMethods
-        def is_a_neo_node
-          cattr_accessor :db, :acl
-          self.db = Struct.new(:meta_info, :dynamic_properties, :validations).new(false, false, false)
-          self.acl = Struct.new(:default_visibility).new(false)
-          yield if block_given?
+        def is_a_neo_node(&block)
+          Dsl.new(self).evaluate_dsl(&block)
 
           include ::Neo4j::NodeMixin
-          include ::Neo4j::DynamicAccessorMixin if db.dynamic_properties
+          include ::Neo4j::DynamicAccessorMixin if neo_node_env.db.dynamic_properties
           extend  SingletonMethods
-          include MetaInfoExtensions            if db.meta_info
+          include MetaInfoExtensions            if neo_node_env.db.meta_info
           include InstanceMethods
-          include NodeValidations               if db.validations
+          include NodeValidations               if neo_node_env.db.validations
         end
       end
+
+
+      class Dsl
+        def initialize(node_klass)
+          @node_klass = node_klass
+          setup_dsl
+        end
+
+        def setup_dsl
+          @node_klass.class_eval do
+            class_inheritable_accessor :neo_node_env
+          end
+
+          @node_klass.neo_node_env = dingsl_accessor do
+            db  dingsl_accessor(:meta_info => false, :dynamic_properties => false, :validations => false)
+            acl dingsl_accessor(:default_visibility => false)
+            dsl
+          end
+
+          @node_klass.neo_node_env.dsl = self
+        end
+
+        def evaluate_dsl(&block)
+          @node_klass.neo_node_env.instance_eval(&block) if block_given?
+          self
+        end
+      end
+
 
 
       module SingletonMethods
@@ -80,7 +105,7 @@ module RoboRails
         # overwrite in super to allow hash properties in arguments
         #  p = Person.new(:name => 'peter', :age => 20)
         def initialize(*args)
-          @errors = ActiveRecord::Errors.new(self) if self.class.db.validations
+          @errors = ActiveRecord::Errors.new(self) if neo_node_env.db.validations
           if (properties = args.first).is_a?(Hash)
             super
             update(properties)
