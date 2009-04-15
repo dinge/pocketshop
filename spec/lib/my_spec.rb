@@ -3,7 +3,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe "global my" do
   before(:all) do
     start_neo4j
-
     undefine_class :Ding, :SpecialUser
 
     class Ding
@@ -27,9 +26,7 @@ describe "global my" do
     end
   end
 
-  after(:all) do
-    stop_neo4j
-  end
+  after(:all) { stop_neo4j }
 
 
   it "should be globaly available" do

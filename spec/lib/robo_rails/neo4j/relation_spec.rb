@@ -26,9 +26,7 @@ describe RoboRails::Neo4j::Relation, :shared => true do
 
   end
 
-  after(:all) do
-    stop_neo4j
-  end
+  after(:all) { stop_neo4j }
 end
 
 

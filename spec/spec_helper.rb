@@ -49,6 +49,12 @@ Spec::Runner.configure do |config|
 end
 
 
+ActionController::Routing::Routes.draw do |map|
+  map.root :controller => 'index'
+  map.resources :beans, :collection => { :full_access_for_test => :get }
+  map.resources :dummies, :collection => { :full_access_for_test => :get }
+end
+
 
 def fixed_datetime
   DateTime.now.change(:year => 2000, :month => 1, :day => 1, :hour => 10, :min => 56, :sec => 12 )
@@ -57,7 +63,7 @@ end
 
 #
 # Helper methods for specs
-# based from neo4j.rb spec
+# based on neo4j.rb spec
 #
 
 require 'fileutils'
@@ -94,7 +100,7 @@ end
 def delete_neo4jdb_files
   FileUtils.rm_rf(Neo4j::Config[:storage_path]) if File.exists?(Neo4j::Config[:storage_path])
   if !Lucene::Config[:storage_path].nil? && File.exists?(Lucene::Config[:storage_path])
-    FileUtils.rm_rf Lucene::Config[:storage_path]
+    FileUtils.rm_rf(Lucene::Config[:storage_path])
   end
 end
 
