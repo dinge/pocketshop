@@ -3,7 +3,6 @@ unless defined?(ActiveRecord)
 end
 
 Object.class_eval do
-  include RoboRails::Neo4j::Node
-  include RoboRails::Neo4j::Relation
-  #include RoboRails::Neo4j::DynamicContainer
+  include DingDealer::Neo4j::Node
+  include DingDealer::Neo4j::Relation
 end

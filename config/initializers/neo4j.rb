@@ -1,3 +1,5 @@
+require 'neo4j'
+
 neo4j_base_path = if Rails.env.development?
   File.join(Rails.root, 'tmp')
 elsif Rails.env.production?

@@ -1,5 +1,4 @@
-require 'neo4j'
-require 'robo_rails/neo4r'
+require 'ding_dealer/neo4r'
 require 'my'
 require 'digest/sha1'
 

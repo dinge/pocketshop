@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
-describe RoboRails::Neo4j::Node, :shared => true do
+describe DingDealer::Neo4j::Node, :shared => true do
   before(:all) do
     start_neo4j
     undefine_class :SomeThing, :OtherThing, :DingDong
@@ -35,7 +35,7 @@ end
 
 
 describe "every object should be able to be a neo node" do
-  it_should_behave_like "RoboRails::Neo4j::Node"
+  it_should_behave_like "DingDealer::Neo4j::Node"
 
   before(:all) do
     undefine_class :SomeNakedClass
@@ -43,8 +43,8 @@ describe "every object should be able to be a neo node" do
   end
 
   it "the module should be included in all objects" do
-    Object.should be_include(RoboRails::Neo4j::Node)
-    SomeNakedClass.should be_include(RoboRails::Neo4j::Node)
+    Object.should be_include(DingDealer::Neo4j::Node)
+    SomeNakedClass.should be_include(DingDealer::Neo4j::Node)
   end
 
   it "it's macro method is_a_neo_node should be available to all objects" do
@@ -72,7 +72,7 @@ end
 
 
 describe "a neo node class" do
-  it_should_behave_like "RoboRails::Neo4j::Node"
+  it_should_behave_like "DingDealer::Neo4j::Node"
 
   it "should return it's property names" do
     SomeThing.should have(2).property_names
@@ -123,11 +123,11 @@ describe "a neo node class" do
       end
 
       it "should raise an exception if loaded node is an instance of an other class" do
-        lambda { SomeThing.load(4) }.should raise_error(RoboRails::Neo4j::NotFoundException)
+        lambda { SomeThing.load(4) }.should raise_error(DingDealer::Neo4j::NotFoundException)
       end
 
       it "should raise no exception if loaded node is an instance of the same class" do
-        lambda { OtherThing.load(4) }.should_not raise_error(RoboRails::Neo4j::NotFoundException)
+        lambda { OtherThing.load(4) }.should_not raise_error(DingDealer::Neo4j::NotFoundException)
       end
     end
 
@@ -246,7 +246,7 @@ describe "a neo node class" do
     end
 
     it "should fire an exception if non matching find_first! is found" do
-      lambda { SomeThing.find_first!(:name => "nothing") }.should raise_error(RoboRails::Neo4j::NotFoundException)
+      lambda { SomeThing.find_first!(:name => "nothing") }.should raise_error(DingDealer::Neo4j::NotFoundException)
     end
   end
 end
@@ -254,7 +254,7 @@ end
 
 
 describe "a neo node instance" do
-  it_should_behave_like "RoboRails::Neo4j::Node"
+  it_should_behave_like "DingDealer::Neo4j::Node"
 
   context "in general" do
     it "should have the same id as it's neo_node_id" do
@@ -315,7 +315,7 @@ end
 
 
 describe "a neo node instance", ' from a class' do
-  it_should_behave_like "RoboRails::Neo4j::Node"
+  it_should_behave_like "DingDealer::Neo4j::Node"
 
   describe "without any special options" do
     context 'like enabled dynamic_properties' do

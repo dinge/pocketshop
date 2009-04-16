@@ -1,4 +1,4 @@
-module RoboRails
+module DingDealer
   module Neo4j
 
     class NotFoundException < StandardError; end
@@ -56,7 +56,7 @@ module RoboRails
       module SingletonMethods
         def l(neo_node_id)
           node = ::Neo4j.load(neo_node_id)
-          raise RoboRails::Neo4j::NotFoundException unless node.is_a?(self)
+          raise DingDealer::Neo4j::NotFoundException unless node.is_a?(self)
           node
         end
 
@@ -88,7 +88,7 @@ module RoboRails
 
         def find_first!(query=nil, &block)
           find_first(query, &block) ||
-            raise(RoboRails::Neo4j::NotFoundException.new("can't find #{self.name} with query #{query.inspect}"))
+            raise(DingDealer::Neo4j::NotFoundException.new("can't find #{self.name} with query #{query.inspect}"))
         end
 
         # overwriting Neo4j::NodeMixin.value_object
@@ -121,11 +121,11 @@ module RoboRails
               unless node.valid?
                 node.errors.instance_variable_set(:@base, nil)
                 vo, vo.errors = node.value_object, node.errors
-                raise RoboRails::Neo4j::InvalidRecord, vo
+                raise DingDealer::Neo4j::InvalidRecord, vo
               end
               return node
             end
-          rescue RoboRails::Neo4j::InvalidRecord => vo
+          rescue DingDealer::Neo4j::InvalidRecord => vo
             return vo.message
           end
         end
@@ -136,7 +136,7 @@ module RoboRails
         #   node = load(decoded[:i].to_i)
         #   node = load(5)
         #   if node.created_at.strftime('%Y%m%d%H%M%S') != decoded[:t] || node.class.name != decoded[:c]
-        #     raise RoboRails::Neo4j::NotFoundException
+        #     raise DingDealer::Neo4j::NotFoundException
         #   end
         #   node
         # end

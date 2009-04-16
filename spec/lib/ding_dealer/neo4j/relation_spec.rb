@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
-describe RoboRails::Neo4j::Relation, :shared => true do
+describe DingDealer::Neo4j::Relation, :shared => true do
   before(:all) do
     start_neo4j
     undefine_class :SomeThing, :SimpleRelation, :ComplexRelation
@@ -31,15 +31,15 @@ end
 
 
 describe "every object should be able to be a neo relation" do
-  it_should_behave_like "RoboRails::Neo4j::Relation"
+  it_should_behave_like "DingDealer::Neo4j::Relation"
 
   before(:all) do
     class SomeNakedClass; end
   end
 
   it "the module should be included in all objects" do
-    Object.should be_include(RoboRails::Neo4j::Relation)
-    SomeNakedClass.should be_include(RoboRails::Neo4j::Relation)
+    Object.should be_include(DingDealer::Neo4j::Relation)
+    SomeNakedClass.should be_include(DingDealer::Neo4j::Relation)
   end
 
 
@@ -66,7 +66,7 @@ end
 
 
 describe "a neo relation instance", ' from a class' do
-  it_should_behave_like "RoboRails::Neo4j::Relation"
+  it_should_behave_like "DingDealer::Neo4j::Relation"
 
   before(:each) do
     @something = SomeThing.new

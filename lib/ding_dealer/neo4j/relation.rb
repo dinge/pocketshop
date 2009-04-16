@@ -1,4 +1,4 @@
-module RoboRails
+module DingDealer
   module Neo4j
 
     # class NotFoundException < StandardError; end
