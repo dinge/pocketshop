@@ -123,10 +123,3 @@ module DingDealer
 
   end
 end
-
-
-class Object
-  def dingsl_accessor(*attributes, &block)
-    DingDealer::Struct.new(*attributes, &block)
-  end
-end

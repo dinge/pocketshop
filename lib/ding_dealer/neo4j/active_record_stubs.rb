@@ -23,6 +23,4 @@ unless defined?(ActiveRecord)
       cattr_accessor :timestamped_migrations
     end
   end
-
-  require 'active_record/validations'
 end

@@ -140,8 +140,3 @@ module DingDealer
     end
   end
 end
-
-
-ActionController::Base.class_eval do
-  include DingDealer::Acl
-end

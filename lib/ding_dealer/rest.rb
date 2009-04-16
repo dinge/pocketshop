@@ -313,8 +313,3 @@ module DingDealer
 
   end
 end
-
-
-ActionController::Base.class_eval do
-  include DingDealer::Rest
-end
