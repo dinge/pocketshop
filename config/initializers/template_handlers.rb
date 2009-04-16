@@ -1,1 +1,0 @@
-ActionView::Template.register_template_handler :bre, RoboRails::Widgets::TemplateHandlers::Bre
