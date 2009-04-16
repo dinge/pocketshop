@@ -3,6 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 describe DingDealer::Acl do
 
   before(:all) do
+    start_neo4j
     undefine_class :MonkeysController, :Monkey, :ElephantsController
 
     class Monkey; end
@@ -19,6 +20,7 @@ describe DingDealer::Acl do
     end
   end
 
+  after(:all) { stop_neo4j }
 
   it "should have an acl_env", 'with the acl environment as DingDealer::Struct' do
     MonkeysController.acl_env.should be_kind_of(DingDealer::Struct)
@@ -35,7 +37,7 @@ end
 
 
 
-
+undefine_class :Dummy, :DummiesController
 
 class Dummy
   is_a_neo_node do
@@ -61,10 +63,7 @@ class Dummy
   end
 end
 
-ActionController::Routing::Routes.draw do |map|
-  map.root :controller => 'index'
-  map.resources :dummies, :collection => { :full_access_for_test => :get }
-end
+# routes are have been moved to spec_helper.rb
 
 class DummiesController < ActionController::Base
   use_rest
@@ -75,6 +74,9 @@ end
 
 describe "a controller instance", ' with standard_permissions', :type => :controller do
   controller_name 'dummies'
+
+  before(:all) { start_neo4j }
+  after(:all) { stop_neo4j }
 
   it "should have an acl_run and other acl_run.methods" do
     get :full_access_for_test
@@ -100,7 +102,11 @@ describe "a controller instance", ' with standard_permissions', :type => :contro
 
       it "should grant #create" do
         post :create, :dummy => { :name => 'salt' }
-        response.should be_success
+        response.should redirect_to edit_dummy_path(assigns(:dummy))
+      end
+
+      it "should maybe grant #index" do
+        pending
       end
 
       it "should grant #show" do
@@ -115,7 +121,7 @@ describe "a controller instance", ' with standard_permissions', :type => :contro
 
       it "should grant #update" do
         put :update, :id => @dummy.id, :dummy => { :name => 'suppe' }
-        response.should be_success
+        response.should redirect_to dummy_path(@dummy)
       end
 
       it "should allow #destroy" do
@@ -138,6 +144,10 @@ describe "a controller instance", ' with standard_permissions', :type => :contro
       it "should deny #create" do
         post :create, :dummy => { :name => 'salt' }
         response.should redirect_to root_url
+      end
+
+      it "should maybe deny #index" do
+        pending
       end
 
       it "should deny #show" do

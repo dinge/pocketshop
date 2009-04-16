@@ -90,23 +90,33 @@ describe "a global uuid", 'is part of the things uri' do
         end
 
         it "like a longer string without version" do
-          lambda { DingDealer::Guid.prepare_decodable_for_decoding('longer') }.should raise_error(DingDealer::Guid::InvalidVersionFormat)
+          lambda do 
+            DingDealer::Guid.prepare_decodable_for_decoding('longer')
+          end.should raise_error(DingDealer::Guid::InvalidVersionFormat)
         end
 
         it "like a string with v identifier but without number" do
-          lambda { DingDealer::Guid.prepare_decodable_for_decoding('stringv') }.should raise_error(DingDealer::Guid::InvalidVersionFormat)
+          lambda do 
+            DingDealer::Guid.prepare_decodable_for_decoding('stringv') 
+          end.should raise_error(DingDealer::Guid::InvalidVersionFormat)
         end
 
         it "like only the version number" do
-          lambda { DingDealer::Guid.prepare_decodable_for_decoding('v33') }.should raise_error(DingDealer::Guid::InvalidVersionFormat)
+          lambda do 
+            DingDealer::Guid.prepare_decodable_for_decoding('v33')
+          end.should raise_error(DingDealer::Guid::InvalidVersionFormat)
         end
 
         it "like only the version number" do
-          lambda { DingDealer::Guid.prepare_decodable_for_decoding('33') }.should raise_error(DingDealer::Guid::InvalidVersionFormat)
+          lambda do 
+            DingDealer::Guid.prepare_decodable_for_decoding('33')
+          end.should raise_error(DingDealer::Guid::InvalidVersionFormat)
         end
 
         it "like other crap" do
-          lambda { DingDealer::Guid.prepare_decodable_for_decoding('333333333333') }.should raise_error(DingDealer::Guid::InvalidVersionFormat)
+          lambda do 
+            DingDealer::Guid.prepare_decodable_for_decoding('333333333333')
+          end.should raise_error(DingDealer::Guid::InvalidVersionFormat)
         end
       end
     end

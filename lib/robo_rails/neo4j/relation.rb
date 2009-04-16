@@ -13,12 +13,7 @@ module RoboRails
         def is_a_neo_relation(&block)
           include ::Neo4j::RelationMixin
           attr_reader :internal_r
-
           Dsl.new(self).evaluate_dsl(&block)
-          #
-          # cattr_accessor :db
-          # self.db = Struct.new(:meta_info).new
-          # yield if block_given?
 
           include InstanceMethods
           include MetaInfoExtensions  if neo_relation_env.db.meta_info

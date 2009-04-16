@@ -2,11 +2,12 @@ module RoboRails
   module Neo4j
 
     class NotFoundException < StandardError; end
+    class InvalidRecord < StandardError; end
 
     module Node
 
       def self.included(base)
-        base.extend ClassMethods
+        base.extend(ClassMethods)
       end
 
       module ClassMethods
@@ -19,6 +20,7 @@ module RoboRails
           include MetaInfoExtensions            if neo_node_env.db.meta_info
           include InstanceMethods
           include NodeValidations               if neo_node_env.db.validations
+          include NodeValidationStubs           unless neo_node_env.db.validations
         end
       end
 
@@ -58,7 +60,7 @@ module RoboRails
           node
         end
 
-        # overwriting something from a parent class, seems to work ..
+        # overwriting Neo4j::NodeMixin.load
         alias :load :l
 
         def property_names
@@ -88,6 +90,46 @@ module RoboRails
           find_first(query, &block) ||
             raise(RoboRails::Neo4j::NotFoundException.new("can't find #{self.name} with query #{query.inspect}"))
         end
+
+        # overwriting Neo4j::NodeMixin.value_object
+        def value_object
+          @value_class ||= if neo_node_env.db.validations
+            value_klass = create_value_class
+            value_klass.send(:include, NodeValidations)
+            value_klass.send(:include, ValueObjectValidations)
+          else
+            create_value_class.send(:include, NodeValidationStubs)
+          end
+        end
+
+        def new_with_validations(attributes_hash)
+          update_with_validations(attributes_hash){ new }
+        end
+
+        def update_with_validations(node_or_attributes_hash, attributes_hash = nil, &proc)
+          begin
+            ::Neo4j::Transaction.run do
+              if block_given?
+                attributes_hash = node_or_attributes_hash
+                node = yield
+              else
+                node = node_or_attributes_hash
+              end
+
+              node.update(attributes_hash)
+
+              unless node.valid?
+                node.errors.instance_variable_set(:@base, nil)
+                vo, vo.errors = node.value_object, node.errors
+                raise RoboRails::Neo4j::InvalidRecord, vo
+              end
+              return node
+            end
+          rescue RoboRails::Neo4j::InvalidRecord => vo
+            return vo.message
+          end
+        end
+
 
         # def load_by_guid!(guid)
         #   decoded = DingDealer::Guid.decode_to_hash(guid)
@@ -139,7 +181,6 @@ module RoboRails
         def new_record?
           false
         end
-
 
         # def to_guid
         #   DingDealer::Guid.encode(
@@ -214,6 +255,27 @@ module RoboRails
         def save; end
         def save!; end
         def update_attribute; end
+      end
+
+
+
+      module ValueObjectValidations
+        def initialize(*args)
+          @errors = ActiveRecord::Errors.new(self)
+          super
+        end
+
+        # oberwriting AR:Validations#valid?
+        def valid?
+          @errors.empty?
+        end
+      end
+
+
+      module NodeValidationStubs
+        def valid?
+          true
+        end
       end
 
     end

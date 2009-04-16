@@ -29,10 +29,9 @@ describe RoboRails::Neo4j::Node, :shared => true do
     @otherthing = OtherThing.new
   end
 
-  after(:all) do
-    stop_neo4j
-  end
+  after(:all) { stop_neo4j }
 end
+
 
 
 describe "every object should be able to be a neo node" do
@@ -44,8 +43,8 @@ describe "every object should be able to be a neo node" do
   end
 
   it "the module should be included in all objects" do
-    Object.included_modules.should include(RoboRails::Neo4j::Node)
-    SomeNakedClass.included_modules.should include(RoboRails::Neo4j::Node)
+    Object.included_modules.should be_include(RoboRails::Neo4j::Node)
+    SomeNakedClass.included_modules.should be_include(RoboRails::Neo4j::Node)
   end
 
   it "it's macro method is_a_neo_node should be available to all objects" do
@@ -56,14 +55,14 @@ describe "every object should be able to be a neo node" do
   describe "the Neo4j::NodeMixin", " in a class" do
     context "without calling is_a_neo_node" do
       it "should not be mixed in" do
-        SomeNakedClass.included_modules.should_not include(Neo4j::NodeMixin)
+        SomeNakedClass.included_modules.should_not be_include(Neo4j::NodeMixin)
         SomeNakedClass.new.should_not be_a_kind_of(Neo4j::NodeMixin)
       end
     end
 
     context "with calling is_a_neo_node" do
       it "should be mixed in" do
-        SomeThing.included_modules.should include(Neo4j::NodeMixin)
+        SomeThing.included_modules.should be_include(Neo4j::NodeMixin)
         @something.should be_a_kind_of(Neo4j::NodeMixin)
       end
     end
@@ -71,20 +70,22 @@ describe "every object should be able to be a neo node" do
 end
 
 
+
 describe "a neo node class" do
   it_should_behave_like "RoboRails::Neo4j::Node"
 
   it "should return it's property names" do
     SomeThing.should have(2).property_names
-    SomeThing.property_names.should include(:name)
-    SomeThing.property_names.should include(:age)
+    SomeThing.property_names.should be_include(:name)
+    SomeThing.property_names.should be_include(:age)
   end
 
   it "db options should be configurable" do
-    OtherThing.neo_node_env.db.should be_a_kind_of(DingDealer::Struct)
-    OtherThing.neo_node_env.db.meta_info.should be_true
-    OtherThing.neo_node_env.db.dynamic_properties.should be_true
-    OtherThing.neo_node_env.db.validations.should be_true
+    db_env = OtherThing.neo_node_env.db
+    db_env.should be_a_kind_of(DingDealer::Struct)
+    db_env.meta_info.should be_true
+    db_env.dynamic_properties.should be_true
+    db_env.validations.should be_true
     SomeThing.neo_node_env.db.validations.should_not be_true
   end
 
@@ -92,6 +93,14 @@ describe "a neo node class" do
     OtherThing.neo_node_env.acl.should be_a_kind_of(DingDealer::Struct)
     OtherThing.neo_node_env.acl.default_visibility.should be_true
     SomeThing.neo_node_env.acl.default_visibility.should be_false
+  end
+
+
+  describe "the ValueClass" do
+    it "should only created once" do
+      SomeThing.value_object.should be SomeThing.value_object
+      SomeThing.value_object.should_not be OtherThing.value_object
+    end
   end
 
   describe "loading a collection of nodes" do
@@ -105,6 +114,7 @@ describe "a neo node class" do
       end
     end
   end
+
 
   describe "loading a single node" do
     context "by id" do
@@ -121,6 +131,7 @@ describe "a neo node class" do
       end
     end
 
+
     context "by other criteria" do
       it "should be able to load it's first created node" do
         SomeThing.first_node.should == @somethings.first
@@ -131,15 +142,83 @@ describe "a neo node class" do
       end
     end
 
+
     context "with enabled validations" do
       it "should include ActiveRecord's validations" do
         undefine_class :SomeNakedClass
         class SomeNakedClass; end
-        OtherThing.included_modules.should include(ActiveRecord::Validations)
+        OtherThing.included_modules.should be_include(ActiveRecord::Validations)
         OtherThing.should respond_to(:validates_presence_of)
-        SomeNakedClass.included_modules.should_not include(ActiveRecord::Validations)
+        SomeNakedClass.included_modules.should_not be_include(ActiveRecord::Validations)
       end
     end
+
+
+    describe "special validating node create and update methods" do
+
+      before(:all) do
+        undefine_class :Cat
+        class Cat
+          is_a_neo_node do
+            db.validations true
+          end
+          property :name
+
+          validates_length_of :name, :minimum => 3
+        end
+      end
+
+      context "with valid values" do
+        it "new_with_validations should create the node and return it" do
+          old_number_of_cats = Cat.all_nodes.to_a.size
+
+          cat = Cat.new_with_validations(:name => "dieter")
+
+          cat.should be_valid
+          cat.should be_an_instance_of(Cat)
+          Cat.all_nodes.to_a.size.should be old_number_of_cats + 1
+        end
+
+        it "update_with_validations should update the node and return it" do
+          valid_cat = Cat.new(:name => 'valid_due_create')
+
+          valid_updated_cat = Cat.update_with_validations(valid_cat, :name => 'valid_due_update')
+
+          valid_updated_cat.should be_valid
+          valid_updated_cat.should be_an_instance_of(Cat)
+          valid_updated_cat.name.should == 'valid_due_update'
+
+          valid_updated_cat.should be valid_cat
+        end
+      end
+
+
+      context "with invalid values" do
+        it "new_with_validations should not create the node and return a ValueObject with errors" do
+          old_number_of_cats = Cat.all_nodes.to_a.size
+
+          cat = Cat.new_with_validations(:name => 'ts')
+
+          cat.should_not be_valid
+          cat.should be_an_instance_of(Neo4j::CatValueObject)
+          Cat.all_nodes.to_a.size.should be old_number_of_cats
+        end
+
+        it "update_with_validations should not update the node and return a ValueObject with errors" do
+          valid_cat = Cat.new(:name => 'valid_due_create')
+
+          invalid_updated_cat = Cat.update_with_validations(valid_cat, :name => 'ts')
+
+          invalid_updated_cat.should_not be_valid
+          invalid_updated_cat.should be_an_instance_of(Neo4j::CatValueObject)
+          invalid_updated_cat.name.should == 'ts'
+
+          valid_cat.should be_valid
+          valid_cat.name.should == 'valid_due_create'
+        end
+      end
+    end
+
 
   end
 
@@ -155,6 +234,7 @@ describe "a neo node class" do
     dingdong.age.should be 46
   end
 
+
   describe "using it's lucene index for searching" do
     it "should find it's first matching node and only return this one" do
       pending 'works in dev, check why not in spec'
@@ -169,8 +249,8 @@ describe "a neo node class" do
       lambda { SomeThing.find_first!(:name => "nothing") }.should raise_error(RoboRails::Neo4j::NotFoundException)
     end
   end
-
 end
+
 
 
 describe "a neo node instance" do
@@ -229,10 +309,9 @@ describe "a neo node instance" do
         lambda { @something.update!(:name => 'dieter') }.should_not raise_error(NoMethodError)
       end
     end
-
   end
-
 end
+
 
 
 describe "a neo node instance", ' from a class' do
@@ -249,6 +328,7 @@ describe "a neo node instance", ' from a class' do
       end
     end
 
+
     context 'like enabled meta_info' do
       it "should not have a created_at property" do
         lambda { @something.created_at }.should raise_error(NoMethodError)
@@ -263,7 +343,36 @@ describe "a neo node instance", ' from a class' do
       end
     end
 
+
+    context "like validations" do
+      it "should not have the errors accessor" do
+        @something.should_not respond_to(:errors)
+      end
+
+      it "should respond to valid? as an true returning interface" do
+        @something.should be_valid
+      end
+
+
+      describe "the ValueClass" do
+        it "should include some needed modules" do
+          included_modules = SomeThing.value_object.included_modules
+          included_modules.should be_include(NodeValidationStubs)
+
+          included_modules.should_not be_include(NodeValidations)
+          included_modules.should_not be_include(ValueObjectValidations)
+        end
+      end
+
+
+      describe "the ValueObject" do
+        it "should respond to valid? as an true returning interface" do
+          @something.value_object.should be_valid
+        end
+      end
+    end
   end
+
 
 
   describe "with enabled special db options" do
@@ -313,22 +422,92 @@ describe "a neo node instance", ' from a class' do
     end
 
     context "like validations" do
-      it "should have methods from ActiveRecord::Validations" do
-        undefine_class :SomeNakedClass
-        class SomeNakedClass
+
+      before(:all) do
+        undefine_class :NakedClassWithValidations
+        class NakedClassWithValidations
           is_a_neo_node do
             db.validations true
           end
+          property :name
+
+          validates_length_of :name, :minimum => 3
+        end
+      end
+
+
+      it "should have methods from ActiveRecord::Validations" do
+        naked = NakedClassWithValidations.new
+        naked.errors.should be_a_kind_of(ActiveRecord::Errors)
+        naked.should respond_to(:errors)
+        naked.should respond_to(:valid?)
+      end
+
+      context "given a new invalid object" do
+        it "calling #valid? should return false" do
+          naked = NakedClassWithValidations.new(:name => nil)
+          naked.should_not be_valid
+          #naked.should have(1).error_on(:name)
         end
 
-        @naked = SomeNakedClass.new
-
-        @naked.errors.should be_a_kind_of(ActiveRecord::Errors)
-        @naked.should respond_to(:errors)
-        @naked.should respond_to(:valid?)
-
-        @something.should_not respond_to(:errors)
+        it "but the node should even be saved" do
+          naked = NakedClassWithValidations.new(:name => 'ts')
+          naked.should_not be_valid
+          # naked.should have(1).error_on(:name)
+          naked.name.should == 'ts'
+        end
       end
+
+      context "given a valid object" do
+        it "calling #valid? should return true" do
+          naked = NakedClassWithValidations.new(:name => 'total valid')
+          naked.should be_valid
+        end
+      end
+
+
+      describe "the ValueClass" do
+        it "should include some needed modules" do
+          included_modules = NakedClassWithValidations.value_object.included_modules
+          included_modules.should be_include(NodeValidations)
+          included_modules.should be_include(ValueObjectValidations)
+
+          included_modules.should_not be_include(NodeValidationStubs)
+        end
+      end
+
+
+      describe "the ValueObject" do
+
+        it "should have methods from ActiveRecord::Validations" do
+          value_object = NakedClassWithValidations.value_object.new
+          value_object.errors.should be_a_kind_of(ActiveRecord::Errors)
+          value_object.should respond_to(:errors)
+          value_object.should respond_to(:valid?)
+        end
+
+
+        # context "given a invalid object" do
+        #   it "calling #valid? should return false" do
+        #     value_object = NakedClassWithValidations.value_object.new(:name => nil)
+        #     value_object.should_not be_valid
+        #   end
+        # end
+
+        context "given a valid object" do
+          it "calling #valid? should return true" do
+            value_object = NakedClassWithValidations.value_object.new(:name => 'total valid')
+            value_object.should be_valid
+          end
+        end
+
+      end
+
+      # it "should not create if invalid" do
+      #   naked = SomeNakedClass.validated_new(:name => nil)
+      #   naked.should_not be_valid?
+      # end
+
     end
 
   end

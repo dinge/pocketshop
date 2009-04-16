@@ -5,11 +5,15 @@ module DingDealer
       base.extend ClassMethods
     end
 
+    PublicActionMethods = [ :new, :create, :index, :show, :edit, :update, :destroy ]
+
     module ClassMethods
       def uses_rest(options = {}, &block)
-        RestDsl.new(self).evaluate_dsl(&block).set_defaults
+        Dsl.new(self).evaluate_dsl(&block).set_defaults
+        include FilterHooks
         extend SingletonMethods
         include PublicActions
+        include ObjectInitalizations
         include ActionOperations
         include ActionRenderer
       end
@@ -18,7 +22,8 @@ module DingDealer
     end
 
 
-    class RestDsl
+
+    class Dsl
       def initialize(controller_klass)
         @controller_klass = controller_klass
         setup_dsl
@@ -28,16 +33,14 @@ module DingDealer
         @controller_klass.class_eval do
           class_inheritable_accessor :rest_env
           attr_accessor :rest_run
-          before_filter { |controller| DingDealer::Rest::RestRun.init(controller) }
-          hide_action :rest_env, :rest_run
+          before_filter { |controller| DingDealer::Rest::RestRun.init_rest_run(controller) }
+          hide_action :rest_env, :rest_run, :rest_env=, :rest_run=
         end
 
         @controller_klass.rest_env = dingsl_accessor do
           model     dingsl_accessor(:klass, :object_name, :collection_name, :object_symbol,
                                     :collection_symbol, :object_instance_symbol, :collection_instance_symbol)
           paths     dingsl_accessor(:object, :collection, :new, :edit)
-          actions   dingsl_accessor(:discard)
-          messages  dingsl_accessor(:success, :error)
           dsl
         end
 
@@ -81,8 +84,32 @@ module DingDealer
     end
 
 
+
+    module FilterHooks
+      def self.included(base)
+        base.class_eval do
+          before_filter :init_new,      :only => :new
+          before_filter :init_create,   :only => :create
+          before_filter :init_index,    :only => :index
+          before_filter :init_show,     :only => :show
+          before_filter :init_edit,     :only => :edit
+          before_filter :init_update,   :only => :update
+          before_filter :init_destroy,  :only => :destroy
+          after_filter  { |controller| controller.rest_run.overwrite_response_status }
+        end
+      end
+    end
+
+
+    module SingletonMethods; end
+
+
+
     class RestRun
-      def self.init(controller_instance)
+
+      attr_accessor :response_status
+
+      def self.init_rest_run(controller_instance)
         controller_instance.rest_run = RestRun.new(controller_instance)
       end
 
@@ -124,23 +151,23 @@ module DingDealer
         @controller_instance.params[@rest_env.model.object_symbol]
       end
 
+      def overwrite_response_status
+        if @response_status
+          @controller_instance.response.headers['Status'] = @controller_instance.send(:interpret_status, @response_status)
+        end
+      end
+
       def my_created_collection
         my.send("created_#{@rest_env.model.collection_name}")
       end
     end
 
-
-    module SingletonMethods; end
-
-
-
     module PublicActions
       public
-
-      [ :index, :show, :edit, :new, :create, :update, :destroy].each do | action |
+      PublicActionMethods.each do | action |
         class_eval <<-"RUBY"
           def #{action}
-            #{action.to_s}_operation
+            operate_#{action}
             render_#{action}
           end
         RUBY
@@ -149,40 +176,63 @@ module DingDealer
 
 
 
-    module ActionOperations
+    module ObjectInitalizations
       private
 
-      def index_operation
-        rest_run.current_collection = rest_run.my_created_collection
-      end
-
-      def new_operation
+      def init_new
         rest_run.current_object = rest_env.model.klass.value_object.new
       end
 
-      def create_operation
-        Neo4j::Transaction.run do
-          rest_run.current_object = rest_env.model.klass.new
-          rest_run.current_object.update(rest_run.current_params_hash)
+      def init_create; end
+
+      def init_index
+        rest_run.current_collection = rest_run.my_created_collection
+      end
+
+      def init_show
+        rest_run.init_current_object_by_params
+      end
+
+      def init_edit
+        rest_run.init_current_object_by_params
+      end
+
+      def init_update
+        rest_run.init_current_object_by_params
+      end
+
+      def init_destroy
+        rest_run.init_current_object_by_params
+      end
+    end
+
+
+
+    module ActionOperations
+      private
+
+      def operate_new; end
+
+      def operate_create
+        rest_run.current_object = rest_env.model.klass.new_with_validations(rest_run.current_params_hash)
+        if rest_run.current_object.valid?
           rest_run.my_created_collection << rest_run.current_object
         end
       end
 
-      def show_operation
-        rest_run.init_current_object_by_params
+      def operate_index; end
+      def operate_show; end
+      def operate_edit; end
+
+      def operate_update
+        rest_run.current_object =
+          rest_env.model.klass.update_with_validations(rest_run.current_object, rest_run.current_params_hash)
+        if rest_run.current_object.valid?
+          rest_run.my_created_collection << rest_run.current_object
+        end
       end
 
-      def edit_operation
-        rest_run.init_current_object_by_params
-      end
-
-      def update_operation
-        rest_run.init_current_object_by_params
-        rest_run.current_object.update(rest_run.current_params_hash)
-      end
-
-      def destroy_operation
-        rest_run.init_current_object_by_params
+      def operate_destroy
         rest_run.current_object.delete
       end
     end
@@ -205,15 +255,24 @@ module DingDealer
       end
 
       def render_create
-        respond_to do |format|
-          if rest_run.current_object.valid?
-            flash[:notice] = 'successfully created.'
-            format.html { redirect_to rest_run.object_path(:edit) }
-          else
-            flash[:error] = 'not saved !'
-            format.html { render :action => :new }
-          end
+        if rest_run.current_object.valid?
+          render_create_with_success
+        else
+          render_create_without_success
         end
+      end
+
+      def render_create_with_success
+        respond_to do |format|
+          flash[:notice] = 'successfully created.'
+          format.html { redirect_to rest_run.object_path(:edit) }
+        end
+      end
+
+      def render_create_without_success
+        flash[:error] = 'not saved !'
+        rest_run.response_status = :unprocessable_entity
+        render_new
       end
 
       def render_show
@@ -225,15 +284,24 @@ module DingDealer
       def render_edit; end
 
       def render_update
-        respond_to do |format|
-          if rest_run.current_object.valid?
-            flash[:notice] = 'successfully updated.'
-            format.html { redirect_to rest_run.object_path }
-          else
-            flash[:error] = 'not saved !'
-            format.html { render :action => :edit }
-          end
+        if rest_run.current_object.valid?
+          render_update_with_success
+        else
+          render_update_without_success
         end
+      end
+
+      def render_update_with_success
+        respond_to do |format|
+          flash[:notice] = 'successfully updated.'
+          format.html { redirect_to rest_run.object_path }
+        end
+      end
+
+      def render_update_without_success
+        flash[:error] = 'not saved !'
+        rest_run.response_status = :unprocessable_entity
+        render_edit
       end
 
       def render_destroy

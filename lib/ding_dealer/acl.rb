@@ -29,7 +29,7 @@ module DingDealer
           class_inheritable_accessor :acl_env
           attr_accessor :acl_run
           before_filter { |controller| DingDealer::Acl::AclRun.init(controller) }
-          hide_action :acl_env, :acl_run
+          hide_action :acl_env, :acl_run, :acl_env=, :acl_run=
         end
 
         @controller_klass.acl_env = dingsl_accessor do
