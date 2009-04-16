@@ -38,8 +38,8 @@ describe "every object should be able to be a neo relation" do
   end
 
   it "the module should be included in all objects" do
-    Object.included_modules.should include(RoboRails::Neo4j::Relation)
-    SomeNakedClass.included_modules.should include(RoboRails::Neo4j::Relation)
+    Object.should be_include(RoboRails::Neo4j::Relation)
+    SomeNakedClass.should be_include(RoboRails::Neo4j::Relation)
   end
 
 
@@ -51,14 +51,14 @@ describe "every object should be able to be a neo relation" do
   describe "the Neo4j::RelationMixin", " in a class" do
     context "without calling is_a_neo_relation" do
       it "should not be mixed in" do
-        SomeNakedClass.included_modules.should_not include(Neo4j::RelationMixin)
+        SomeNakedClass.should_not be_include(Neo4j::RelationMixin)
         SomeNakedClass.new.should_not be_a_kind_of(Neo4j::RelationMixin)
       end
     end
 
     context "with calling is_a_neo_relation" do
       it "should be mixed in" do
-        SimpleRelation.included_modules.should include(Neo4j::RelationMixin)
+        SimpleRelation.should be_include(Neo4j::RelationMixin)
       end
     end
   end

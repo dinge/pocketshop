@@ -43,8 +43,8 @@ describe "every object should be able to be a neo node" do
   end
 
   it "the module should be included in all objects" do
-    Object.included_modules.should be_include(RoboRails::Neo4j::Node)
-    SomeNakedClass.included_modules.should be_include(RoboRails::Neo4j::Node)
+    Object.should be_include(RoboRails::Neo4j::Node)
+    SomeNakedClass.should be_include(RoboRails::Neo4j::Node)
   end
 
   it "it's macro method is_a_neo_node should be available to all objects" do
@@ -55,14 +55,14 @@ describe "every object should be able to be a neo node" do
   describe "the Neo4j::NodeMixin", " in a class" do
     context "without calling is_a_neo_node" do
       it "should not be mixed in" do
-        SomeNakedClass.included_modules.should_not be_include(Neo4j::NodeMixin)
+        SomeNakedClass.should_not be_include(Neo4j::NodeMixin)
         SomeNakedClass.new.should_not be_a_kind_of(Neo4j::NodeMixin)
       end
     end
 
     context "with calling is_a_neo_node" do
       it "should be mixed in" do
-        SomeThing.included_modules.should be_include(Neo4j::NodeMixin)
+        SomeThing.should be_include(Neo4j::NodeMixin)
         @something.should be_a_kind_of(Neo4j::NodeMixin)
       end
     end
@@ -147,9 +147,9 @@ describe "a neo node class" do
       it "should include ActiveRecord's validations" do
         undefine_class :SomeNakedClass
         class SomeNakedClass; end
-        OtherThing.included_modules.should be_include(ActiveRecord::Validations)
+        OtherThing.should be_include(ActiveRecord::Validations)
         OtherThing.should respond_to(:validates_presence_of)
-        SomeNakedClass.included_modules.should_not be_include(ActiveRecord::Validations)
+        SomeNakedClass.should_not be_include(ActiveRecord::Validations)
       end
     end
 
@@ -356,11 +356,10 @@ describe "a neo node instance", ' from a class' do
 
       describe "the ValueClass" do
         it "should include some needed modules" do
-          included_modules = SomeThing.value_object.included_modules
-          included_modules.should be_include(NodeValidationStubs)
+          SomeThing.value_object.should be_include(NodeValidationStubs)
 
-          included_modules.should_not be_include(NodeValidations)
-          included_modules.should_not be_include(ValueObjectValidations)
+          SomeThing.value_object.should_not be_include(NodeValidations)
+          SomeThing.value_object.should_not be_include(ValueObjectValidations)
         end
       end
 
@@ -468,11 +467,10 @@ describe "a neo node instance", ' from a class' do
 
       describe "the ValueClass" do
         it "should include some needed modules" do
-          included_modules = NakedClassWithValidations.value_object.included_modules
-          included_modules.should be_include(NodeValidations)
-          included_modules.should be_include(ValueObjectValidations)
+          NakedClassWithValidations.value_object.should be_include(NodeValidations)
+          NakedClassWithValidations.value_object.should be_include(ValueObjectValidations)
 
-          included_modules.should_not be_include(NodeValidationStubs)
+          NakedClassWithValidations.value_object.should_not be_include(NodeValidationStubs)
         end
       end
 
