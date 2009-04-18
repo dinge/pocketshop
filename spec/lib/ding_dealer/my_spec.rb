@@ -52,14 +52,14 @@ describe "global my" do
 
     it "calling dump_names_of_my(:dings) should return my dings' names" do
       @my_dings.each do |ding|
-        dump_names_of_my(:dings).should include(ding.name)
+        dump_names_of_my(:dings).should be_include(ding.name)
         ding.should be_a_instance_of(Ding)
       end
     end
 
     it "calling dump_classes_of_my(:dings) should return my dings' classes" do
       @my_dings.each do |ding|
-        dump_classes_of_my(:dings).should include(ding.class)
+        dump_classes_of_my(:dings).should be_include(ding.class)
         ding.should be_a_instance_of(Ding)
       end
     end
