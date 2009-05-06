@@ -76,6 +76,7 @@ describe "a controller instance", ' with standard_permissions', :type => :contro
   controller_name 'dummies'
 
   before(:all) { start_neo4j }
+  before(:each) { controller.stub!(:render) }
   after(:all) { stop_neo4j }
 
   it "should have an acl_run and other acl_run.methods" do

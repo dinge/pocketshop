@@ -120,8 +120,8 @@ module DingDealer
 
               unless node.valid?
                 node.errors.instance_variable_set(:@base, nil)
-                vo, vo.errors = node.value_object, node.errors
-                raise DingDealer::Neo4j::InvalidRecord, vo
+                vo, vo.errors = node.value_object, node.errors.dup
+                raise DingDealer::Neo4j::InvalidRecord.new(vo)
               end
               return node
             end
@@ -161,7 +161,7 @@ module DingDealer
         end
 
         def to_param
-          "#{id}-#{name}"
+          "#{id}-#{name.parameterize}"
         end
 
         def <=>(other)
@@ -235,11 +235,9 @@ module DingDealer
           base.class_eval do
             include ActiveRecord::Validations
             attr_accessor :errors
-
             # needed if not valid after validation
-            def self.self_and_descendents_from_active_record
-              []
-            end
+            def self.self_and_descendents_from_active_record; [] end
+            def self.self_and_descendants_from_active_record; [] end # since rails 2.3.2
 
             def self.human_name
               self.name.humanize

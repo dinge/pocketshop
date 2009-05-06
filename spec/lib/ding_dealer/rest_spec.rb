@@ -158,7 +158,9 @@ describe "a controller instance", ' with default convention based settings', :ty
   controller_name 'beans'
 
   before(:all) { start_neo4j }
+  before(:each) { controller.stub!(:render) }
   after(:all) { stop_neo4j }
+
 
   it "should have an rest_run and other rest_run.methods" do
     get :full_access_for_test
@@ -167,8 +169,8 @@ describe "a controller instance", ' with default convention based settings', :ty
 
   it "should have only the standard rest methods public accessable" do
     public_actions = ["index", "update", "create", "new", "show", "destroy", "edit"]
-    some_rails_methods = ["full_access_for_test", "exception", "exception=", "rescue_action_without_handler"]
-    controller.class.action_methods.should == (public_actions + some_rails_methods).to_set
+    some_extra_methods = ["full_access_for_test"]
+    controller.class.action_methods.should == (public_actions + some_extra_methods).to_set
   end
 
 

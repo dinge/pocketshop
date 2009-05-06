@@ -9,7 +9,7 @@ unless defined?(ActiveRecord)
       cattr_accessor :store_full_sti_class
       cattr_accessor :instantiate_observers
       cattr_accessor :configurations
-      
+
       # needed for reload! in script/console
       cattr_accessor :reset_subclasses
       def self.clear_reloadable_connections!; end

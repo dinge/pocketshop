@@ -144,7 +144,7 @@ module DingDealer
       end
 
       def init_current_object_by_params
-        self.current_object =  @rest_env.model.klass.load(@controller_instance.params[:id])
+        self.current_object = @rest_env.model.klass.load(@controller_instance.params[:id])
       end
 
       def current_params_hash
@@ -153,6 +153,7 @@ module DingDealer
 
       def overwrite_response_status
         if @response_status
+          puts "111111111111"
           @controller_instance.response.headers['Status'] = @controller_instance.send(:interpret_status, @response_status)
         end
       end
@@ -272,7 +273,7 @@ module DingDealer
       def render_create_without_success
         flash[:error] = 'not saved !'
         rest_run.response_status = :unprocessable_entity
-        render_new
+        render :action => :new
       end
 
       def render_show
@@ -301,7 +302,7 @@ module DingDealer
       def render_update_without_success
         flash[:error] = 'not saved !'
         rest_run.response_status = :unprocessable_entity
-        render_edit
+        render :action => :edit
       end
 
       def render_destroy
