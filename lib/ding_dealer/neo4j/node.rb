@@ -1,10 +1,9 @@
 module DingDealer
   module Neo4j
 
-    class NotFoundException < StandardError; end
-    class InvalidRecord < StandardError; end
-
     module Node
+      class NotFoundException < StandardError; end
+      class InvalidRecord < StandardError; end
 
       def self.included(base)
         base.extend(ClassMethods)
@@ -56,7 +55,7 @@ module DingDealer
       module SingletonMethods
         def l(neo_node_id)
           node = ::Neo4j.load(neo_node_id)
-          raise DingDealer::Neo4j::NotFoundException unless node.is_a?(self)
+          raise NotFoundException unless node.is_a?(self)
           node
         end
 
@@ -88,7 +87,7 @@ module DingDealer
 
         def find_first!(query=nil, &block)
           find_first(query, &block) ||
-            raise(DingDealer::Neo4j::NotFoundException.new("can't find #{self.name} with query #{query.inspect}"))
+            raise(NotFoundException.new("can't find #{self.name} with query #{query.inspect}"))
         end
 
         # overwriting Neo4j::NodeMixin.value_object
@@ -96,17 +95,19 @@ module DingDealer
           @value_class ||= if neo_node_env.db.validations
             value_klass = create_value_class
             value_klass.send(:include, NodeValidations)
-            value_klass.send(:include, ValueObjectValidations)
+            value_klass.send(:include, ValueObjectExtensions::Validations)
           else
             create_value_class.send(:include, NodeValidationStubs)
           end
         end
 
         def new_with_validations(attributes_hash)
-          update_with_validations(attributes_hash){ new }
+          # need to use block here to roll back node creation if it is invalid
+          update_with_validations(attributes_hash, attributes_hash, :new_record_for_value_object => true){ new }
         end
 
-        def update_with_validations(node_or_attributes_hash, attributes_hash = nil, &proc)
+        def update_with_validations(node_or_attributes_hash, attributes_hash, options = {})
+          options = options.reverse_merge(:new_record_for_value_object => false)
           begin
             ::Neo4j::Transaction.run do
               if block_given?
@@ -119,17 +120,29 @@ module DingDealer
               node.update(attributes_hash)
 
               unless node.valid?
-                node.errors.instance_variable_set(:@base, nil)
-                vo, vo.errors = node.value_object, node.errors.dup
-                raise DingDealer::Neo4j::InvalidRecord.new(vo)
+                raise InvalidRecord.new( invalid_node_to_invalid_value_object(node, options[:new_record_for_value_object]) )
               end
               return node
             end
-          rescue DingDealer::Neo4j::InvalidRecord => vo
-            return vo.message
+          rescue InvalidRecord => invalid_value_object_exception
+            return invalid_value_object_exception.message # return value_object with errors
           end
         end
 
+
+        private
+
+        def invalid_node_to_invalid_value_object(node, new_record_for_value_object)
+          node.errors.instance_variable_set(:@base, nil)
+          invalid_value_object, invalid_value_object.errors = node.value_object, node.errors.dup
+          invalid_value_object.extend(ValueObjectExtensions::InstanceMethods) # need to extend here to overwrite #new_record?
+          if new_record_for_value_object
+            invalid_value_object.new_record = true
+          else
+            invalid_value_object.id = node.id
+          end
+          invalid_value_object
+        end
 
         # def load_by_guid!(guid)
         #   decoded = DingDealer::Guid.decode_to_hash(guid)
@@ -141,6 +154,7 @@ module DingDealer
         #   node
         # end
       end
+
 
 
       module InstanceMethods
@@ -181,17 +195,6 @@ module DingDealer
         def new_record?
           false
         end
-
-        # def to_guid
-        #   DingDealer::Guid.encode(
-        #     :i => id,
-        #     :t => created_at.strftime('%Y%m%d%H%M%S'),
-        #     :c => self.class.name,
-        #     :u => 'x@xxx.de',
-        #     :r => rand(9999999) )
-        # end
-
-        # alias :to_param :to_guid
       end
 
 
@@ -257,22 +260,39 @@ module DingDealer
 
 
 
-      module ValueObjectValidations
-        def initialize(*args)
-          @errors = ActiveRecord::Errors.new(self)
-          super
-        end
-
-        # oberwriting AR:Validations#valid?
+      module NodeValidationStubs
         def valid?
-          @errors.empty?
+          true
         end
       end
 
 
-      module NodeValidationStubs
-        def valid?
-          true
+
+      module ValueObjectExtensions
+        module Validations
+          def initialize(*args)
+            @errors = ActiveRecord::Errors.new(self)
+            super
+          end
+
+          # oberwriting AR:Validations#valid?
+          def valid?
+            @errors.empty?
+          end
+        end
+
+
+        module InstanceMethods
+          attr_accessor :id, :new_record
+
+          def to_param
+            name.blank? ? id.to_s : "#{id}-#{name.parameterize}"
+          end
+
+          # overwriting from Neo Mixin
+          def new_record?
+            @new_record ? @new_record : ! defined?(@_updated)
+          end
         end
       end
 

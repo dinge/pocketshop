@@ -123,11 +123,11 @@ describe "a neo node class" do
       end
 
       it "should raise an exception if loaded node is an instance of an other class" do
-        lambda { SomeThing.load(4) }.should raise_error(DingDealer::Neo4j::NotFoundException)
+        lambda { SomeThing.load(4) }.should raise_error(DingDealer::Neo4j::Node::NotFoundException)
       end
 
       it "should raise no exception if loaded node is an instance of the same class" do
-        lambda { OtherThing.load(4) }.should_not raise_error(DingDealer::Neo4j::NotFoundException)
+        lambda { OtherThing.load(4) }.should_not raise_error(DingDealer::Neo4j::Node::NotFoundException)
       end
     end
 
@@ -246,7 +246,7 @@ describe "a neo node class" do
     end
 
     it "should fire an exception if non matching find_first! is found" do
-      lambda { SomeThing.find_first!(:name => "nothing") }.should raise_error(DingDealer::Neo4j::NotFoundException)
+      lambda { SomeThing.find_first!(:name => "nothing") }.should raise_error(DingDealer::Neo4j::Node::NotFoundException)
     end
   end
 end
@@ -359,7 +359,7 @@ describe "a neo node instance", ' from a class' do
           SomeThing.value_object.should be_include(NodeValidationStubs)
 
           SomeThing.value_object.should_not be_include(NodeValidations)
-          SomeThing.value_object.should_not be_include(ValueObjectValidations)
+          SomeThing.value_object.should_not be_include(ValueObjectExtensions::Validations)
         end
       end
 
@@ -468,7 +468,7 @@ describe "a neo node instance", ' from a class' do
       describe "the ValueClass" do
         it "should include some needed modules" do
           NakedClassWithValidations.value_object.should be_include(NodeValidations)
-          NakedClassWithValidations.value_object.should be_include(ValueObjectValidations)
+          NakedClassWithValidations.value_object.should be_include(ValueObjectExtensions::Validations)
 
           NakedClassWithValidations.value_object.should_not be_include(NodeValidationStubs)
         end

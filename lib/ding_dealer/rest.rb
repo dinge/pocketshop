@@ -218,7 +218,7 @@ module DingDealer
       def operate_edit; end
 
       def operate_update
-        rest_run.current_object =
+        rest_run.current_object = 
           rest_env.model.klass.update_with_validations(rest_run.current_object, rest_run.current_params_hash)
         if rest_run.current_object.valid?
           rest_run.my_created_collection << rest_run.current_object
