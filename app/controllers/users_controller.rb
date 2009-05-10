@@ -1,3 +1,3 @@
 class UsersController < ApplicationController
-  use_rest
+  uses_rest
 end

@@ -299,6 +299,8 @@ describe "a controller instance", ' with default convention based settings', :ty
         bean.should_not be_valid
         bean.should have(1).error_on(:name)
         original_bean.name.should == 'tiger'
+
+        # Bean.all_nodes.to_a.size.should == @number_of_all_beans
       end
     end
   end

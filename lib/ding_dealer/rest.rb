@@ -105,9 +105,6 @@ module DingDealer
 
 
     class RestRun
-
-      # attr_accessor :response_status
-
       def self.init_rest_run(controller_instance)
         controller_instance.rest_run = RestRun.new(controller_instance)
       end
