@@ -1244,7 +1244,6 @@ module ActionController #:nodoc:
       def render_for_text(text = nil, status = nil, append_response = false) #:nodoc:
         @performed_render = true
 
-puts "222222222222"
         response.status = interpret_status(status || DEFAULT_RENDER_STATUS_CODE)
 
         if append_response

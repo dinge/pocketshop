@@ -95,7 +95,6 @@ module DingDealer
           before_filter :init_edit,     :only => :edit
           before_filter :init_update,   :only => :update
           before_filter :init_destroy,  :only => :destroy
-          after_filter  { |controller| controller.rest_run.overwrite_response_status }
         end
       end
     end
@@ -107,7 +106,7 @@ module DingDealer
 
     class RestRun
 
-      attr_accessor :response_status
+      # attr_accessor :response_status
 
       def self.init_rest_run(controller_instance)
         controller_instance.rest_run = RestRun.new(controller_instance)
@@ -149,13 +148,6 @@ module DingDealer
 
       def current_params_hash
         @controller_instance.params[@rest_env.model.object_symbol]
-      end
-
-      def overwrite_response_status
-        if @response_status
-          puts "111111111111"
-          @controller_instance.response.headers['Status'] = @controller_instance.send(:interpret_status, @response_status)
-        end
       end
 
       def my_created_collection
@@ -272,8 +264,7 @@ module DingDealer
 
       def render_create_without_success
         flash[:error] = 'not saved !'
-        rest_run.response_status = :unprocessable_entity
-        render :action => :new
+        render :action => :new, :status => :unprocessable_entity
       end
 
       def render_show
@@ -301,8 +292,7 @@ module DingDealer
 
       def render_update_without_success
         flash[:error] = 'not saved !'
-        rest_run.response_status = :unprocessable_entity
-        render :action => :edit
+        render :action => :edit, :status => :unprocessable_entity
       end
 
       def render_destroy

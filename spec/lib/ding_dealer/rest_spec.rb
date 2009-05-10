@@ -158,7 +158,7 @@ describe "a controller instance", ' with default convention based settings', :ty
   controller_name 'beans'
 
   before(:all) { start_neo4j }
-  before(:each) { controller.stub!(:render) }
+  before(:each) { controller.stub!(:default_template).and_return('some_non_existing_template_path') }
   after(:all) { stop_neo4j }
 
 
