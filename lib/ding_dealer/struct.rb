@@ -70,17 +70,20 @@ module DingDealer
       case method.to_s
       when PredicateMethod then false
       when WriterMethod, ReaderMethod
-        if @_uninitialized
-          struct_accessor($1)
-          send(method, *args)
-        else
-          raise NoMethodError.new("#{method} not found in #{self.inspect}")
-        end
+        build_methods_on_method_missing(method, args, $1)
       else
         raise NoMethodError.new("#{method} not found in #{self.inspect}")
       end
     end
 
+    def build_methods_on_method_missing(method, args, attribute)
+      if @_uninitialized
+        struct_accessor(attribute)
+        send(method, *args)
+      else
+        raise NoMethodError.new("#{method} not found in #{self.inspect}")
+      end
+    end
 
     def struct_accessor(attribute)
       @_attribute_names << attribute.to_sym

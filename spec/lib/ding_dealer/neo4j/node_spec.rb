@@ -17,9 +17,15 @@ describe DingDealer::Neo4j::Node, :shared => true do
           dynamic_properties true
           validations true
         end
+        defaults do
+          property_with_default_value 'default value'
+        end
         acl.default_visibility true
       end
+
+      property :property_with_default_value
     end
+
 
     @somethings = (1..3).map do |i|
       SomeThing.new(:name => "name_#{i}", :age => i)
@@ -95,6 +101,10 @@ describe "a neo node class" do
     SomeThing.neo_node_env.acl.default_visibility.should be_false
   end
 
+  it "default values should be configurable" do
+    OtherThing.neo_node_env.defaults.should be_a_kind_of(DingDealer::OpenStruct)
+    OtherThing.neo_node_env.defaults.property_with_default_value.should == 'default value'
+  end
 
   describe "the ValueClass" do
     it "should only created once" do
@@ -374,7 +384,7 @@ describe "a neo node instance", ' from a class' do
 
 
 
-  describe "with enabled special db options" do
+  describe "with enabled special options" do
     context "like dynamic_properties" do
       it "should have dynamic properties" do
         @otherthing.should_not respond_to(:any_dynamic_property)
@@ -419,6 +429,19 @@ describe "a neo node instance", ' from a class' do
         @otherthing.version.should be old_version + 1
       end
     end
+
+    context "like default values" do
+      it "should use the default value, when no other value is given" do
+        otherthing = OtherThing.new
+        otherthing.property_with_default_value.should == 'default value'
+      end
+
+      it "should not use the default value, when another value is given" do
+        otherthing = OtherThing.new(:property_with_default_value => 'custom value')
+        otherthing.property_with_default_value.should == 'custom value'
+      end
+    end
+
 
     context "like validations" do
 

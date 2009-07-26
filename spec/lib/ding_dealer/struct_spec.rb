@@ -11,7 +11,7 @@ describe DingDealer::Struct do
 
       it "should have no attributes" do
         lambda { @struct.unexisting_attribute }.should raise_error(NoMethodError)
-        lambda { @struct.unexisting_attribute == 'gang green' }.should raise_error(NoMethodError)
+        lambda { @struct.unexisting_attribute = 'gang green' }.should raise_error(NoMethodError)
       end
 
       it "should return false", 'calling the predicate method' do

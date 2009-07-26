@@ -19,6 +19,7 @@ class User
   has_n(:created_tags).to(Tag).relation(Acl::Created)
   has_n(:created_things).to(Thing).relation(Acl::Created)
   has_n(:created_concepts).to(Concept).relation(Acl::Created)
+  has_n(:created_concept_units).to(Concept).relation(Acl::Created)
   has_n(:created_teams).to(Team).relation(Acl::Created)
   has_n(:created_users).to(Team).relation(Acl::Created)
 

@@ -3,7 +3,7 @@ class Concept
     db do
       meta_info true
       validations true
-      dynamic_properties true
+      # dynamic_properties true
     end
   end
 
@@ -13,19 +13,16 @@ class Concept
   has_one(:creator).from(User, :created_concepts)
   has_n(:tags).from(Tag, :tagged_concepts)
 
+  has_n(:units) #.from(Concept::Unit, :concept)
 
   validates_presence_of :name
 
-  # has_n(:units)
+
+
   # has_n(:tags).to(Tag).relation(Tagging)
 
   # has_n(:basic_tags).relation(Taggings::Basic)
 
-
-
-  def create_new_thing
-    
-  end
 
   # collection_name :concepts
   # fields :name, :text, :created_at, :updated_at, :version

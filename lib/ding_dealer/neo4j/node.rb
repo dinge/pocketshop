@@ -1,3 +1,4 @@
+require 'ostruct'
 module DingDealer
   module Neo4j
 
@@ -37,6 +38,7 @@ module DingDealer
 
           @node_klass.neo_node_env = dingsl_accessor do
             db  dingsl_accessor(:meta_info => false, :dynamic_properties => false, :validations => false)
+            defaults DingDealer::OpenStruct.new
             acl dingsl_accessor(:default_visibility => false)
             dsl
           end
@@ -168,6 +170,7 @@ module DingDealer
           else
             super(*args)
           end
+          set_default_values
         end
 
         def id
@@ -195,6 +198,17 @@ module DingDealer
         def new_record?
           false
         end
+
+        protected
+
+        def set_default_values
+          neo_node_env.defaults.to_hash.each do |property, value|
+            if send(property).blank?
+              send("#{property}=", value)
+            end
+          end
+        end
+
       end
 
 
