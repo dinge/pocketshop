@@ -17,7 +17,7 @@ class Concept::Unit::Text
 
   validates_presence_of :name
 
-  # has_one(:creator).from(User, :created_concept_units)
-  # has_one(:concept).to(Concept)
+  has_one(:creator).from(User, :created_concept_units)
+  has_one(:concept).to(Concept)
 
 end

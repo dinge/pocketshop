@@ -126,6 +126,7 @@ describe "a neo node class" do
   end
 
 
+
   describe "loading a single node" do
     context "by id" do
       it "should be able to load a node instance by id" do
@@ -162,6 +163,7 @@ describe "a neo node class" do
         SomeNakedClass.should_not be_include(ActiveRecord::Validations)
       end
     end
+
 
 
     describe "special validating node create and update methods" do
@@ -430,6 +432,7 @@ describe "a neo node instance", ' from a class' do
       end
     end
 
+
     context "like default values" do
       it "should use the default value, when no other value is given" do
         otherthing = OtherThing.new
@@ -440,7 +443,14 @@ describe "a neo node instance", ' from a class' do
         otherthing = OtherThing.new(:property_with_default_value => 'custom value')
         otherthing.property_with_default_value.should == 'custom value'
       end
+
+      it "should be possible to overwrite the default value" do
+        otherthing = OtherThing.new
+        otherthing.property_with_default_value = 'changed value'
+        otherthing.property_with_default_value.should == 'changed value'
+      end
     end
+
 
 
     context "like validations" do
@@ -508,12 +518,13 @@ describe "a neo node instance", ' from a class' do
         end
 
 
-        # context "given a invalid object" do
-        #   it "calling #valid? should return false" do
-        #     value_object = NakedClassWithValidations.value_object.new(:name => nil)
-        #     value_object.should_not be_valid
-        #   end
-        # end
+        context "given a invalid object" do
+          it "calling #valid? should return false" do
+            pending
+            value_object = NakedClassWithValidations.value_object.new(:name => nil)
+            value_object.should_not be_valid
+          end
+        end
 
         context "given a valid object" do
           it "calling #valid? should return true" do
@@ -524,10 +535,11 @@ describe "a neo node instance", ' from a class' do
 
       end
 
-      # it "should not create if invalid" do
-      #   naked = SomeNakedClass.validated_new(:name => nil)
-      #   naked.should_not be_valid?
-      # end
+      it "should not create if invalid" do
+        pending
+        naked = SomeNakedClass.validated_new(:name => nil)
+        naked.should_not be_valid?
+      end
 
     end
 

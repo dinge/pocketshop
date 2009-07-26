@@ -10,6 +10,8 @@ describe Concept::Unit::Text do
     concept = Concept.new(:name => 'soup')
     text.concept = concept
     text.concept.should == concept
+
+    # concept.units.should be_include(text)
   end
 
   it "should have some default values" do
