@@ -4,6 +4,9 @@ describe DingDealer::Rest, ' with default settings' do
   before(:all) do
     start_neo4j
     undefine_class :MonkeysController, :Monkey
+
+
+
     class Monkey; end
     class MonkeysController < ApplicationController
       uses_rest
@@ -53,6 +56,7 @@ describe DingDealer::Rest, ' with a customized namespaced model' do
     module Animal
       class Tiger; end
     end
+
     class ElephantsController < ApplicationController
       uses_rest do
         model.klass Animal::Tiger
@@ -87,6 +91,7 @@ end
 describe DingDealer::Rest, ' with all settings customized' do
   before(:all) do
     start_neo4j
+
     undefine_class :ElephantsController, :Cat
     class Cat; end
     class ElephantsController < ApplicationController
@@ -178,7 +183,9 @@ describe "a controller instance", ' with default convention based settings', :ty
     context 'with valid values' do
       before(:each) do
         Me.now = mock(User, :created_beans => [])
-        @bean = Bean.new
+        Neo4j::Transaction.run do
+          @bean = Bean.new
+        end
       end
 
       it "should #new" do
@@ -190,7 +197,7 @@ describe "a controller instance", ' with default convention based settings', :ty
       end
 
       it "should #create" do
-        number_of_all_nodes = Bean.all_nodes.to_a.size
+        number_of_all_nodes = Bean.nodes.size
 
         post :create, :bean => { :name => 'salt' }
         bean = assigns(:bean)
@@ -204,7 +211,7 @@ describe "a controller instance", ' with default convention based settings', :ty
 
         bean.should be_valid
         bean.errors.should be_empty
-        Bean.all_nodes.to_a.size.should == number_of_all_nodes + 1
+        Bean.nodes.to_a.size.should == number_of_all_nodes + 1
       end
 
       it "should #index" do
@@ -267,7 +274,7 @@ describe "a controller instance", ' with default convention based settings', :ty
     context 'with invalid values' do
       before(:each) do
         Me.now = mock(User, :created_beans => [])
-        @number_of_all_beans = Bean.all_nodes.to_a.size
+        @number_of_all_beans = Bean.nodes.size
       end
 
       it "should #create with errors", ' without changing the node' do
@@ -282,11 +289,13 @@ describe "a controller instance", ' with default convention based settings', :ty
         bean.should_not be_valid
         bean.should have(1).error_on(:name)
 
-        Bean.all_nodes.to_a.size.should == @number_of_all_beans
+        Bean.nodes.size.should == @number_of_all_beans
       end
 
       it "should #update with errors", ' without changing the node' do
-        original_bean = Bean.new(:name => 'tiger')
+        original_bean = Neo4j::Transaction.run do 
+          Bean.new(:name => 'tiger')
+        end
 
         put :update, :id => original_bean.id, :bean => { :name => 'ts' }
         bean = assigns(:bean)
@@ -298,9 +307,12 @@ describe "a controller instance", ' with default convention based settings', :ty
         bean.name.should == 'ts'
         bean.should_not be_valid
         bean.should have(1).error_on(:name)
-        original_bean.name.should == 'tiger'
 
-        # Bean.all_nodes.to_a.size.should == @number_of_all_beans
+        Neo4j::Transaction.run do
+          original_bean.name.should == 'tiger'
+        end
+
+        # Bean.nodes.size.should == @number_of_all_beans
       end
     end
   end

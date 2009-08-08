@@ -10,7 +10,7 @@ class Tag
   index :name, :text
 
   has_one(:creator).from(User, :created_tags)
-  has_n(:tagged_concepts).to(Concept).relation(Taggings::Basic)
+  has_n(:tagged_concepts).to(Concept).relationship(Taggings::Basic)
 
   validates_presence_of  :name
 end

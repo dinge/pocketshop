@@ -140,7 +140,7 @@ module DingDealer
       end
 
       def init_current_object_by_params
-        self.current_object = @rest_env.model.klass.load(@controller_instance.params[:id])
+        self.current_object = @rest_env.model.klass.load!(@controller_instance.params[:id])
       end
 
       def current_params_hash
@@ -223,7 +223,9 @@ module DingDealer
       end
 
       def operate_destroy
-        rest_run.current_object.delete
+        ::Neo4j::Transaction.run do
+          rest_run.current_object.delete
+        end
       end
     end
 

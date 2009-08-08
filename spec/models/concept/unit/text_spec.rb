@@ -4,6 +4,9 @@ describe Concept::Unit::Text do
   before(:all) { start_neo4j }
   after(:all) { stop_neo4j }
 
+  before(:each) { Neo4j::Transaction.new }
+  after(:each) { Neo4j::Transaction.finish }
+
 
   it "should be part of a concept" do
     text = Concept::Unit::Text.new(:name => 'color')

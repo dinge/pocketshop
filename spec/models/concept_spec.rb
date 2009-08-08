@@ -1,8 +1,15 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Concept do
-  before(:all) { start_neo4j }
-  after(:all) { stop_neo4j }
+  before(:all) do
+    start_neo4j
+    Neo4j::Transaction.new
+  end
+
+  after(:all) do
+    Neo4j::Transaction.finish
+    stop_neo4j
+  end
 
   it "has many units" do
     concept = Concept.new(:name => 'soup')
@@ -22,5 +29,4 @@ describe Concept do
     concept.units.should be_include number
     concept.units.should be_include text
   end
-
 end

@@ -5,7 +5,7 @@ class User
   end
 
   property :name, :encrypted_password, :salt_for_password
-  property :password # needed for User.value_object.new, attr_accessors owerwritten
+  property :password # needed for User.value_object.new, attr_accessors owerwritten, TODO: check if needed any longer
   def password; nil; end
 
   index :name
@@ -16,16 +16,16 @@ class User
   validates_presence_of :name, :password
 
 
-  has_n(:created_tags).to(Tag).relation(Acl::Created)
-  has_n(:created_things).to(Thing).relation(Acl::Created)
-  has_n(:created_concepts).to(Concept).relation(Acl::Created)
-  has_n(:created_concept_units).to(Concept).relation(Acl::Created)
-  has_n(:created_teams).to(Team).relation(Acl::Created)
-  has_n(:created_users).to(Team).relation(Acl::Created)
+  has_n(:created_tags).to(Tag).relationship(Acl::Created)
+  has_n(:created_things).to(Thing).relationship(Acl::Created)
+  has_n(:created_concepts).to(Concept).relationship(Acl::Created)
+  # has_n(:created_concept_units).to(Concept).relationship(Acl::Created)
+  has_n(:created_teams).to(Team).relationship(Acl::Created)
+  has_n(:created_users).to(Team).relationship(Acl::Created)
 
   has_one(:creator).from(User, :created_users)
 
-  # has_n(:creations).relation(Acl::Creation)
+  # has_n(:creations).relationship(Acl::Creation)
 
   def is_me_now
     Me.now = self

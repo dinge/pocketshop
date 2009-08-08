@@ -12,8 +12,10 @@ describe "global my" do
 
     class SpecialUser
       is_a_neo_node
-      has_n(:dings).to(Tag).relation(Acl::Created)
+      has_n(:dings).to(Tag).relationship(Acl::Created)
     end
+
+    Neo4j::Transaction.new
 
     Me.now = SpecialUser.new
 
@@ -26,7 +28,10 @@ describe "global my" do
     end
   end
 
-  after(:all) { stop_neo4j }
+  after(:all) do 
+    Neo4j::Transaction.finish
+    stop_neo4j
+  end
 
 
   it "should be globaly available" do

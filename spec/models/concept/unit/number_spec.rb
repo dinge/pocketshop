@@ -4,6 +4,8 @@ describe Concept::Unit::Number do
   before(:all) { start_neo4j }
   after(:all) { stop_neo4j }
 
+  before(:each) { Neo4j::Transaction.new }
+  after(:each) { Neo4j::Transaction.finish }
 
   it "should be part of a concept" do
     number = Concept::Unit::Number.new(:name => 'color')

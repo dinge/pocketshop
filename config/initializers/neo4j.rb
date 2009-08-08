@@ -1,4 +1,6 @@
+# require 'neo4j/auto_tx' # using auto transactions
 require 'neo4j'
+require 'neo4j/extensions/reindexer' # NodeMixin.all have been moved here
 
 neo4j_base_path = if Rails.env.development?
   File.join(Rails.root, 'tmp')

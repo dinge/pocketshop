@@ -11,7 +11,7 @@ module DingDealer
 
       module ClassMethods
         def is_a_neo_relation(&block)
-          include ::Neo4j::RelationMixin
+          include ::Neo4j::RelationshipMixin
           attr_reader :internal_r
           Dsl.new(self).evaluate_dsl(&block)
 
@@ -50,7 +50,7 @@ module DingDealer
 
       module InstanceMethods
         def id
-          neo_relation_id
+          neo_relationship_id
         end
       end
 

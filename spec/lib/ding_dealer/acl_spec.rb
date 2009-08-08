@@ -90,10 +90,12 @@ describe "a controller instance", ' with standard_permissions', :type => :contro
 
 
   describe "some usage scenarios", ' with dummy_permissions' do
-    context "granted access", 'with valid user' do
+    context "granted access", ' with valid user' do
       before(:each) do
         Me.now = mock(User, :name => 'let_me_in', :null_object => true)
-        @dummy = Dummy.new
+        Neo4j::Transaction.run do
+          @dummy = Dummy.new
+        end
       end
 
       it "should grant #new" do
@@ -134,7 +136,9 @@ describe "a controller instance", ' with standard_permissions', :type => :contro
     context "denied access", 'with invalid user' do
       before(:all) do
         Me.now = mock(User, :name => 'dont_let_me_in', :null_object => true)
-        @dummy = Dummy.new
+        Neo4j::Transaction.run do
+          @dummy = Dummy.new
+        end
       end
 
       it "should deny #new" do
@@ -180,4 +184,3 @@ describe "a controller instance", ' with standard_permissions', :type => :contro
   end
 
 end
-

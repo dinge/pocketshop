@@ -20,13 +20,17 @@ describe DingDealer::Neo4j::Relation, :shared => true do
     class SomeThing
       is_a_neo_node
       property :name
-      has_n(:simple_relations).relation(SimpleRelation)
-      has_n(:complex_relations).relation(ComplexRelation)
+      has_n(:simple_relations).relationship(SimpleRelation)
+      has_n(:complex_relations).relationship(ComplexRelation)
     end
 
+    Neo4j::Transaction.new
   end
 
-  after(:all) { stop_neo4j }
+  after(:all) do
+    ::Neo4j::Transaction.finish
+    stop_neo4j
+  end
 end
 
 
@@ -51,14 +55,14 @@ describe "every object should be able to be a neo relation" do
   describe "the Neo4j::RelationMixin", " in a class" do
     context "without calling is_a_neo_relation" do
       it "should not be mixed in" do
-        SomeNakedClass.should_not be_include(Neo4j::RelationMixin)
-        SomeNakedClass.new.should_not be_a_kind_of(Neo4j::RelationMixin)
+        SomeNakedClass.should_not be_include(Neo4j::RelationshipMixin)
+        SomeNakedClass.new.should_not be_a_kind_of(Neo4j::RelationshipMixin)
       end
     end
 
     context "with calling is_a_neo_relation" do
       it "should be mixed in" do
-        SimpleRelation.should be_include(Neo4j::RelationMixin)
+        SimpleRelation.should be_include(Neo4j::RelationshipMixin)
       end
     end
   end
@@ -73,22 +77,22 @@ describe "a neo relation instance", ' from a class' do
   end
 
   after(:each) do
-    @something.relations.each(&:delete)
+    @something.relationships.each(&:delete)
   end
 
 
   context "in general" do
     before(:each) do
       @something.simple_relations << SomeThing.new
-      @relation = @something.relations.both(:simple_relations).to_a.first
+      @relation = @something.relationships.both(:simple_relations).to_a.first
     end
 
     it "should be a kind of Neo4j::RelationMixin" do
-      @relation.should be_a_kind_of(Neo4j::RelationMixin)
+      @relation.should be_a_kind_of(Neo4j::RelationshipMixin)
     end
 
-    it "should have the same id as it's neo_relation_id" do
-      @relation.id.should be @relation.neo_relation_id
+    it "should have the same id as it's neo_relationship_id" do
+      @relation.id.should be @relation.neo_relationship_id
     end
   end
 
@@ -97,7 +101,7 @@ describe "a neo relation instance", ' from a class' do
 
     before(:each) do
       @something.simple_relations << SomeThing.new
-      @relation = @something.relations.both(:simple_relations).to_a.first
+      @relation = @something.relationships.both(:simple_relations).to_a.first
     end
 
     context 'like enabled meta_info' do
@@ -121,7 +125,7 @@ describe "a neo relation instance", ' from a class' do
 
     before(:each) do
       @something.complex_relations << SomeThing.new
-      @relation = @something.relations.both(:complex_relations).to_a.first
+      @relation = @something.relationships.both(:complex_relations).to_a.first
     end
 
     it "should have the property created_at returning a DateTime" do

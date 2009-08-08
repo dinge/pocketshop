@@ -21,47 +21,115 @@ end
 # based on neo4j.rb spec
 #
 
-# suppress all warnings
 $NEO_LOGGER.level = Logger::ERROR
-
 NEO_STORAGE = Dir::tmpdir + "/neo_storage"
 LUCENE_INDEX_LOCATION = Dir::tmpdir + "/lucene"
 
-def start_neo4j
-  Lucene::Config[:storage_path] = LUCENE_INDEX_LOCATION
-  Lucene::Config[:store_on_file] = true
-  Neo4j::Config[:storage_path] = NEO_STORAGE
+Lucene::Config[:storage_path] = LUCENE_INDEX_LOCATION
+Lucene::Config[:store_on_file] = true
+Neo4j::Config[:storage_path] = NEO_STORAGE
 
+def delete_neo4jdb_files
+  FileUtils.rm_rf Neo4j::Config[:storage_path]  # NEO_STORAGE
+  FileUtils.rm_rf Lucene::Config[:storage_path] unless Lucene::Config[:storage_path].nil?
+end
+
+def reset_config
+  # reset configuration
+  Lucene::Config.delete_all
+  Lucene::Config[:storage_path] = LUCENE_INDEX_LOCATION
+  Lucene::Config[:store_on_file] = false
+
+  Neo4j::Config.delete_all
+  Neo4j::Config[:storage_path] = NEO_STORAGE
+end
+
+def start_neo4j
+  # stop it - just in case
+  stop_neo4j
   delete_neo4jdb_files
+  reset_config
+  # start neo
+  Neo4j.event_handler.remove_all  # TODO need a nicer way to test extension - loading and unloading
+  Neo4j.load_reindexer
   Neo4j.start
 end
 
+
 def stop_neo4j
-  Neo4j.stop
-  reset_neo4j
-end
-
-def reset_neo4j
   # make sure we finish all transactions
-  Neo4j::Transaction.current.finish if Neo4j::Transaction.running?
-  # delete all configuration
-  Lucene::Config.delete_all
+  Neo4j::Transaction.finish if Neo4j::Transaction.running?
+  Neo4j.stop
   delete_neo4jdb_files
-end
-
-def delete_neo4jdb_files
-  FileUtils.rm_rf(Neo4j::Config[:storage_path]) if File.exists?(Neo4j::Config[:storage_path])
-  if !Lucene::Config[:storage_path].nil? && File.exists?(Lucene::Config[:storage_path])
-    FileUtils.rm_rf(Lucene::Config[:storage_path])
-  end
+  reset_config
 end
 
 def undefine_class(*clazz_syms)
   clazz_syms.each do |clazz_sym|
     Object.instance_eval do
       begin
-        remove_const clazz_sym
-      end if const_defined? clazz_sym
+        clazz = const_get(clazz_sym)
+        Neo4j::Indexer.remove_instance(clazz) if clazz.included_modules.include?(Neo4j::NodeMixin)
+        remove_const(clazz_sym)
+      end if const_defined?(clazz_sym)
     end
   end
 end
+
+
+def clazz_from_symbol(classname_as_symbol)
+  classname_as_symbol.to_s.split("::").inject(Kernel) do |container, name|
+    container.const_get(name.to_s)
+  end
+end
+
+#
+# Helper methods for specs
+# based on neo4j.rb spec
+#
+
+# suppress all warnings
+# $NEO_LOGGER.level = Logger::ERROR
+# 
+# NEO_STORAGE = Dir::tmpdir + "/neo_storage"
+# LUCENE_INDEX_LOCATION = Dir::tmpdir + "/lucene"
+# 
+# def start_neo4j
+#   reset_neo4j
+#   Lucene::Config[:storage_path] = LUCENE_INDEX_LOCATION
+#   Lucene::Config[:store_on_file] = true
+#   Neo4j::Config[:storage_path] = NEO_STORAGE
+# 
+#   # delete_neo4jdb_files
+#   Neo4j.start
+# end
+# 
+# def stop_neo4j
+#   Neo4j.stop
+#   reset_neo4j
+# end
+# 
+# def reset_neo4j
+#   # make sure we finish all transactions
+#   Neo4j::Transaction.finish if Neo4j::Transaction.running?
+#   # delete all configuration
+#   Lucene::Config.delete_all
+#   delete_neo4jdb_files
+# end
+# 
+# def delete_neo4jdb_files
+#   FileUtils.rm_rf(Neo4j::Config[:storage_path]) if File.exists?(Neo4j::Config[:storage_path])
+#   if !Lucene::Config[:storage_path].nil? && File.exists?(Lucene::Config[:storage_path])
+#     FileUtils.rm_rf(Lucene::Config[:storage_path])
+#   end
+# end
+# 
+# def undefine_class(*clazz_syms)
+#   clazz_syms.each do |clazz_sym|
+#     Object.instance_eval do
+#       begin
+#         remove_const clazz_sym
+#       end if const_defined? clazz_sym
+#     end
+#   end
+# end

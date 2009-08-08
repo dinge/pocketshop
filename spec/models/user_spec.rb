@@ -5,9 +5,10 @@ describe User do
   after(:all) { stop_neo4j }
 
   describe "some instance methods" do
-
     before(:each) do
-      @user = User.new(:name => 'harras', :password => 'lkwpeter')
+      Neo4j::Transaction.run do 
+        @user = User.new(:name => 'harras', :password => 'lkwpeter')
+      end
     end
 
     it "calling is_me_now should set Me.now to the calling user" do
@@ -21,7 +22,10 @@ describe User do
   describe "the authentification" do
 
     before(:all) do
-      @user = User.new(:name => 'harras', :password => 'lkwpeter')
+      Neo4j::Transaction.run do
+        @user = User.new(:name => 'harras')
+        @user.password = 'lkwpeter'
+      end
     end
 
     context "with valid credentials" do
@@ -86,8 +90,10 @@ describe User do
 
     describe "the plain text password" do
       it "should be not available for security purposes" do
-        user = User.new(:name => 'harras', :password => 'lkwpeter')
-        user.password.should be_nil
+        Neo4j::Transaction.run do 
+          user = User.new(:name => 'harras', :password => 'lkwpeter')
+          user.password.should be_nil
+        end
       end
     end
 
@@ -107,7 +113,9 @@ describe User do
     describe "setting up" do
 
       before(:each) do
-        @user = User.new(:name => 'sugar')
+        Neo4j::Transaction.run do 
+          @user = User.new(:name => 'sugar')
+        end
       end
 
       context "before" do

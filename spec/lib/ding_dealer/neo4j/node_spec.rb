@@ -26,8 +26,9 @@ describe DingDealer::Neo4j::Node, :shared => true do
       property :property_with_default_value
     end
 
+    Neo4j::Transaction.new
 
-    @somethings = (1..3).map do |i|
+    @somethings = (2..4).map do |i|
       SomeThing.new(:name => "name_#{i}", :age => i)
     end
     @something = @somethings.first
@@ -35,7 +36,10 @@ describe DingDealer::Neo4j::Node, :shared => true do
     @otherthing = OtherThing.new
   end
 
-  after(:all) { stop_neo4j }
+  after(:all) do
+    Neo4j::Transaction.finish
+    stop_neo4j
+  end
 end
 
 
@@ -106,6 +110,7 @@ describe "a neo node class" do
     OtherThing.neo_node_env.defaults.property_with_default_value.should == 'default value'
   end
 
+
   describe "the ValueClass" do
     it "should only created once" do
       SomeThing.value_object.should be SomeThing.value_object
@@ -113,33 +118,45 @@ describe "a neo node class" do
     end
   end
 
+
   describe "loading a collection of nodes" do
     it "they should be all nodes of this class" do
-      SomeThing.all_nodes.to_a.size.should be @somethings.size
+      SomeThing.nodes.size.should be @somethings.size
     end
 
     it "they should be only instances it's own class" do
-      SomeThing.all_nodes.each do |thing|
+      SomeThing.nodes.each do |thing|
         thing.should be_an_instance_of(SomeThing)
       end
     end
   end
 
 
+  describe "validations" do
+    it "should include ActiveRecord's validations" do
+      undefine_class :SomeNakedClass
+      class SomeNakedClass; end
+      OtherThing.should be_include(ActiveRecord::Validations)
+      OtherThing.should respond_to(:validates_presence_of)
+      SomeNakedClass.should_not be_include(ActiveRecord::Validations)
+    end
+  end
+
 
   describe "loading a single node" do
     context "by id" do
       it "should be able to load a node instance by id" do
-        SomeThing.load(1).should == @somethings.first
-      end
-
-      it "should raise an exception if loaded node is an instance of an other class" do
-        lambda { SomeThing.load(4) }.should raise_error(DingDealer::Neo4j::Node::NotFoundException)
+        SomeThing.load(2).should == @somethings.first
       end
 
       it "should raise no exception if loaded node is an instance of the same class" do
-        lambda { OtherThing.load(4) }.should_not raise_error(DingDealer::Neo4j::Node::NotFoundException)
+        lambda { OtherThing.load(5) }.should_not raise_error(DingDealer::Neo4j::Node::NotFoundException)
       end
+
+      it "should raise an exception if loaded node is an instance of an other class" do
+        lambda { SomeThing.load!(5) }.should raise_error(DingDealer::Neo4j::Node::NotFoundException)
+      end
+
     end
 
 
@@ -152,98 +169,6 @@ describe "a neo node class" do
         SomeThing.last_node.should == @somethings.last
       end
     end
-
-
-    context "with enabled validations" do
-      it "should include ActiveRecord's validations" do
-        undefine_class :SomeNakedClass
-        class SomeNakedClass; end
-        OtherThing.should be_include(ActiveRecord::Validations)
-        OtherThing.should respond_to(:validates_presence_of)
-        SomeNakedClass.should_not be_include(ActiveRecord::Validations)
-      end
-    end
-
-
-
-    describe "special validating node create and update methods" do
-
-      before(:all) do
-        undefine_class :Cat
-        class Cat
-          is_a_neo_node do
-            db.validations true
-          end
-          property :name
-
-          validates_length_of :name, :minimum => 3
-        end
-      end
-
-      context "with valid values" do
-        it "new_with_validations should create the node and return it" do
-          old_number_of_cats = Cat.all_nodes.to_a.size
-
-          cat = Cat.new_with_validations(:name => "dieter")
-
-          cat.should be_valid
-          cat.should be_an_instance_of(Cat)
-          Cat.all_nodes.to_a.size.should be old_number_of_cats + 1
-        end
-
-        it "update_with_validations should update the node and return it" do
-          valid_cat = Cat.new(:name => 'valid_due_create')
-
-          valid_updated_cat = Cat.update_with_validations(valid_cat, :name => 'valid_due_update')
-
-          valid_updated_cat.should be_valid
-          valid_updated_cat.should be_an_instance_of(Cat)
-          valid_updated_cat.name.should == 'valid_due_update'
-
-          valid_updated_cat.should be valid_cat
-        end
-      end
-
-
-      context "with invalid values" do
-        it "new_with_validations should not create the node and return a ValueObject with errors" do
-          old_number_of_cats = Cat.all_nodes.to_a.size
-
-          cat = Cat.new_with_validations(:name => 'ts')
-
-          cat.should_not be_valid
-          cat.should be_an_instance_of(Neo4j::CatValueObject)
-          Cat.all_nodes.to_a.size.should be old_number_of_cats
-        end
-
-        it "update_with_validations should not update the node and return a ValueObject with errors" do
-          valid_cat = Cat.new(:name => 'valid_due_create')
-
-          invalid_updated_cat = Cat.update_with_validations(valid_cat, :name => 'ts')
-
-          invalid_updated_cat.should_not be_valid
-          invalid_updated_cat.should be_an_instance_of(Neo4j::CatValueObject)
-          invalid_updated_cat.name.should == 'ts'
-
-          valid_cat.should be_valid
-          valid_cat.name.should == 'valid_due_create'
-        end
-      end
-    end
-
-
-  end
-
-
-  it "should be able to instantize a node with properties as arguments hash" do
-    class DingDong
-      is_a_neo_node
-      property :name, :age
-    end
-
-    dingdong = DingDong.new(:name => 'harras', :age => 46)
-    dingdong.name.should == 'harras'
-    dingdong.age.should be 46
   end
 
 
@@ -261,7 +186,20 @@ describe "a neo node class" do
       lambda { SomeThing.find_first!(:name => "nothing") }.should raise_error(DingDealer::Neo4j::Node::NotFoundException)
     end
   end
+
+
+  it "should be able to instantize a node with properties as arguments hash" do
+    class DingDong
+      is_a_neo_node
+      property :name, :age
+    end
+
+    dingdong = DingDong.new(:name => 'harras', :age => 46)
+    dingdong.name.should == 'harras'
+    dingdong.age.should be 46
+  end
 end
+
 
 
 
@@ -274,7 +212,7 @@ describe "a neo node instance" do
     end
 
     it 'should return #{id}_#{name} calling to_param' do
-      @something.to_param.should == "1-name_1"
+      @something.to_param.should == "2-name_2"
     end
 
     it "should be compareable to other things by it's id" do
@@ -544,6 +482,73 @@ describe "a neo node instance", ' from a class' do
     end
 
   end
+end
 
 
+describe "special validating node create and update methods" do
+
+  before(:all) do
+    undefine_class :Cat
+    class Cat
+      is_a_neo_node do
+        db.validations true
+      end
+      property :name
+
+      validates_length_of :name, :minimum => 3
+    end
+  end
+
+  context "with valid values" do
+    it "new_with_validations should create the node and return it" do
+      old_number_of_cats = Cat.nodes.size
+
+      cat = Cat.new_with_validations(:name => "dieter")
+
+      cat.should be_valid
+      cat.should be_an_instance_of(Cat)
+      Cat.nodes.size.should be old_number_of_cats + 1
+    end
+
+    it "update_with_validations should update the node and return it" do
+      valid_cat = ::Neo4j::Transaction.run { Cat.new(:name => 'valid_due_create') }
+
+
+      valid_updated_cat = Cat.update_with_validations(valid_cat, :name => 'valid_due_update')
+
+      valid_updated_cat.should be_valid
+      valid_updated_cat.should be_an_instance_of(Cat)
+      valid_updated_cat.name.should == 'valid_due_update'
+
+      valid_updated_cat.should be valid_cat
+    end
+  end
+
+
+  context "with invalid values" do
+    it "new_with_validations should not create the node and return a ValueObject with errors" do
+      old_number_of_cats = Cat.nodes.size
+
+      cat = Cat.new_with_validations(:name => 'ts')
+
+      cat.should_not be_valid
+      cat.should be_an_instance_of(Neo4j::CatValueObject)
+      Cat.nodes.size.should be old_number_of_cats
+    end
+
+    it "update_with_validations should not update the node and return a ValueObject with errors" do
+      valid_cat = ::Neo4j::Transaction.run { Cat.new(:name => 'valid_due_create') }
+
+      invalid_updated_cat = Cat.update_with_validations(valid_cat, :name => 'ts')
+
+      invalid_updated_cat.should_not be_valid
+      invalid_updated_cat.should be_an_instance_of(Neo4j::CatValueObject)
+      invalid_updated_cat.name.should == 'ts'
+
+      ::Neo4j::Transaction.run do
+        valid_cat.should be_valid
+        valid_cat.name.should == 'valid_due_create'
+      end
+    end
+  end
 end

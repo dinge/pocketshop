@@ -1,4 +1,5 @@
 require 'ostruct'
+
 module DingDealer
   module Neo4j
 
@@ -55,21 +56,23 @@ module DingDealer
 
 
       module SingletonMethods
-        def l(neo_node_id)
-          node = ::Neo4j.load(neo_node_id)
+
+        def load(neo_node_id)
+          ::Neo4j.send(:load, neo_node_id)
+        end
+
+        def load!(neo_node_id)
+          node = load(neo_node_id)
           raise NotFoundException unless node.is_a?(self)
           node
         end
-
-        # overwriting Neo4j::NodeMixin.load
-        alias :load :l
 
         def property_names
           properties_info.keys
         end
 
-        def all_nodes
-          all.nodes
+        def nodes
+          ::Neo4j::Transaction.run { all.nodes.to_a }
         end
 
         # not sure if this is the best way
@@ -98,8 +101,11 @@ module DingDealer
             value_klass = create_value_class
             value_klass.send(:include, NodeValidations)
             value_klass.send(:include, ValueObjectExtensions::Validations)
+            value_klass
           else
-            create_value_class.send(:include, NodeValidationStubs)
+            value_klass = create_value_class
+            value_klass.send(:include, NodeValidationStubs)
+            value_klass
           end
         end
 
@@ -168,7 +174,7 @@ module DingDealer
             super
             update(properties)
           else
-            super(*args)
+            super#(*args)
           end
           set_default_values
         end

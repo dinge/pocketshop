@@ -7,6 +7,7 @@ class Concept
     end
   end
 
+
   property :name, :text
   index :name, :text
 
@@ -19,9 +20,9 @@ class Concept
 
 
 
-  # has_n(:tags).to(Tag).relation(Tagging)
+  # has_n(:tags).to(Tag).relationship(Tagging)
 
-  # has_n(:basic_tags).relation(Taggings::Basic)
+  # has_n(:basic_tags).relationship(Taggings::Basic)
 
 
   # collection_name :concepts
