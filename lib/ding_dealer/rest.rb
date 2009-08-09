@@ -10,10 +10,11 @@ module DingDealer
     module ClassMethods
       def uses_rest(options = {}, &block)
         Dsl.new(self).evaluate_dsl(&block).set_defaults
-        include FilterHooks
+        include ControllerFilters
         extend SingletonMethods
         include PublicActions
         include ObjectInitalizations
+        include Neo4jTransaction
         include ActionOperations
         include ActionRenderer
       end
@@ -85,7 +86,7 @@ module DingDealer
 
 
 
-    module FilterHooks
+    module ControllerFilters
       def self.included(base)
         base.class_eval do
           before_filter :init_new,      :only => :new
@@ -98,6 +99,7 @@ module DingDealer
         end
       end
     end
+
 
 
     module SingletonMethods; end
@@ -152,8 +154,11 @@ module DingDealer
       end
     end
 
+
+
     module PublicActions
       public
+
       PublicActionMethods.each do | action |
         class_eval <<-"RUBY"
           def #{action}
@@ -161,6 +166,22 @@ module DingDealer
             render_#{action}
           end
         RUBY
+      end
+    end
+
+
+
+    module Neo4jTransaction
+      def self.included(base)
+        base.class_eval do
+          around_filter :init_neo4j_transaction
+        end
+      end
+
+      private
+
+      def init_neo4j_transaction
+        ::Neo4j::Transaction.run{ yield }
       end
     end
 
@@ -194,6 +215,7 @@ module DingDealer
       def init_destroy
         rest_run.init_current_object_by_params
       end
+
     end
 
 
@@ -215,7 +237,7 @@ module DingDealer
       def operate_edit; end
 
       def operate_update
-        rest_run.current_object = 
+        rest_run.current_object =
           rest_env.model.klass.update_with_validations(rest_run.current_object, rest_run.current_params_hash)
         if rest_run.current_object.valid?
           rest_run.my_created_collection << rest_run.current_object
@@ -223,9 +245,7 @@ module DingDealer
       end
 
       def operate_destroy
-        ::Neo4j::Transaction.run do
-          rest_run.current_object.delete
-        end
+        rest_run.current_object.delete
       end
     end
 

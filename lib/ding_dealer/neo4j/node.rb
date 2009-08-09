@@ -58,7 +58,9 @@ module DingDealer
       module SingletonMethods
 
         def load(neo_node_id)
-          ::Neo4j.send(:load, neo_node_id)
+          ::Neo4j::Transaction.run do
+            ::Neo4j.send(:load, neo_node_id)
+          end
         end
 
         def load!(neo_node_id)
@@ -87,7 +89,7 @@ module DingDealer
 
         def find_first(query=nil, &block)
           matches = find(query, &block)
-          matches.size > 0 ? matches[0] : nil
+          matches.size > 0 ? ::Neo4j::Transaction.run{ matches[0] } : nil
         end
 
         def find_first!(query=nil, &block)

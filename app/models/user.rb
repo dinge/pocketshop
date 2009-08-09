@@ -33,7 +33,7 @@ class User
 
   def self.by_credentials(name, password)
     user_by_name = find_first(:name => name)
-    if user_by_name && user_by_name.has_this_password?(password)
+    if user_by_name && Neo4j::Transaction.run{ user_by_name.has_this_password?(password) }
       user_by_name
     else
       false
