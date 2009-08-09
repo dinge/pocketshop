@@ -14,7 +14,6 @@ module DingDealer
         extend SingletonMethods
         include PublicActions
         include ObjectInitalizations
-        include Neo4jTransaction
         include ActionOperations
         include ActionRenderer
       end
@@ -34,7 +33,6 @@ module DingDealer
         @controller_klass.class_eval do
           class_inheritable_accessor :rest_env
           attr_accessor :rest_run
-          before_filter { |controller| DingDealer::Rest::RestRun.init_rest_run(controller) }
           hide_action :rest_env, :rest_run, :rest_env=, :rest_run=
         end
 
@@ -89,14 +87,20 @@ module DingDealer
     module ControllerFilters
       def self.included(base)
         base.class_eval do
-          before_filter :init_new,      :only => :new
-          before_filter :init_create,   :only => :create
-          before_filter :init_index,    :only => :index
-          before_filter :init_show,     :only => :show
-          before_filter :init_edit,     :only => :edit
-          before_filter :init_update,   :only => :update
-          before_filter :init_destroy,  :only => :destroy
+          around_filter :init_neo4j_transaction, :only => PublicActionMethods
+          before_filter { |controller| DingDealer::Rest::RestRun.init_rest_run(controller) }
+          before_filter :dispatch_object_initialization, :only => PublicActionMethods
         end
+      end
+
+      private
+
+      def init_neo4j_transaction
+        ::Neo4j::Transaction.run{ yield }
+      end
+
+      def dispatch_object_initialization
+        send("init_#{action_name}")
       end
     end
 
@@ -166,22 +170,6 @@ module DingDealer
             render_#{action}
           end
         RUBY
-      end
-    end
-
-
-
-    module Neo4jTransaction
-      def self.included(base)
-        base.class_eval do
-          around_filter :init_neo4j_transaction
-        end
-      end
-
-      private
-
-      def init_neo4j_transaction
-        ::Neo4j::Transaction.run{ yield }
       end
     end
 
