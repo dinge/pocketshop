@@ -29,6 +29,10 @@ module DingDealer
       to_hash.to_a
     end
 
+    def inspect
+      super + to_hash.symbolize_keys.inspect
+    end
+
     def instance_variables
     end
 
