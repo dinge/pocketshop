@@ -245,6 +245,7 @@ module DingDealer
       def render_index
         respond_to do |format|
           format.html
+          format.json { render :json => generate_json(rest_run.current_collection.to_a) }
         end
       end
 
@@ -277,6 +278,7 @@ module DingDealer
       def render_show
         respond_to do |format|
           format.html
+          format.json { render :json => generate_json(rest_run.current_object) }
         end
       end
 
@@ -307,6 +309,15 @@ module DingDealer
           format.html { redirect_to rest_run.collection_path }
         end
       end
+
+      def generate_json(node_or_array)
+        structure = case node_or_array
+        when Array; node_or_array.map{ |node| node.props }
+        else        node_or_array.props
+        end
+        { :content => structure }.to_json
+      end
+
     end
 
   end
