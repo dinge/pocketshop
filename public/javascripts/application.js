@@ -1,2 +1,12 @@
-// Place your application-specific JavaScript functions and classes here
-// This file is automatically included by javascript_include_tag :defaults
+document.observe("dom:loaded", function() {
+  document.body.observe('mouseover', Elbe.MouseEvent.Delegator.over);
+  document.body.observe('mouseout',  Elbe.MouseEvent.Delegator.out);
+  // Elbe.MouseEvent.Droppables.init();
+});
+
+
+var logger = function(message) {
+  console.log(message);
+};
+
+Effect.DefaultOptions.duration = 0.25;

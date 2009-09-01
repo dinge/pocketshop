@@ -51,3 +51,24 @@ legend .object_control{
 .node_meta_info {
   font-size: 0.6em;
 }
+
+
+/* things and thing controls */
+li {
+  float:left;
+  list-style-type: none;
+}
+
+.thing-container {
+  border: 1px black dotted;
+  margin: 8px;
+}
+
+.drag-hover {
+  border: 1px red solid;
+}
+
+
+/*.thing-container .drag-handle {
+  opacity: 0.1;
+}*/

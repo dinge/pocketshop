@@ -9,3 +9,14 @@
 <!-- <hr />
 <h3>new unit</h3> -->
 <%#= render :partial => Unit.new %>
+
+<ul>
+  <% 500.times do |i| %>
+    <li class="thing-container droppable" id="c<%= i %>">
+      <span class="thing" id="t<%= i %>">
+        thing <%= i %>
+      </span>
+      <span class="drag-handle" id="h<%= i %>" style="opacity: 0.1;">[x]</span>
+    </li>
+  <% end %>
+</ul>
