@@ -57,8 +57,8 @@ module DingDealer
         rec_ident = ActionController::RecordIdentifier
 
         evaluate_dsl do
-          model do
-            klass controller_klass.name.gsub(/Controller$/, "").singularize.constantize unless klass
+          unless model.klass
+            model.klass controller_klass.name.gsub(/Controller$/, "").split('::').map(&:singularize).join('::').constantize
           end
 
           model do

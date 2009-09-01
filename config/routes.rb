@@ -40,7 +40,9 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :users
   map.resources :teams
-  map.resources :concepts
+  map.resources :concepts do |concept|
+    concept.resources :units, :controller => 'concepts/units'
+  end
   map.resources :things
   map.resources :tags
   map.resources :me

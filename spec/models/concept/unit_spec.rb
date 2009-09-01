@@ -13,6 +13,7 @@ describe Concept::Unit do
     concept = Concept.new(:name => 'soup')
     unit.concept = concept
     unit.concept.should == concept
+    concept.units.to_a.should == [unit]
   end
 
 end

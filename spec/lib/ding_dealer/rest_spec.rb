@@ -52,18 +52,17 @@ end
 describe DingDealer::Rest, ' with a customized namespaced model' do
   before(:all) do
     start_neo4j
-    undefine_class :ElephantsController
+    # undefine_class :Animals::TigersController
     module Animal
       class Tiger; end
     end
 
-    class ElephantsController < ApplicationController
-      uses_rest do
-        model.klass Animal::Tiger
-      end
+    module Animals; end
+    class Animals::TigersController < ApplicationController
+      uses_rest
     end
 
-    @rest_env = ElephantsController.rest_env
+    @rest_env = Animals::TigersController.rest_env
   end
 
   after(:all) { stop_neo4j }
