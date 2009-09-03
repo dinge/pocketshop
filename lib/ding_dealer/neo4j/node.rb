@@ -218,7 +218,7 @@ module DingDealer
 
         def set_default_values
           neo_node_env.defaults.to_hash.each do |property, value|
-            set_property(property, value) if send(property).blank?
+            set_property(property, value) if get_property(property).blank?
           end
         end
 
