@@ -3,7 +3,10 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 describe DingDealer::Neo4j::Node, :shared => true do
   before(:all) do
     start_neo4j
-    undefine_class :SomeThing, :OtherThing, :DingDong
+  end
+
+  before(:each) do
+    undefine_class :SomeThing, :OtherThing#, :DingDong
 
     class SomeThing
       is_a_neo_node
@@ -36,12 +39,14 @@ describe DingDealer::Neo4j::Node, :shared => true do
     @otherthing = OtherThing.new
   end
 
-  after(:all) do
+  after(:each) do
     Neo4j::Transaction.finish
+  end
+
+  after(:all) do
     stop_neo4j
   end
 end
-
 
 
 describe "every object should be able to be a neo node" do
@@ -212,7 +217,7 @@ describe "a neo node instance" do
     end
 
     it 'should return #{id}_#{name} calling to_param' do
-      @something.to_param.should == "2-name_2"
+      @something.to_param.should == "#{@something.id}-name_2"
     end
 
     it "should be compareable to other things by it's id" do
@@ -306,9 +311,9 @@ describe "a neo node instance", ' from a class' do
 
       describe "the ValueClass" do
         it "should include some needed modules" do
-          SomeThing.value_object.should be_include(NodeValidationStubs)
+          SomeThing.value_object.should be_include(DingDealer::Neo4j::Node::ValidationStubs)
 
-          SomeThing.value_object.should_not be_include(NodeValidations)
+          SomeThing.value_object.should_not be_include(DingDealer::Neo4j::Node::Validations)
           SomeThing.value_object.should_not be_include(ValueObjectExtensions::Validations)
         end
       end
@@ -438,10 +443,10 @@ describe "a neo node instance", ' from a class' do
 
       describe "the ValueClass" do
         it "should include some needed modules" do
-          NakedClassWithValidations.value_object.should be_include(NodeValidations)
+          NakedClassWithValidations.value_object.should be_include(DingDealer::Neo4j::Node::Validations)
           NakedClassWithValidations.value_object.should be_include(ValueObjectExtensions::Validations)
 
-          NakedClassWithValidations.value_object.should_not be_include(NodeValidationStubs)
+          NakedClassWithValidations.value_object.should_not be_include(DingDealer::Neo4j::Node::ValidationStubs)
         end
       end
 

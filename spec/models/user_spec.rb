@@ -113,10 +113,11 @@ describe User do
     describe "setting up" do
 
       before(:each) do
-        Neo4j::Transaction.run do 
-          @user = User.new(:name => 'sugar')
-        end
+        Neo4j::Transaction.new 
+        @user = User.new(:name => 'sugar')
       end
+
+      after(:each) { Neo4j::Transaction.finish }
 
       context "before" do
         context "the password" do

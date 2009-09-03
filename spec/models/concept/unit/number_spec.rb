@@ -19,7 +19,7 @@ describe Concept::Unit::Number do
     number = Concept::Unit::Number.new(:name => 'color')
     number.minimal_value.should == -9999999999
     number.maximal_value.should == 9999999999
-    number.required.should be_false
+    # number.required.should be_false
   end
 
   it "the default values should be overwritten in the initalization" do
@@ -27,5 +27,6 @@ describe Concept::Unit::Number do
     number.minimal_value.should == 10
     number.maximal_value.should == 20
   end
+
 
 end

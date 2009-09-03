@@ -13,7 +13,7 @@ describe Concept do
 
   it "has many units" do
     concept = Concept.new(:name => 'soup')
-    unit = Concept::Unit.new(:name => 'color')
+    unit = Concept::Unit::Number.new(:name => 'a special number')
     concept.units << unit
     concept.units.should be_include unit
   end

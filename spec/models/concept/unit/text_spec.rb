@@ -19,7 +19,7 @@ describe Concept::Unit::Text do
     text = Concept::Unit::Text.new(:name => 'color')
     text.minimal_length.should == 1
     text.maximal_length.should == 1000
-    text.required.should be_false
+    # text.required.should be_false
   end
 
   it "the default values should be overwritten in the initalization" do
