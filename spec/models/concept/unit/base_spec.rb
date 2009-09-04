@@ -27,8 +27,7 @@ describe Concept::Unit::Base do
 
 
     it 'should inherit some basic properties' do
-      OtherThing.property?(:name).should be_true
-      OtherThing.property?(:text).should be_true
+      OtherThing.properties?(:name, :text).should be_true
     end
 
     it "should also have it's own properties" do

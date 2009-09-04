@@ -62,7 +62,7 @@ module DingDealer
       module SingletonMethods
         def load(neo_node_id)
           ::Neo4j::Transaction.run do
-            ::Neo4j.send(:load, neo_node_id)
+            ::Neo4j.load(neo_node_id)
           end
         end
 
