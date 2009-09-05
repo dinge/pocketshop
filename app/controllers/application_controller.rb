@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+
   before_filter :init_me
   before_filter :redirect_to_login, :if => Proc.new{ Me.none? }
 
@@ -51,6 +52,15 @@ class ApplicationController < ActionController::Base
 
   def redirect_to_root
     redirect_to root_path
+  end
+
+
+  def self.use_neo4j_transaction
+    around_filter :init_neo4j_transaction
+  end
+
+  def init_neo4j_transaction
+    ::Neo4j::Transaction.run{ yield }
   end
 
 end
