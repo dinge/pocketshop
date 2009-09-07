@@ -1,0 +1,3 @@
+@concepts.each do |concept|
+  _ quick_view_for(concept, :only => [:text])
+end
