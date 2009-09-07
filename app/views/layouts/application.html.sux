@@ -1,4 +1,4 @@
-doctype_declaration
+doctype_definiton
 html do
   head do
    meta :"http-equiv" => 'Content-Type', :content => 'text/html; charset=utf-8'

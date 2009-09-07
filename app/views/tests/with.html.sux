@@ -8,8 +8,8 @@ div :class => :harras do
     @items.each do |item|
       dt "name"
       dd item.name
-      # dt "render partial definition"
-      # dd render(:partial => 'here')
+      dt "render partial definition"
+      #dd render(:partial => 'here')
       dt "text from helper"
       dd sux_helper_text(item)
     end

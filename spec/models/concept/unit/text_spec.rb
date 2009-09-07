@@ -1,3 +1,4 @@
+#! /usr/bin/env jruby
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
 describe Concept::Unit::Text do
