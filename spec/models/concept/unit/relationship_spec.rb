@@ -21,27 +21,27 @@ describe Concept::Unit::Relationship do
       @speed          = Concept::Prim::Number.new(:name => 'speed')
     end
 
-    context "between units and concepts" do
+    context "between prims and concepts" do
       before(:each) do
-        @whisky.units << @taste << @age
+        @whisky.attributes << @taste << @age
       end
 
-      it "a concept should have relationships with units" do
-        @whisky.units.should include(@taste)
-        @whisky.units.should include(@age)
-        @whisky.should have(2).units
+      it "a concept instance should value instances as attributes" do
+        @whisky.attributes.should include(@taste)
+        @whisky.attributes.should include(@age)
+        @whisky.should have(2).attributes
       end
 
-      it "a unit should have the same relationship to the concept" do
+      it "a value instance should have the same relationship to the concept instance" do
         @taste.concepts.should include(@whisky)
         @age.concepts.should include(@whisky)
       end
 
-      it "a unit should not have relationships to all concepts" do
-        @whisky.units.should_not include(@speed)
+      it "a value instance should not have relationships to other undefined concepts" do
+        @whisky.attributes.should_not include(@speed)
       end
 
-      it "a unit should have relationships to other concepts" do
+      it "a value instance should have relationships to other concepts" do
         @age.concepts << @rocket
         @age.concepts.should include(@rocket)
         @age.concepts.should include(@whisky)
@@ -49,17 +49,18 @@ describe Concept::Unit::Relationship do
     end
 
 
-    context "between concepts and concepts" do
+    context "between concept instances and other concept instances" do
       it "a concept should have relationships to other concepts as an unit" do
-        @whisky.units << @distillery
-        @whisky.units.should include(@distillery)
+        @whisky.attributes << @distillery
+        @whisky.attributes.should include(@distillery)
       end
 
-      it "the units should be units or concepts" do
-        @whisky.units << @distillery
-        @whisky.units << @taste
-        @whisky.units.should include(@distillery)
-        @whisky.units.should include(@taste)
+      it "the prims should be units or concepts" do
+        @whisky.attributes << @distillery
+        @whisky.attributes << @taste
+
+        @whisky.attributes.should include(@distillery)
+        @whisky.attributes.should include(@taste)
       end
 
     end

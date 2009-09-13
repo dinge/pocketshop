@@ -13,7 +13,7 @@ describe Concept::Prim::Text do
     concept = Concept.new(:name => 'soup')
     text.concepts << concept
     text.concepts.should include(concept)
-    concept.units.should include(text)
+    concept.attributes.should include(text)
   end
 
   it "should have some default values" do

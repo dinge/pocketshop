@@ -1,7 +1,7 @@
 class Concept::Prim::Base
+
   def self.inherited(sub_klass)
     sub_klass.class_eval do
-
       is_a_neo_node do
         db do
           meta_info true

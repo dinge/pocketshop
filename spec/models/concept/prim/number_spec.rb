@@ -13,7 +13,7 @@ describe Concept::Prim::Number do
 
     number.concepts << concept
     number.concepts.should include(concept)
-    concept.units.should include(number)
+    concept.attributes.should include(number)
   end
 
   it "should have some default values" do

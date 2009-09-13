@@ -11,22 +11,22 @@ describe Concept do
     stop_neo4j
   end
 
-  it "has many units" do
+  it "has many attributes" do
     concept = Concept.new(:name => 'soup')
     unit    = Concept::Prim::Number.new(:name => 'a special number')
-    concept.units << unit
-    concept.units.should be_include unit
+    concept.attributes << unit
+    concept.attributes.should be_include unit
   end
 
-  it "should have different types of units" do
+  it "should have different types of attributes" do
     concept = Concept.new(:name => 'soup')
     number  = Concept::Prim::Number.new(:name => 'color')
     text    = Concept::Prim::Number.new(:name => 'color')
 
-    concept.units << number
-    concept.units << text
+    concept.attributes << number
+    concept.attributes << text
 
-    concept.units.should be_include number
-    concept.units.should be_include text
+    concept.attributes.should be_include number
+    concept.attributes.should be_include text
   end
 end
