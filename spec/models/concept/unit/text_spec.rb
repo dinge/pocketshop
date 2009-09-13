@@ -11,9 +11,9 @@ describe Concept::Unit::Text do
   it "should be part of a concept" do
     text = Concept::Unit::Text.new(:name => 'color')
     concept = Concept.new(:name => 'soup')
-    text.concept = concept
-    text.concept.should == concept
-    concept.units.to_a.should == [text]
+    text.concepts << concept
+    text.concepts.should include(concept)
+    concept.units.should include(text)
   end
 
   it "should have some default values" do

@@ -1,5 +1,4 @@
 class Concept::Unit::Base
-
   def self.inherited(sub_klass)
     sub_klass.class_eval do
 
@@ -16,7 +15,7 @@ class Concept::Unit::Base
       validates_presence_of :name
 
       has_one(:creator).from(User, :created_concept_units)
-      has_one(:concept).to(Concept).relationship(Concept::Unit::Relationship)
+      has_n(:concepts).to(Concept).relationship(Concept::Unit::Relationship)
     end
   end
 

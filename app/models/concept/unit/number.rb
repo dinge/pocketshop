@@ -7,5 +7,4 @@ class Concept::Unit::Number < Concept::Unit::Base
   end
 
   property :minimal_value, :maximal_value
-
 end

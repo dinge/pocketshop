@@ -7,5 +7,4 @@ class Concept::Unit::Text < Concept::Unit::Base
   end
 
   property :minimal_length, :maximal_length
-
 end
