@@ -21,9 +21,10 @@ describe Concept::AttributeRelationship do
       @speed          = Concept::Value::Number.new(:name => 'speed')
     end
 
-    context "between prims and concepts" do
+    context "between concepts and value instances" do
       before(:each) do
-        @whisky.attributes << @taste << @age
+        @whisky.attributes << @taste
+        @age.shared_concepts << @whisky
       end
 
       it "a concept instance should value instances as attributes" do
@@ -33,38 +34,41 @@ describe Concept::AttributeRelationship do
       end
 
       it "a value instance should have the same relationship to the concept instance" do
-        @taste.concepts.should include(@whisky)
-        @age.concepts.should include(@whisky)
-      end
-
-      it "a value instance should not have relationships to other undefined concepts" do
-        @whisky.attributes.should_not include(@speed)
+        @taste.shared_concepts.should include(@whisky)
+        @age.shared_concepts.should include(@whisky)
       end
 
       it "a value instance should have relationships to other concepts" do
-        @age.concepts << @rocket
-        @age.concepts.should include(@rocket)
-        @age.concepts.should include(@whisky)
+        @age.shared_concepts << @rocket
+        @age.shared_concepts.should include(@rocket)
+        @age.shared_concepts.should include(@whisky)
+      end
+
+      it "a concept instance should not have relationships to other undefined value instances" do
+        @whisky.attributes.should_not include(@speed)
       end
     end
 
 
     context "between concept instances and other concept instances" do
-      it "a concept should have relationships to other concepts as an unit" do
+      it "a concept should have relationships to other concepts as an attribute" do
         @whisky.attributes << @distillery
+
         @whisky.attributes.should include(@distillery)
       end
+    end
 
-      it "the prims should be units or concepts" do
-        @whisky.attributes << @distillery
-        @whisky.attributes << @taste
+
+    context "between concept instances and a mixture of other concept instances and value instances" do
+      it "a concept instance should have relationships to a mixture of other concept and values instances as attributes " do
+        @whisky.attributes << @distillery << @taste
 
         @whisky.attributes.should include(@distillery)
         @whisky.attributes.should include(@taste)
+        @whisky.should have(2).attributes
       end
-
     end
 
-  end
 
+  end
 end

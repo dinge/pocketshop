@@ -1,4 +1,3 @@
-#! /usr/bin/env jruby
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
 describe Concept::Value::Text do
@@ -11,8 +10,9 @@ describe Concept::Value::Text do
   it "should be part of a concept" do
     text = Concept::Value::Text.new(:name => 'color')
     concept = Concept.new(:name => 'soup')
-    text.concepts << concept
-    text.concepts.should include(concept)
+
+    text.shared_concepts << concept
+    text.shared_concepts.should include(concept)
     concept.attributes.should include(text)
   end
 
@@ -28,5 +28,4 @@ describe Concept::Value::Text do
     number.minimal_length.should == 10
     number.maximal_length.should == 20
   end
-
 end

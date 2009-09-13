@@ -11,8 +11,8 @@ describe Concept::Value::Number do
     number  = Concept::Value::Number.new(:name => 'color')
     concept = Concept.new(:name => 'soup')
 
-    number.concepts << concept
-    number.concepts.should include(concept)
+    number.shared_concepts << concept
+    number.shared_concepts.should include(concept)
     concept.attributes.should include(number)
   end
 
@@ -28,6 +28,4 @@ describe Concept::Value::Number do
     number.minimal_value.should == 10
     number.maximal_value.should == 20
   end
-
-
 end
