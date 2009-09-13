@@ -8,3 +8,11 @@ require 'rake/testtask'
 require 'rake/rdoctask'
 
 require 'tasks/rails'
+
+# gem "yard", ">= 0"
+# load Gem.bin_path('yard', 'yardoc', ">= 0")
+# 
+# YARD::Rake::YardocTask.new do |t|
+#   t.files   = ['lib/**/*.rb']   # optional
+#   t.options = ['--any', '--extra', '--opts'] # optional
+# end

@@ -17,7 +17,6 @@ module DingDealer
     end
 
 
-
     class Dsl
       def initialize(controller_klass)
         @controller_klass = controller_klass

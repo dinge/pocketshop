@@ -66,6 +66,13 @@ module DingDealer
           end
         end
 
+        # loads an neo node by it's node id, 
+        # raises if this does not is an instance of the calling class
+        #
+        # @param [Fixnum] neo_node_id the neo node id
+        # @return [NeoNodeInstance] an instance of a neo node
+        # @example loading a node
+        #   "Concept.load!(22)" #=> concept instance
         def load!(neo_node_id)
           node = load(neo_node_id)
           raise NotFoundException unless node.is_a?(self)
