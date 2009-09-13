@@ -20,3 +20,5 @@ ActionController::Base.class_eval do
   include DingDealer::Rest
   include DingDealer::Acl
 end
+
+require 'ding_dealer/neo4j/neo_extensions'
