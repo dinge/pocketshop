@@ -15,7 +15,7 @@ class Concept::Value::Base
       validates_presence_of :name
 
       has_one(:creator).from(User, :created_concept_units)
-      has_n(:concepts).to(Concept).relationship(Concept::Unit::Relationship)
+      has_n(:concepts).to(Concept).relationship(Concept::AttributeRelationship)
     end
   end
 

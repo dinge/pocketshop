@@ -1,4 +1,4 @@
-class Concept::Unit::Relationship
+class Concept::AttributeRelationship
   is_a_neo_relation do
     db.meta_info true
   end

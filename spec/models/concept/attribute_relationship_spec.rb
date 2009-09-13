@@ -1,6 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
-describe Concept::Unit::Relationship do
+describe Concept::AttributeRelationship do
   before(:all) { start_neo4j }
   after(:all) { stop_neo4j }
 

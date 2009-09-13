@@ -37,7 +37,7 @@ describe Concept::Value::Base do
     it 'should inherit some basic association methods' do
       OtherThing.relationships_info[:creator].should be_true
       OtherThing.relationships_info[:concepts].should be_true
-      OtherThing.relationships_info[:concepts][:relationship].should == Concept::Unit::Relationship
+      OtherThing.relationships_info[:concepts][:relationship].should == Concept::AttributeRelationship
     end
 
     it 'should inherit the basic neo node env' do
