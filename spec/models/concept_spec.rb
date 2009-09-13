@@ -13,15 +13,15 @@ describe Concept do
 
   it "has many units" do
     concept = Concept.new(:name => 'soup')
-    unit = Concept::Unit::Number.new(:name => 'a special number')
+    unit    = Concept::Prim::Number.new(:name => 'a special number')
     concept.units << unit
     concept.units.should be_include unit
   end
 
   it "should have different types of units" do
     concept = Concept.new(:name => 'soup')
-    number = Concept::Unit::Number.new(:name => 'color')
-    text = Concept::Unit::Number.new(:name => 'color')
+    number  = Concept::Prim::Number.new(:name => 'color')
+    text    = Concept::Prim::Number.new(:name => 'color')
 
     concept.units << number
     concept.units << text
