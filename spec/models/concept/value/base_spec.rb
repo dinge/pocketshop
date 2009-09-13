@@ -22,7 +22,6 @@ describe Concept::Value::Base do
         property :another_property
       end
 
-
     end
 
 

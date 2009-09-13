@@ -1,3 +1,3 @@
 class Concepts::UnitsController < ApplicationController
-  uses_rest
+  # uses_rest
 end

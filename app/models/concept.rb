@@ -14,7 +14,8 @@ class Concept
   has_one(:creator).from(User, :created_concepts)
   has_n(:tags).from(Tag, :tagged_concepts)
 
-  has_n(:attributes).from(Concept::Unit, :shared_concepts)
+  has_n(:attributes).from(Concept::Value::Base, :shared_concepts)
+
 
   validates_presence_of :name
 

@@ -24,24 +24,27 @@ describe Concept::AttributeRelationship do
     context "between concepts and value instances" do
       before(:each) do
         @whisky.attributes << @taste
-        @age.shared_concepts << @whisky
+        @age.shared_concepts << @whisky # as alternative to @whisky.attributes << @age
       end
 
       it "a concept instance should value instances as attributes" do
-        @whisky.attributes.should include(@taste)
-        @whisky.attributes.should include(@age)
+        @whisky.attributes.should include(@taste, @age)
         @whisky.should have(2).attributes
       end
 
-      it "a value instance should have the same relationship to the concept instance" do
+      it "a value instance should have the same relationship to the concept instance as a shared_concept" do
         @taste.shared_concepts.should include(@whisky)
         @age.shared_concepts.should include(@whisky)
       end
 
+      it "the relationship instance should be the same" do
+        # debugger
+        # @concept.relationships
+      end
+
       it "a value instance should have relationships to other concepts" do
         @age.shared_concepts << @rocket
-        @age.shared_concepts.should include(@rocket)
-        @age.shared_concepts.should include(@whisky)
+        @age.shared_concepts.should include(@rocket, @whisky)
       end
 
       it "a concept instance should not have relationships to other undefined value instances" do
@@ -63,8 +66,7 @@ describe Concept::AttributeRelationship do
       it "a concept instance should have relationships to a mixture of other concept and values instances as attributes " do
         @whisky.attributes << @distillery << @taste
 
-        @whisky.attributes.should include(@distillery)
-        @whisky.attributes.should include(@taste)
+        @whisky.attributes.should include(@distillery, @taste)
         @whisky.should have(2).attributes
       end
     end

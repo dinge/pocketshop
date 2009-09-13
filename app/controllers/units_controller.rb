@@ -10,7 +10,7 @@ class UnitsController < ApplicationController
   end
 
   def new
-    @unit = Unit.new
+    # @unit = Unit.new
   end
 
   def create
