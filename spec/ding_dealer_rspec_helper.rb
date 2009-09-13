@@ -15,6 +15,11 @@ def fixed_datetime
   DateTime.now.change(:year => 2000, :month => 1, :day => 1, :hour => 10, :min => 56, :sec => 12 )
 end
 
+def delete_all_nodes_from(*klasses)
+  klasses.each{ |klass| klass.all.nodes.each(&:delete) }
+end
+
+
 
 #
 # Helper methods for specs
