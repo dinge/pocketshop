@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../../spec_helper')
 
-describe Concept::Prim::Base do
+describe Concept::Value::Base do
   before(:all) { start_neo4j }
   after(:all) { stop_neo4j }
 
@@ -12,7 +12,7 @@ describe Concept::Prim::Base do
     before(:all) do
       undefine_class :OtherThing
 
-      class OtherThing < Concept::Prim::Base
+      class OtherThing < Concept::Value::Base
         is_a_neo_node do
           defaults do
             ding 'dong'

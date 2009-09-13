@@ -1,4 +1,4 @@
-class Concept::Prim::Text < Concept::Prim::Base
+class Concept::Value::Text < Concept::Value::Base
   is_a_neo_node do
     defaults do
       minimal_length 1

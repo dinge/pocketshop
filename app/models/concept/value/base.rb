@@ -1,4 +1,4 @@
-class Concept::Prim::Base
+class Concept::Value::Base
 
   def self.inherited(sub_klass)
     sub_klass.class_eval do

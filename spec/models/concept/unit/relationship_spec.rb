@@ -10,15 +10,15 @@ describe Concept::Unit::Relationship do
 
   describe "relationships" do
     before(:each) do
-      delete_all_nodes_from Concept, Concept::Prim::Text, Concept::Prim::Number
+      delete_all_nodes_from Concept, Concept::Value::Text, Concept::Value::Number
 
       @whisky         = Concept.new(:name => 'whisky')
       @distillery     = Concept.new(:name => 'distillery')
       @rocket         = Concept.new(:name => 'rocket')
 
-      @taste          = Concept::Prim::Text.new(:name => 'taste')
-      @age            = Concept::Prim::Number.new(:name => 'age')
-      @speed          = Concept::Prim::Number.new(:name => 'speed')
+      @taste          = Concept::Value::Text.new(:name => 'taste')
+      @age            = Concept::Value::Number.new(:name => 'age')
+      @speed          = Concept::Value::Number.new(:name => 'speed')
     end
 
     context "between prims and concepts" do

@@ -1,4 +1,4 @@
-class Concept::Prim::Number < Concept::Prim::Base
+class Concept::Value::Number < Concept::Value::Base
   is_a_neo_node do
     defaults do
       minimal_value -9999999999
