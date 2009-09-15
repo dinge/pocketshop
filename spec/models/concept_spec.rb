@@ -133,5 +133,4 @@ describe Concept do
     end
 
   end
-
 end

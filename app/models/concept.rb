@@ -12,8 +12,8 @@ class Concept
   has_one(:creator).from(User, :created_concepts)
   has_n(:tags).from(Tag, :tagged_concepts)
 
-  has_n(:attributes).from(Concept::Value::Base, :shared_concepts)
-  has_n(:shared_concepts).to(Concept).relationship(Concept::AttributeRelationship)
+  has_n(:attributes).relationship(Concept::AttributeRelationship)
+  has_n(:shared_concepts).from(Concept, :attributes).relationship(Concept::AttributeRelationship)
 
 
   has_n(:localized_names).to(Word).relationship(Concept::LocalizedNameRelationship)

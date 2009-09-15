@@ -6,5 +6,7 @@ class Concept::Value::Number < Concept::Value::Base
     end
   end
 
+  Defaults = HashWithIndifferentAccess.new(:minimal_value => -1000000, :maximal_value => 1000000)
+
   property :minimal_value, :maximal_value
 end
