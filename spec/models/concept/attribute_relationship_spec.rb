@@ -136,10 +136,10 @@ describe Concept::AttributeRelationship do
 
     it "should " do
       # @whisky.attributes << @age
-      # debugger
-      # @whisky.class::Defaults.keys
-      # @whisky.relationships.incoming(:shared_concepts).to_a.first
-
+      # # @whisky.class::Defaults.keys
+      # #debugger
+      # @whisky.relationships.outgoing(:attributes)[@age]
+      # 
     end
 
 
