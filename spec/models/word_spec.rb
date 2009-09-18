@@ -20,15 +20,15 @@ describe Word do
 
 
   describe "a word instance" do
-    before(:each) do
-      @palace   = Word.new(:name => 'palace')
-      @language = Language.new(:code => 'en')
+    describe "its relationship to a language instance" do
+      before(:each) do
+        delete_all_nodes_from Word, Language
+        @palace   = Word.new(:name => 'palace')
+        @language = Language.new(:code => 'en')
 
-      @palace.language = @language
-    end
+        @palace.language = @language
+      end
 
-
-    describe "its relationship to a language" do
       it "it should have relationship to a language" do
         @palace.language.should == @language
         @language.words.should include(@palace)
@@ -36,6 +36,29 @@ describe Word do
 
       it "the relationships should be the same" do
         @palace.relationships.incoming(:words).to_a.should == @language.relationships.outgoing(:words).to_a
+      end
+    end
+
+
+
+    describe "its relationship to a concept instance" do
+      before(:each) do
+        delete_all_nodes_from Word, Language
+        @palace   = Word.new(:name => 'palace')
+        @english  = Language.new(:code => 'en')
+
+        @palast   = Word.new(:name => 'palast')
+        @deutsch  = Language.new(:code => 'de')
+
+        @palace.language = @english
+        @palast.language = @deutsch
+
+        @palace_concept = Concept.new
+      end
+
+      it "should have an relationship to a concept instance" do
+        # @palace_concept.localized_names << @palast << @palace
+        # @palace_concept.localized_names.should include(@palast, @palace)
       end
     end
 

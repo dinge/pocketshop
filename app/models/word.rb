@@ -10,6 +10,7 @@ class Word
   index :name#, :language_code
 
   has_one(:language).from(Language, :words)
+  has_n(:names_in_concepts).from(Concept, :localized_names)
 
   validates_presence_of :name
 end

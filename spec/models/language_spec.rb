@@ -29,13 +29,13 @@ describe Language do
     end
 
 
-    describe "its relationship to a word" do
-      it "it should have relationship to a word" do
+    describe "its relationship to a word instance" do
+      it "it should have relationship to a word instance" do
         @language.words.should include(@palace, @lock)
         @palace.language.should == @language
       end
 
-      it "the relationships should be the same" do
+      it "the relationships should be the same instance" do
         language_relationship_ids = @language.relationships.outgoing(:words).map(&:id)
         word_relationship_ids     =
           (@palace.relationships.incoming(:words).map(&:id) + @lock.relationships.incoming(:words).map(&:id)).flatten
