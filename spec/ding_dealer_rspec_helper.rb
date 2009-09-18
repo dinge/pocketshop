@@ -43,7 +43,7 @@ def reset_config
   # reset configuration
   Lucene::Config.delete_all
   Lucene::Config[:storage_path] = LUCENE_INDEX_LOCATION
-  Lucene::Config[:store_on_file] = false
+  Lucene::Config[:store_on_file] = true
 
   Neo4j::Config.delete_all
   Neo4j::Config[:storage_path] = NEO_STORAGE
