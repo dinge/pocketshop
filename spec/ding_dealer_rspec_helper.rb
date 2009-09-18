@@ -31,8 +31,8 @@ NEO_STORAGE = Dir::tmpdir + "/neo_storage"
 LUCENE_INDEX_LOCATION = Dir::tmpdir + "/lucene"
 
 Lucene::Config[:storage_path] = LUCENE_INDEX_LOCATION
-Lucene::Config[:store_on_file] = true
-Neo4j::Config[:storage_path] = NEO_STORAGE
+Lucene::Config[:store_on_file] = false
+# Neo4j::Config[:storage_path] = NEO_STORAGE
 
 def delete_neo4jdb_files
   FileUtils.rm_rf Neo4j::Config[:storage_path]  # NEO_STORAGE
@@ -42,8 +42,8 @@ end
 def reset_config
   # reset configuration
   Lucene::Config.delete_all
-  Lucene::Config[:storage_path] = LUCENE_INDEX_LOCATION
-  Lucene::Config[:store_on_file] = true
+  # Lucene::Config[:storage_path] = LUCENE_INDEX_LOCATION
+  Lucene::Config[:store_on_file] = false
 
   Neo4j::Config.delete_all
   Neo4j::Config[:storage_path] = NEO_STORAGE

@@ -24,15 +24,6 @@ class Concept
   # has_n(:basic_tags).relationship(Taggings::Basic)
 
 
-  # returns the localized name
-  # @overload localized_name(locale)
-  #   @param [Symbol] locale a language code as Symbol or String
-  # @overload localized_name(language)
-  #   @param [Symbol] language a language instance
-  # @return [String] the localized name
-  # @example using a Symbol
-  #   "@cat_concept.localized_name(:en)" #=> "cat"
-  #   "@cat_concept.localized_name(Language.new(:code => 'de'))" #=> "katze"
   def localized_name(locale = I18n.locale)
     locale = locale.code if locale.is_a?(Language)
     word = localized_names.find{ |word| word.language.code == locale.to_s } ? word.name : ''
