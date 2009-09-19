@@ -1,5 +1,3 @@
-# require 'ostruct'
-
 module DingDealer
   module Neo4j
 

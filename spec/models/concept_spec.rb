@@ -91,6 +91,11 @@ describe Concept do
         @palace_concept.name.should == 'palast'
       end
 
+      it "initializing a new concept should also set the localized_name", ' using the current locale' do
+        pending
+        @food_concept = Concept.new(:name => 'food')
+        @food_concept.name.should == 'food'
+      end
 
     end
 
