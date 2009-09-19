@@ -10,6 +10,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :dummies, :collection => { :full_access_for_test => :get }
 end
 
+Time.zone = "Berlin"
 
 def fixed_datetime
   DateTime.now.change(:year => 2000, :month => 1, :day => 1, :hour => 10, :min => 56, :sec => 12 )

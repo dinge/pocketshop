@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
 
   before_filter :init_me
+  before_filter :set_timezone
   before_filter :redirect_to_login, :if => Proc.new{ Me.none? }
 
   # after_filter :update_my_last_action, :if => Proc.new{ Me.someone? }
@@ -21,6 +22,10 @@ class ApplicationController < ActionController::Base
 
   def reset_me
     Me.reset
+  end
+
+  def set_timezone
+    Time.zone = 'Berlin' # TODO: this will later be based on user setting or so
   end
 
   def redirect_to_login

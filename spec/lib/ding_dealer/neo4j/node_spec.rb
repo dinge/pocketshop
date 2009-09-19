@@ -346,8 +346,8 @@ describe "a neo node instance", ' from a class' do
       end
 
       it "should return the DateTime it was created" do
-        @otherthing.created_at.day.should == DateTime.now.day
-        @otherthing.created_at.hour.should == DateTime.now.hour
+        @otherthing.created_at.in_time_zone.day.should == DateTime.now.in_time_zone.day
+        @otherthing.created_at.in_time_zone.hour.should == DateTime.now.in_time_zone.hour
       end
 
       it "should return the DateTime it was updated" do
@@ -358,9 +358,9 @@ describe "a neo node instance", ' from a class' do
         last_update_at = @otherthing.updated_at
         sleep 2
         @otherthing.suppe = "lecker"
-
-        @otherthing.updated_at.should be_close(DateTime.now, 0.00002)
-        @otherthing.updated_at.to_s.should_not == last_update_at.to_s
+        @otherthing.updated_at.in_time_zone.to_datetime.should be_close(DateTime.now.in_time_zone.to_datetime, 0.00002)
+        # @otherthing.updated_at.in_time_zone.should be == DateTime.now.in_time_zone
+        @otherthing.updated_at.in_time_zone.to_s.should_not == last_update_at.in_time_zone.to_s
       end
 
       it "should return a integer as version" do
