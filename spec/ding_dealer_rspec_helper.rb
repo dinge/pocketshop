@@ -20,6 +20,9 @@ def delete_all_nodes_from(*klasses)
   klasses.each{ |klass| klass.all.nodes.each(&:delete) }
 end
 
+def restart_transaction
+  Neo4j::Transaction.finish; Neo4j::Transaction.new
+end
 
 
 #
