@@ -6,11 +6,26 @@ class Word
     end
   end
 
-  property :name#, :language_code
-  index :name#, :language_code
+  property :name
+  index :name
 
   has_one(:language).from(Language, :words)
-  has_n(:names_in_concepts).from(Concept, :localized_names)
+  index 'language.code'
 
-  validates_presence_of :name
+  has_n(:names_in_concepts).from(Concept, :localized_names)
+  has_n(:synonyms_in_concepts).from(Concept, :localized_synonym_words)
+
+  # validates_presence_of :name
+
+
+  def to_s
+    name.to_s
+  end
+
+  def self.new_uniqe_from_language(properties)
+    Neo4j::Transaction.run do
+      find_first(:name => properties[:name], 'language.code' => properties[:language].to_s ) || new(properties)
+    end
+  end
+
 end

@@ -12,10 +12,10 @@ describe Concept::AttributeRelationship do
     before(:each) do
       delete_all_nodes_from Concept, Concept::Value::Text, Concept::Value::Number
 
-      @whisky     = Concept.new(:name => 'whisky')
-      @distillery = Concept.new(:name => 'distillery')
-      @color      = Concept.new(:name => 'color')
-      @rocket     = Concept.new(:name => 'rocket')
+      @whisky     = Concept.new
+      @distillery = Concept.new
+      @color      = Concept.new
+      @rocket     = Concept.new
 
       @taste      = Concept::Value::Text.new(:name => 'taste')
       @age        = Concept::Value::Number.new(:name => 'age')
@@ -125,9 +125,9 @@ describe Concept::AttributeRelationship do
     before(:each) do
       delete_all_nodes_from Concept, Concept::Value::Text, Concept::Value::Number
 
-      @whisky     = Concept.new(:name => 'whisky')
-      @distillery = Concept.new(:name => 'distillery')
-      @rocket     = Concept.new(:name => 'rocket')
+      @whisky     = Concept.new
+      @distillery = Concept.new
+      @rocket     = Concept.new
 
       @taste      = Concept::Value::Text.new(:name => 'taste')
       @age        = Concept::Value::Number.new(:name => 'age')

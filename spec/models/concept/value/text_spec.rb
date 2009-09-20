@@ -9,7 +9,7 @@ describe Concept::Value::Text do
 
   it "should be part of a concept" do
     text = Concept::Value::Text.new(:name => 'color')
-    concept = Concept.new(:name => 'soup')
+    concept = Concept.new
 
     text.shared_concepts << concept
     text.shared_concepts.should include(concept)

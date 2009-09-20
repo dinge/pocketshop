@@ -12,11 +12,36 @@ describe Word do
   end
 
   describe "the word class" do
+
     it "should have some properties" do
       Word.properties?(:name).should be_true
     end
-  end
 
+    it "every word should be unique in its language" do
+      delete_all_nodes_from Word, Language
+      english = Language.new(:code => 'en')
+      deutsch = Language.new(:code => 'de')
+
+      # restart_transaction
+
+
+      Word.should have(:no).nodes
+      Word.new_uniqe_from_language(:name => 'soap', :language => english)
+
+      restart_transaction
+      Word.should have(1).nodes
+
+      first_uniqe_word = Word.new_uniqe_from_language(:name => 'kindergarten', :language => english)
+
+      restart_transaction
+      Word.should have(2).nodes
+
+      second_uniqe_word = Word.new_uniqe_from_language(:name => 'kindergarten', :language => english)
+      Word.should have(2).nodes
+      first_uniqe_word.should == second_uniqe_word
+    end
+
+  end
 
 
   describe "a word instance" do

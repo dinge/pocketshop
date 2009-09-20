@@ -99,7 +99,7 @@ module DingDealer
           all.nodes.max
         end
 
-        def find_first(query=nil, &block)
+        def find_first(query = nil, &block)
           matches = find(query, &block)
           matches.size > 0 ? ::Neo4j::Transaction.run{ matches[0] } : nil
         end

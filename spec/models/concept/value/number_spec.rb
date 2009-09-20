@@ -9,7 +9,7 @@ describe Concept::Value::Number do
 
   it "should be part of a concept" do
     number  = Concept::Value::Number.new(:name => 'color')
-    concept = Concept.new(:name => 'soup')
+    concept = Concept.new
 
     number.shared_concepts << concept
     number.shared_concepts.should include(concept)

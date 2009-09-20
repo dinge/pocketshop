@@ -15,8 +15,9 @@ class Concept
   has_n(:attributes).relationship(Concept::AttributeRelationship)
   has_n(:shared_concepts).from(Concept, :attributes).relationship(Concept::AttributeRelationship)
 
-
   has_n(:localized_names).to(Word).relationship(Concept::LocalizedNameRelationship)
+  has_n(:localized_synonym_words).to(Word).relationship(Concept::LocalizedNameRelationship)
+
 
   # validates_presence_of :name
 
@@ -25,21 +26,47 @@ class Concept
 
 
   def localized_name(locale = I18n.locale)
-    locale = locale.code if locale.is_a?(Language)
-    word = localized_names.find{ |word| word.language.code == locale.to_s } ? word.name : ''
-    # TODO: maybe provide a other way or default language when no language version is found..
+    localized_names.find{ |word| word.language.code == locale.to_s }
   end
 
-  alias :name :localized_name
+  def name
+    localized_name(I18n.locale).to_s
+  end
 
-  def set_localized_name(name, locale = I18n.locale)
-    word = Word.new(:name => name)
-    language = locale.is_a?(Language) ? locale : Language.find(:code => locale.to_s).first
-    word.language = language
+
+  def set_localized_name(word_or_name, locale = I18n.locale)
+    case word_or_name
+    when Word
+      word = word_or_name
+    else
+      word = Word.new(:name => word_or_name)
+      Language.to_language(locale).words << word
+    end
+
+    # if word_or_name != name
+    # localized_name
+
+    if localized_name
+      relationships.outgoing(:localized_names)[localized_name].delete
+    end
+
     localized_names << word
-    word.name
+    word
   end
 
   alias :name= :set_localized_name
+
+
+
+        # def #{method}(value = (empty_argument = true; nil), &block)
+        #   if !empty_argument
+
+
+  def localized_synonyms(locale = I18n.locale)
+    locale = locale.code if locale.is_a?(Language)
+    # localized_synonym_words.find{ |word| word.language.code == locale.to_s }
+localized_synonym_words
+  end
+
 
 end
