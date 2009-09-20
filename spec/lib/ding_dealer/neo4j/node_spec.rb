@@ -192,17 +192,36 @@ describe "a neo node class" do
     end
   end
 
+  describe "new with arguments hash" do
+    before(:all) do
+      class DingDong
+        is_a_neo_node
+        property :name, :age
 
-  it "should be able to instantize a node with properties as arguments hash" do
-    class DingDong
-      is_a_neo_node
-      property :name, :age
+        def reverse_fun=(reverse_fun)
+          self[:fun] = reverse_fun.reverse
+        end
+      end
     end
 
-    dingdong = DingDong.new(:name => 'harras', :age => 46)
-    dingdong.name.should == 'harras'
-    dingdong.age.should be 46
+    it "should be able to instantize a node with properties as arguments hash" do
+      dingdong = DingDong.new(:name => 'harras', :age => 46)
+      dingdong.name.should == 'harras'
+      dingdong.age.should be 46
+    end
+
+    it "should use a writer method and set the property not directly", ", if it's available" do
+      dingdong = DingDong.new(:name => 'harras', :age => 46, :reverse_fun => 'oakak')
+      dingdong.name.should == 'harras'
+      dingdong.age.should be 46
+
+      dingdong.should_not respond_to(:reverse_fun)
+      dingdong.should_not respond_to(:fun)
+      dingdong[:reverse_fun].should be_nil
+      dingdong[:fun].should == 'kakao'
+    end
   end
+
 end
 
 

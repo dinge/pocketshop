@@ -152,7 +152,7 @@ module DingDealer
         end
 
 
-        private
+      private
 
         def invalid_node_to_invalid_value_object(node, new_record_for_value_object)
           node.errors.instance_variable_set(:@base, nil)
@@ -182,7 +182,7 @@ module DingDealer
       module InstanceMethods
         def init_node(*args)
           if (properties = args.first).is_a?(Hash)
-            update(properties)
+            update_with_attribute_writer_calls(properties)
           end
           set_default_values
         end
@@ -213,7 +213,17 @@ module DingDealer
           false
         end
 
-        protected
+      protected
+
+        def update_with_attribute_writer_calls(properties)
+          properties.each do |property, value|
+            if respond_to?(:"#{property}=")
+              properties.delete(property)
+              send(:"#{property}=", value)
+            end
+          end
+          update(properties)
+        end
 
         def set_default_values
           neo_node_env.defaults.to_hash.each do |property, value|
