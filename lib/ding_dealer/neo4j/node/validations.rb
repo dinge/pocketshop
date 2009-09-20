@@ -6,7 +6,7 @@ module DingDealer
         def self.included(base)
           base.class_eval do
             include ActiveRecord::Validations
-            attr_accessor :errors
+            attr_writer :errors
             # needed if not valid after validation
             def self.self_and_descendents_from_active_record; [] end
             def self.self_and_descendants_from_active_record; [] end # since rails 2.3.2

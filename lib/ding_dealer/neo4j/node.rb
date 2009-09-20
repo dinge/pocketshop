@@ -64,7 +64,7 @@ module DingDealer
           end
         end
 
-        # loads an neo node by it's node id, 
+        # loads an neo node by it's node id,
         # raises if this does not is an instance of the calling class
         #
         # @param [Fixnum] neo_node_id the neo node id
@@ -180,15 +180,9 @@ module DingDealer
 
 
       module InstanceMethods
-        # overwrite in super to allow hash properties in arguments
-        #  p = Person.new(:name => 'peter', :age => 20)
-        def initialize(*args)
-          @errors = ActiveRecord::Errors.new(self) if neo_node_env.db.validations
+        def init_node(*args)
           if (properties = args.first).is_a?(Hash)
-            super
             update(properties)
-          else
-            super#(*args)
           end
           set_default_values
         end
