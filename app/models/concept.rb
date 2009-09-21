@@ -26,6 +26,7 @@ class Concept
 
 
   def localized_name(locale = I18n.locale)
+    # Word.indexer.lucene_index.commit
     localized_names.find{ |word| word.language.code == locale.to_s }
   end
 
@@ -34,24 +35,16 @@ class Concept
   end
 
 
-  def set_localized_name(word_or_name, locale = I18n.locale)
-    case word_or_name
-    when Word
-      word = word_or_name
+  def set_localized_name(wording, locale = I18n.locale)
+    new_word = Word.to_word(wording, locale)
+    old_word = localized_name(locale)
+    if new_word != old_word
+      relationships.outgoing(:localized_names)[old_word].delete if old_word
+      localized_names << new_word
+      new_word
     else
-      word = Word.new(:name => word_or_name)
-      Language.to_language(locale).words << word
+      old_word
     end
-
-    # if word_or_name != name
-    # localized_name
-
-    if localized_name
-      relationships.outgoing(:localized_names)[localized_name].delete
-    end
-
-    localized_names << word
-    word
   end
 
   alias :name= :set_localized_name

@@ -120,6 +120,43 @@ describe Concept do
         @palace_concept.name.should == 'slott'
       end
 
+      it "it should only change the name when it's a new one" do
+        initial_number_of_words = Word.nodes.size
+
+        first_castle_word = @palace_concept.set_localized_name('castle')
+
+        Word.should have(initial_number_of_words + 1).nodes
+
+        second_castle_word = @palace_concept.set_localized_name('castle')
+
+        Word.should have(initial_number_of_words + 1).nodes
+        second_castle_word.should == first_castle_word
+
+        first_palace_word = @palace_concept.set_localized_name(@palace)
+
+        @palace_concept.name.should == @palace.to_s
+        Word.should have(initial_number_of_words + 1).nodes
+        first_palace_word.should_not == first_castle_word
+
+        first_kindergarten_word = @palace_concept.set_localized_name('kindergarten')
+
+        Word.should have(initial_number_of_words + 2).nodes
+        @palace_concept.name.should == 'kindergarten'
+        first_kindergarten_word.should_not == first_castle_word
+        first_kindergarten_word.should_not == first_palace_word
+
+        second_kindergarten_word = @palace_concept.set_localized_name('kindergarten', :de)
+        Word.should have(initial_number_of_words + 3).nodes
+        second_kindergarten_word.should_not == first_kindergarten_word
+        second_kindergarten_word.language.should == @deutsch
+
+        new_kindergarten_word = Word.new_uniqe_from_language(:name => 'kindergarten', :language => @deutsch)
+        third_kindergarten_word = @palace_concept.set_localized_name(new_kindergarten_word)
+        Word.should have(initial_number_of_words + 3).nodes
+        third_kindergarten_word.should == second_kindergarten_word
+        new_kindergarten_word.should == third_kindergarten_word
+      end
+
 
       it "#name= should set the name", ' using the current locale' do
         @palace_concept.name = 'castle'
@@ -136,8 +173,9 @@ describe Concept do
         @palace_concept.name.should == 'palace'
       end
     end
-
   end
+
+
 
   describe "localized synonyms", " through its relationship to word instances" do
     before(:each) do
@@ -174,6 +212,8 @@ describe Concept do
       @palace_concept.should have(2).localized_names
       @palace_concept.should have(2).localized_synonyms
     end
+
+
 
     describe "the method #localized_synonyms", ' for a parametrized access to its international synonyms' do
       before(:each) do
