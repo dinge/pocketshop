@@ -12,8 +12,8 @@ class Concept
   has_n(:attributes).relationship(Concept::AttributeRelationship)
   has_n(:shared_concepts).from(Concept, :attributes).relationship(Concept::AttributeRelationship)
 
-  has_n(:words_as_name).to(Word).relationship(Concept::LocalizedNameRelationship)
-  has_n(:words_as_synonym).to(Word).relationship(Concept::LocalizedNameRelationship)
+  has_n(:name_words).to(Word).relationship(Concept::LocalizedNameRelationship)
+  has_n(:synonym_words).to(Word).relationship(Concept::LocalizedNameRelationship)
 
   # property :name, :text
   # index :name, :text
@@ -23,7 +23,7 @@ class Concept
 
 
   def localized_name(lingo = I18n.locale)
-    words_as_name.find{ |word| word.language.code == lingo.to_s } # TODO: maybe use lucene index here
+    name_words.find{ |word| word.language.code == lingo.to_s } # TODO: maybe use lucene index here
   end
 
   def name
@@ -34,8 +34,8 @@ class Concept
     new_word = Word.to_word(wording, lingo)
     old_word = localized_name(lingo)
     if new_word != old_word
-      relationships.outgoing(:words_as_name)[old_word].delete if old_word
-      words_as_name << new_word
+      relationships.outgoing(:name_words)[old_word].delete if old_word
+      name_words << new_word
       new_word
     else
       old_word
@@ -45,16 +45,12 @@ class Concept
   alias :name= :set_localized_name
 
 
-
-        # def #{method}(value = (empty_argument = true; nil), &block)
-        #   if !empty_argument
-
-
-  def localized_synonyms(locale = I18n.locale)
-    locale = locale.code if locale.is_a?(Language)
-    # localized_synonym_words.find{ |word| word.language.code == locale.to_s }
-localized_synonym_words
+  def localized_synonyms(lingo = I18n.locale)
+    synonym_words.select{ |word| word.language.code == lingo.to_s }.sort_by(&:name)
   end
 
+  def synonyms
+    localized_synonyms(I18n.locale).join(', ')
+  end
 
 end

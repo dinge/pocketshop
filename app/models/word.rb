@@ -12,8 +12,8 @@ class Word
   has_one(:language).from(Language, :words)
   index 'language.code'
 
-  has_n(:names_in_concepts).from(Concept, :words_as_name)
-  has_n(:synonyms_in_concepts).from(Concept, :localized_synonym_words)
+  has_n(:names_in_concepts).from(Concept, :name_words)
+  has_n(:synonyms_in_concepts).from(Concept, :synonym_words)
 
   # validates_presence_of :name
 

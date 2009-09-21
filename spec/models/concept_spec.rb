@@ -31,7 +31,7 @@ describe Concept do
   end
 
 
-  describe "#words_as_name", " through its relationship to word instances" do
+  describe "#name_words", " through its relationship to word instances" do
     before(:each) do
       delete_all_nodes_from Word, Language, Concept
       I18n.locale = :en
@@ -59,16 +59,16 @@ describe Concept do
     end
 
     it "should have words as names" do
-      @palace_concept.words_as_name << @palast << @palace
-      @palace_concept.words_as_name.should include(@palast, @palace)
-      @palace_concept.should have(2).words_as_name
+      @palace_concept.name_words << @palast << @palace
+      @palace_concept.name_words.should include(@palast, @palace)
+      @palace_concept.should have(2).name_words
     end
 
 
 
     describe "the method #names", ' for a parametrized access to its international names' do
       before(:each) do
-        @palace_concept.words_as_name << @palast << @palace
+        @palace_concept.name_words << @palast << @palace
       end
 
       it "should return the localized name", ' using a string or symbol as locale' do
@@ -78,7 +78,7 @@ describe Concept do
         @palace_concept.localized_name('de').to_s.should == 'palast'
         @palace_concept.localized_name(:de_nds).should be_nil
 
-        @palace_concept.words_as_name << @slot
+        @palace_concept.name_words << @slot
         @palace_concept.localized_name(:de_nds).to_s.should == 'slot'
       end
 
@@ -203,28 +203,23 @@ describe Concept do
     end
 
     it "should have localized synonyms", ' next to to its names' do
-      pending
-      @palace_concept.words_as_name << @palast << @palace
+      @palace_concept.name_words << @palast << @palace
+      @palace_concept.synonym_words << @schloss << @castle
 
-      @palace_concept.synonyms << @schloss << @castle
+      @palace_concept.name_words.should include(@palast, @palace)
+      @palace_concept.synonym_words.should include(@schloss, @castle)
 
-      @palace_concept.words_as_name.should include(@palast, @palace)
-      @palace_concept.synonyms.should include(@schloss, @castle)
-
-      @palace_concept.should have(2).names
-      @palace_concept.should have(2).synonyms
+      @palace_concept.should have(2).name_words
+      @palace_concept.should have(2).synonym_words
     end
 
 
     describe "the method #localized_synonyms", ' for a parametrized access to its international synonyms' do
       before(:each) do
-        # @palace_concept.synonyms << @schloss << @castle
+        @palace_concept.synonym_words << @schloss << @castle << @palace << @palast
       end
 
       it "should return the localized synonyms", ' using a string or symbol as locale' do
-        pending
-        @palace_concept.synonyms << @palast << @palace
-
         @palace_concept.localized_synonyms(:en).should include(@palace, @castle)
         @palace_concept.should have(2).localized_synonyms('en')
 
@@ -232,61 +227,23 @@ describe Concept do
         @palace_concept.should have(2).localized_synonyms(:de)
       end
 
-      # it "should return the localized name", ' using language instance' do
-      #   @palace_concept.localized_name(@english).should == 'palace'
-      #   @palace_concept.localized_name(@deutsch).should == 'palast'
-      # end
-      # 
-      # it "#name should return the localized_name", ' using the current local' do
-      #   @palace_concept.name.should == 'palace'
-      #   I18n.locale = :de
-      #   @palace_concept.name.should == 'palast'
-      # end
-      # 
+      it "should return the localized name", ' using language instance' do
+        @palace_concept.localized_synonyms(@english).should include(@palace, @castle)
+        @palace_concept.localized_synonyms(@deutsch).should include(@palast, @schloss)
+      end
+
+      it "#synonyms should return the localized synonyms as seperated string", ' using the current locale' do
+        @palace_concept.synonyms.should == 'castle, palace'
+        I18n.locale = :de
+        @palace_concept.synonyms.should == 'palast, schloss'
+      end
+
       # it "initializing a new concept should also set the localized_name", ' using the current locale' do
-      #   pending
       #   @food_concept = Concept.new(:name => 'food')
       #   @food_concept.name.should == 'food'
       # end
 
     end
-
   end
-
-    #
-    # describe "setting the localized_name", ' using the given locale' do
-    #
-    #   it "#set_localized_name should set the name" do
-    #     @palace_concept.set_localized_name('castle')
-    #     @palace_concept.name.should == 'castle'
-    #
-    #     @palace_concept.set_localized_name('superdickeshaus', :de)
-    #     @palace_concept.localized_name(:de).should == 'superdickeshaus'
-    #
-    #     I18n.locale = :de_nds
-    #     @palace_concept.set_localized_name('dickes hus')
-    #     @palace_concept.name.should == 'dickes hus'
-    #
-    #     @palace_concept.set_localized_name('slott', @swenska)
-    #     I18n.locale = :se
-    #     @palace_concept.name.should == 'slott'
-    #   end
-    #
-    #
-    #   it "#name= should set the name", ' using the current locale' do
-    #     @palace_concept.name = 'castle'
-    #     @palace_concept.name.should == 'castle'
-    #
-    #     I18n.locale = :de
-    #     @palace_concept.name = 'superdickeshaus'
-    #     @palace_concept.name.should == 'superdickeshaus'
-    #
-    #     I18n.locale = :en
-    #     @palace_concept.name.should == 'castle'
-    #   end
-    #
-    # end
-
-
 
 end
