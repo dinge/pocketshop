@@ -12,8 +12,8 @@ class Concept
   has_n(:attributes).relationship(Concept::AttributeRelationship)
   has_n(:shared_concepts).from(Concept, :attributes).relationship(Concept::AttributeRelationship)
 
-  has_n(:names).to(Word).relationship(Concept::LocalizedNameRelationship)
-  has_n(:synonyms).to(Word).relationship(Concept::LocalizedNameRelationship)
+  has_n(:words_as_name).to(Word).relationship(Concept::LocalizedNameRelationship)
+  has_n(:words_as_synonym).to(Word).relationship(Concept::LocalizedNameRelationship)
 
   # property :name, :text
   # index :name, :text
@@ -23,7 +23,7 @@ class Concept
 
 
   def localized_name(lingo = I18n.locale)
-    names.find{ |word| word.language.code == lingo.to_s } # TODO: maybe use lucene index here
+    words_as_name.find{ |word| word.language.code == lingo.to_s } # TODO: maybe use lucene index here
   end
 
   def name
@@ -34,8 +34,8 @@ class Concept
     new_word = Word.to_word(wording, lingo)
     old_word = localized_name(lingo)
     if new_word != old_word
-      relationships.outgoing(:names)[old_word].delete if old_word
-      names << new_word
+      relationships.outgoing(:words_as_name)[old_word].delete if old_word
+      words_as_name << new_word
       new_word
     else
       old_word
