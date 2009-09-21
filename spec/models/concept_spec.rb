@@ -31,12 +31,12 @@ describe Concept do
   end
 
 
-  describe "localized names", " through its relationship to word instances" do
+  describe "#names", " through its relationship to word instances" do
     before(:each) do
       delete_all_nodes_from Word, Language, Concept
       I18n.locale = :en
 
-      Neo4j::Transaction.finish; Neo4j::Transaction.new
+      restart_transaction
 
       @palace_concept = Concept.new
 
@@ -55,20 +55,20 @@ describe Concept do
       @palast.language  = @deutsch
       @slot.language    = @platt
 
-      Neo4j::Transaction.finish; Neo4j::Transaction.new
+      restart_transaction
     end
 
-    it "should have localized names" do
-      @palace_concept.localized_names << @palast << @palace
-      @palace_concept.localized_names.should include(@palast, @palace)
-      @palace_concept.should have(2).localized_names
+    it "should have words as names" do
+      @palace_concept.names << @palast << @palace
+      @palace_concept.names.should include(@palast, @palace)
+      @palace_concept.should have(2).names
     end
 
 
 
-    describe "the method #localized_name", ' for a parametrized access to its international names' do
+    describe "the method #names", ' for a parametrized access to its international names' do
       before(:each) do
-        @palace_concept.localized_names << @palast << @palace
+        @palace_concept.names << @palast << @palace
       end
 
       it "should return the localized name", ' using a string or symbol as locale' do
@@ -78,7 +78,7 @@ describe Concept do
         @palace_concept.localized_name('de').to_s.should == 'palast'
         @palace_concept.localized_name(:de_nds).should be_nil
 
-        @palace_concept.localized_names << @slot
+        @palace_concept.names << @slot
         @palace_concept.localized_name(:de_nds).to_s.should == 'slot'
       end
 
@@ -177,12 +177,14 @@ describe Concept do
 
 
 
+
+
   describe "localized synonyms", " through its relationship to word instances" do
     before(:each) do
       delete_all_nodes_from Word, Language, Concept
       I18n.locale = :en
 
-      Neo4j::Transaction.finish; Neo4j::Transaction.new
+      restart_transaction
 
       @palace_concept = Concept.new
 
@@ -197,19 +199,19 @@ describe Concept do
       @english.words << @palace << @castle
       @deutsch.words << @palast << @schloss
 
-      Neo4j::Transaction.finish; Neo4j::Transaction.new
+      restart_transaction
     end
 
     it "should have localized synonyms", ' nexto to its names' do
       pending
-      @palace_concept.localized_names << @palast << @palace
+      @palace_concept.names << @palast << @palace
       # debugger
       @palace_concept.localized_synonyms << @schloss << @castle
 
-      @palace_concept.localized_names.should include(@palast, @palace)
+      @palace_concept.names.should include(@palast, @palace)
       @palace_concept.localized_synonyms.should include(@schloss, @castle)
 
-      @palace_concept.should have(2).localized_names
+      @palace_concept.should have(2).names
       @palace_concept.should have(2).localized_synonyms
     end
 
