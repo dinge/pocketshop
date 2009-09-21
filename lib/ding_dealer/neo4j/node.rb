@@ -139,7 +139,7 @@ module DingDealer
                 node = node_or_attributes_hash
               end
 
-              node.update(attributes_hash)
+              node.update_with_attribute_writer_calls(attributes_hash)
 
               unless node.valid?
                 raise InvalidRecord.new( invalid_node_to_invalid_value_object(node, options[:new_record_for_value_object]) )
@@ -150,6 +150,7 @@ module DingDealer
             return invalid_value_object_exception.message # return value_object with errors
           end
         end
+
 
 
       private
@@ -213,8 +214,6 @@ module DingDealer
           false
         end
 
-      protected
-
         def update_with_attribute_writer_calls(properties)
           properties.each do |property, value|
             if respond_to?(:"#{property}=")
@@ -224,6 +223,8 @@ module DingDealer
           end
           update(properties)
         end
+
+      protected
 
         def set_default_values
           neo_node_env.defaults.to_hash.each do |property, value|

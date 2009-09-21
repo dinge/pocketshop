@@ -19,12 +19,19 @@ module QuickViewHelper
       '<dl>' +
         field_names.map do |field_name|
           "<dt>#{field_name}</dt>" +
-          "<dd>#{object.send(field_name)}</dd>"
+          "<dd>#{present_field(object.send(field_name))}</dd>"
         end.to_s +
       '</dl>'
     end
-
   end
+
+  def present_field(value)
+    case value
+    when DateTime;  value.in_time_zone
+    else            value
+    end
+  end
+
 
   def field_set_with_control_for(object)
     control = case object

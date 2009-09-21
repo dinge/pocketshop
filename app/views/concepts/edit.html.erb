@@ -1,1 +1,6 @@
 <%= render :partial => "form" %>
+
+
+<%= @concept.name_words.map(&:name).join(', ') %>
+
+<%= I18n.locale %>

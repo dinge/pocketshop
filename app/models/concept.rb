@@ -2,7 +2,7 @@ class Concept
   is_a_neo_node do
     db do
       meta_info true
-      validations true
+      # validations true
     end
   end
 
@@ -15,7 +15,8 @@ class Concept
   has_n(:name_words).to(Word).relationship(Concept::LocalizedNameRelationship)
   has_n(:synonym_words).to(Word).relationship(Concept::LocalizedNameRelationship)
 
-  # property :name, :text
+  property :name # needed for value object initalization
+  property :text
   # index :name, :text
   # validates_presence_of :name
   # has_n(:tags).to(Tag).relationship(Tagging)
