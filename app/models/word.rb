@@ -22,14 +22,14 @@ class Word
     name.to_s
   end
 
-  def self.to_code(word_or_string)
-    word_or_string.to_s
+  def self.to_code(wording)
+    wording.to_s
   end
 
-  def self.to_word(word_or_string, locale = I18n.locale)
-    case word_or_string
-    when Word;    word_or_string
-    else String;  Word.new_uniqe_from_language(:name => word_or_string, :language => Language.to_language(locale))
+  def self.to_word(wording, lingo = I18n.locale)
+    case wording
+    when Word;    wording
+    else String;  Word.new_uniqe_from_language(:name => wording, :language => Language.to_language(lingo))
     end
   end
 

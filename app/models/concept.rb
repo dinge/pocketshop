@@ -6,9 +6,6 @@ class Concept
     end
   end
 
-  # property :name, :text
-  # index :name, :text
-
   has_one(:creator).from(User, :created_concepts)
   has_n(:tags).from(Tag, :tagged_concepts)
 
@@ -16,26 +13,26 @@ class Concept
   has_n(:shared_concepts).from(Concept, :attributes).relationship(Concept::AttributeRelationship)
 
   has_n(:names).to(Word).relationship(Concept::LocalizedNameRelationship)
-  has_n(:localized_synonym_words).to(Word).relationship(Concept::LocalizedNameRelationship)
+  has_n(:synonyms).to(Word).relationship(Concept::LocalizedNameRelationship)
 
-
+  # property :name, :text
+  # index :name, :text
   # validates_presence_of :name
-
   # has_n(:tags).to(Tag).relationship(Tagging)
   # has_n(:basic_tags).relationship(Taggings::Basic)
 
 
-  def localized_name(locale = I18n.locale)
-    names.find{ |word| word.language.code == locale.to_s }
+  def localized_name(lingo = I18n.locale)
+    names.find{ |word| word.language.code == lingo.to_s } # TODO: maybe use lucene index here
   end
 
   def name
     localized_name(I18n.locale).to_s
   end
 
-  def set_localized_name(wording, locale = I18n.locale)
-    new_word = Word.to_word(wording, locale)
-    old_word = localized_name(locale)
+  def set_localized_name(wording, lingo = I18n.locale)
+    new_word = Word.to_word(wording, lingo)
+    old_word = localized_name(lingo)
     if new_word != old_word
       relationships.outgoing(:names)[old_word].delete if old_word
       names << new_word

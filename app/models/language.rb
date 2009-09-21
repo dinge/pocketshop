@@ -16,14 +16,14 @@ class Language
     code
   end
 
-  def self.to_code(lang)
-    lang.to_s
+  def self.to_code(lingo)
+    lingo.to_s
   end
 
-  def self.to_language(lang)
-    case lang
-    when Language;        lang
-    when String, Symbol;  find_first(:code => lang)
+  def self.to_language(lingo)
+    case lingo
+    when Language;        lingo
+    when String, Symbol;  find_first(:code => lingo)
     end
   end
 

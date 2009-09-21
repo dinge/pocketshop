@@ -219,13 +219,13 @@ describe Concept do
 
     describe "the method #localized_synonyms", ' for a parametrized access to its international synonyms' do
       before(:each) do
-        @palace_concept.localized_synonyms << @schloss << @castle
+        @palace_concept.synonyms << @schloss << @castle
       end
 
       it "should return the localized synonyms", ' using a string or symbol as locale' do
         pending
-        @palace_concept.localized_synonyms << @palast << @palace
-        @palace_concept.localized_synonyms(:en).should include(@palace, @castle)
+        @palace_concept.synonyms << @palast << @palace
+        @palace_concept.synonyms(:en).should include(@palace, @castle)
         @palace_concept.should have(2).localized_synonyms('en')
 
         @palace_concept.localized_synonyms('de').should include(@palast, @schloss)
