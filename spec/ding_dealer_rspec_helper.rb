@@ -74,17 +74,20 @@ def stop_neo4j
 end
 
 def undefine_class(*clazz_syms)
-  clazz_syms.each do |clazz_sym|
-    Object.instance_eval do
-      begin
-        clazz = const_get(clazz_sym)
-        Neo4j::Indexer.remove_instance(clazz) if clazz.included_modules.include?(Neo4j::NodeMixin)
-        remove_const(clazz_sym)
-      end if const_defined?(clazz_sym)
+  def descend_scope(clazz_syms, scope, descender_context)
+    clazz_syms.each do |clazz_sym|
+      scope.instance_eval do
+        if clazz_sym.to_s =~ /(.*?)::(.*)/ && const_defined?($1)
+          descender_context.descend_scope($2, const_get($1), descender_context)             
+        elsif const_defined?(clazz_sym)
+          clazz = const_get(clazz_sym)
+          remove_const(clazz_sym)
+        end
+      end
     end
   end
+  descend_scope(clazz_syms, Object, self)
 end
-
 
 def clazz_from_symbol(classname_as_symbol)
   classname_as_symbol.to_s.split("::").inject(Kernel) do |container, name|

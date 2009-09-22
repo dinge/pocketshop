@@ -25,13 +25,13 @@ describe DingDealer::Rest, ' with default settings' do
     end
 
     it "should have a rest_env.model based on default model naming conventions " do
-      @rest_env.model.klass.should  ==                        Monkey
-      @rest_env.model.object_name.should ==                   'monkey'
-      @rest_env.model.collection_name.should ==               'monkeys'
-      @rest_env.model.object_symbol.should ==                 :monkey
-      @rest_env.model.collection_symbol.should  ==            :monkeys
-      @rest_env.model.object_instance_symbol.should ==        :@monkey
-      @rest_env.model.collection_instance_symbol.should ==    :@monkeys
+      @rest_env.model.klass.should                      ==  Monkey
+      @rest_env.model.object_name.should                ==  'monkey'
+      @rest_env.model.collection_name.should            ==  'monkeys'
+      @rest_env.model.object_symbol.should              ==  :monkey
+      @rest_env.model.collection_symbol.should          ==  :monkeys
+      @rest_env.model.object_instance_symbol.should     ==  :@monkey
+      @rest_env.model.collection_instance_symbol.should ==  :@monkeys
     end
 
     it "should have a rest_env.paths based on default naming conventions " do
@@ -52,7 +52,7 @@ end
 describe DingDealer::Rest, ' with a customized namespaced model' do
   before(:all) do
     start_neo4j
-    # undefine_class :Animals::TigersController
+    # undefine_class :"Animals::TigersController"
     module Animal
       class Tiger; end
     end
@@ -68,13 +68,13 @@ describe DingDealer::Rest, ' with a customized namespaced model' do
   after(:all) { stop_neo4j }
 
   it "should have a rest_env.model based on customized model naming conventions " do
-    @rest_env.model.klass.should  ==                        Animal::Tiger
-    @rest_env.model.object_name.should ==                   'animal_tiger'
-    @rest_env.model.collection_name.should ==               'animal_tigers'
-    @rest_env.model.object_symbol.should ==                 :animal_tiger
-    @rest_env.model.collection_symbol.should ==             :animal_tigers
-    @rest_env.model.object_instance_symbol.should ==        :@animal_tiger
-    @rest_env.model.collection_instance_symbol.should ==    :@animal_tigers
+    @rest_env.model.klass.should                      ==  Animal::Tiger
+    @rest_env.model.object_name.should                ==  'animal_tiger'
+    @rest_env.model.collection_name.should            ==  'animal_tigers'
+    @rest_env.model.object_symbol.should              ==  :animal_tiger
+    @rest_env.model.collection_symbol.should          ==  :animal_tigers
+    @rest_env.model.object_instance_symbol.should     ==  :@animal_tiger
+    @rest_env.model.collection_instance_symbol.should ==  :@animal_tigers
   end
 
   it "should have a rest_env.paths based on customized naming conventions " do
@@ -119,13 +119,13 @@ describe DingDealer::Rest, ' with all settings customized' do
   after(:all) { stop_neo4j }
 
   it "should have a rest_env.model based the configured settings" do
-    @rest_env.model.klass.should  ==                        Cat
-    @rest_env.model.object_name.should ==                   'object_name'
-    @rest_env.model.collection_name.should ==               'collection_name'
-    @rest_env.model.object_symbol.should ==                 :object_symbol
-    @rest_env.model.collection_symbol.should ==             :collection_symbol
-    @rest_env.model.object_instance_symbol.should ==        :object_instance_symbol
-    @rest_env.model.collection_instance_symbol.should ==    :collection_instance_symbol
+    @rest_env.model.klass.should                      ==  Cat
+    @rest_env.model.object_name.should                ==  'object_name'
+    @rest_env.model.collection_name.should            ==  'collection_name'
+    @rest_env.model.object_symbol.should              ==  :object_symbol
+    @rest_env.model.collection_symbol.should          ==  :collection_symbol
+    @rest_env.model.object_instance_symbol.should     ==  :object_instance_symbol
+    @rest_env.model.collection_instance_symbol.should ==  :collection_instance_symbol
   end
 
   it "should have a rest_env.paths based the configured settings" do
