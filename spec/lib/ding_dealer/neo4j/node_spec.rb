@@ -29,7 +29,7 @@ describe DingDealer::Neo4j::Node, :shared => true do
       property :property_with_default_value
     end
 
-    Neo4j::Transaction.new
+    restart_transaction
 
     @somethings = (2..4).map do |i|
       SomeThing.new(:name => "name_#{i}", :age => i)
@@ -37,6 +37,8 @@ describe DingDealer::Neo4j::Node, :shared => true do
     @something = @somethings.first
 
     @otherthing = OtherThing.new
+
+    restart_transaction
   end
 
   after(:each) do
@@ -180,7 +182,7 @@ describe "a neo node class" do
   describe "using it's lucene index for searching" do
     it "should find it's first matching node and only return this one" do
       pending 'works in dev, check why not in spec'
-      # SomeThing.find_first(:name => "name_2").should == @somethings.second
+      SomeThing.find_first(:name => "name_2").should == @somethings.second
     end
 
     it "should return nil if non matching find_first is found" do
@@ -191,6 +193,7 @@ describe "a neo node class" do
       lambda { SomeThing.find_first!(:name => "nothing") }.should raise_error(DingDealer::Neo4j::Node::NotFoundException)
     end
   end
+
 
   describe "new with arguments hash" do
     before(:all) do
