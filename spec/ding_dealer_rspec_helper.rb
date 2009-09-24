@@ -73,21 +73,24 @@ def stop_neo4j
   reset_config
 end
 
-def undefine_class(*clazz_syms)
-  def descend_scope(clazz_syms, scope, descender_context)
-    clazz_syms.each do |clazz_sym|
-      scope.instance_eval do
-        if clazz_sym.to_s =~ /(.*?)::(.*)/ && const_defined?($1)
-          descender_context.descend_scope($2, const_get($1), descender_context)             
-        elsif const_defined?(clazz_sym)
-          clazz = const_get(clazz_sym)
-          remove_const(clazz_sym)
-        end
+def undefine_class(*klass_names)
+  klass_names.each do |klass_name|
+    klass_name = klass_name.to_s
+    if Object.const_defined?(klass_name)
+      klass = klass_name.constantize
+      ActiveSupport::Dependencies.remove_constant(klass_name)
+
+      Neo4j::Indexer.remove_instance(klass) if klass.included_modules.include?(Neo4j::NodeMixin)
+
+      path = ActiveSupport::Dependencies.loaded.find do |path|
+        ActiveSupport::Dependencies.loadable_constants_for_path(path).include?(klass_name)
       end
+      $LOADED_FEATURES.delete("#{path}.rb")
+      ActiveSupport::Dependencies.loaded.delete(path)
     end
   end
-  descend_scope(clazz_syms, Object, self)
 end
+
 
 def clazz_from_symbol(classname_as_symbol)
   classname_as_symbol.to_s.split("::").inject(Kernel) do |container, name|
