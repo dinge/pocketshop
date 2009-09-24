@@ -91,7 +91,6 @@ def undefine_class(*klass_names)
   end
 end
 
-
 def clazz_from_symbol(classname_as_symbol)
   classname_as_symbol.to_s.split("::").inject(Kernel) do |container, name|
     container.const_get(name.to_s)

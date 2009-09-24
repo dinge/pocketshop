@@ -6,8 +6,8 @@ class Language
     end
   end
 
-  property :code, :name
-  index :code, :name
+  property  :code, :name
+  index     :code, :name
 
   has_n(:words).to(Word).relationship(Word::LanguageRelationship)
   validates_presence_of :name

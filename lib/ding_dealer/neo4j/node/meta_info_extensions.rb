@@ -23,6 +23,7 @@ module DingDealer
           def self.on_node_created(node)
             if has_meta_info_methods?(node)
               node.set_property('created_at', DateTime.now.utc)
+              node.set_property('updated_at', DateTime.now.utc)
               node.set_property('version', 1)
             end
           end

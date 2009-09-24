@@ -11,6 +11,10 @@ describe Concept do
     stop_neo4j
   end
 
+  # before(:each) do
+  #   Neo4j.event_handler.add(Concept) # rspec seems to disable event listeners ..
+  # end
+
   it "has many attributes" do
     concept = Concept.new
     unit    = Concept::Value::Number.new(:name => 'a special number')
@@ -66,7 +70,7 @@ describe Concept do
 
 
 
-    describe "the method #names", ' for a parametrized access to its international names' do
+    describe "the method #name_words", ' for a parametrized access to its international names' do
       before(:each) do
         @palace_concept.name_words << @palast << @palace
       end

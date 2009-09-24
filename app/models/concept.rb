@@ -17,6 +17,7 @@ class Concept
 
   property :name # needed for value object initalization
   property :text
+
   # index :name, :text
   # validates_presence_of :name
   # has_n(:tags).to(Tag).relationship(Tagging)
@@ -54,4 +55,20 @@ class Concept
     localized_synonyms(I18n.locale).join(', ')
   end
 
+  def synonyms=(synonyms)
+  end
+
 end
+
+
+  # Neo4j.event_handler.add(self)
+  # def self.on_relationship_created(relationship)
+    # case relationship
+    # when Concept::LocalizedNameRelationship
+    #   if relationship.relationship_type == :name_words
+    #     relationship.start_node.relationships.outgoing(:name_words).nodes.select do |word|
+    #       word.language.code == 'en' && word != relationship.end_node
+    #     end.each(&:delete)
+    #   end
+    # end
+  # end

@@ -6,8 +6,8 @@ class Word
     end
   end
 
-  property :name
-  index :name
+  property  :name
+  index     :name
 
   has_one(:language).from(Language, :words)
   index 'language.code'
