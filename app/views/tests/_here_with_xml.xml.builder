@@ -1,1 +1,0 @@
-xml << "text from xml partial"
