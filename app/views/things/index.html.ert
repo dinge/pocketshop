@@ -1,0 +1,3 @@
+@things.each do |thing|
+  text! quick_view_for(thing)
+end

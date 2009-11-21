@@ -1,0 +1,3 @@
+@teams.each do |team|
+  text! quick_view_for(team)
+end

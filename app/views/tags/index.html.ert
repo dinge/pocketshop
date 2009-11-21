@@ -1,0 +1,3 @@
+@tags.each do |tag|
+  text! quick_view_for(tag, :only => [:text])
+end

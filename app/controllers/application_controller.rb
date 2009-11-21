@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-
   before_filter :init_me
   before_filter :set_timezone
   before_filter :redirect_to_login, :if => Proc.new{ Me.none? }
