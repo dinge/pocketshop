@@ -1,9 +1,0 @@
-<% field_set_tag thing.name do  %>
-  <dl>
-  <% thing.visible_attributes.each do |iv| %>
-    <dl><%= iv %></dl>
-    <dd><%= thing.send(iv) %></dd>
-  <% end %>
-  </dl>
-<% end %>
-<%= object_control_for(thing) %>

@@ -1,3 +1,0 @@
-@users.each do |user|
-  text! quick_view_for(user, :only => [:name, :last_action_at])
-end
