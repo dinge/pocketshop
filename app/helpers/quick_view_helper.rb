@@ -33,7 +33,7 @@ module QuickViewHelper
   end
 
 
-  def field_set_with_control_for(object)
+  def field_set_with_control_for(object, &block)
     control = case object
       when Struct
         klass_name = object.class.name.match("Neo4j::(.*)ValueObject")[1].titleize
@@ -42,11 +42,8 @@ module QuickViewHelper
         link_to_object(object) + object_control_for(object)
     end
 
-    field_set_tag(control) do
-      yield
-    end
+    field_set_tag(control) { capture(&block) }
   end
-
 
   def object_control_for(object_or_objects)
     if object_or_objects.is_a?(Array)

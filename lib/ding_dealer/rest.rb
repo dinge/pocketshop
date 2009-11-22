@@ -16,6 +16,8 @@ module DingDealer
         include ObjectInitalizations
         include ActionOperations
         include ActionRenderer
+        include ActionRendererForHtml
+        include ActionRendererForJson
       end
 
       alias :use_rest :uses_rest
@@ -40,6 +42,7 @@ module DingDealer
           model     dingsl_accessor(:klass, :object_name, :collection_name, :object_symbol,
                                     :collection_symbol, :object_instance_symbol, :collection_instance_symbol)
           paths     dingsl_accessor(:object, :collection, :new, :edit)
+          widget    dingsl_accessor(:base_path => 'widgets/crud', :action_mappings => {})
           dsl
         end
 
@@ -244,14 +247,14 @@ module DingDealer
 
       def render_index
         respond_to do |format|
-          format.html
+          format.html { render_index_with_html }
           format.json { render :json => generate_json(rest_run.current_collection.to_a) }
         end
       end
 
       def render_new
         respond_to do |format|
-          format.html
+          format.html { render_new_with_html }
         end
       end
 
@@ -277,12 +280,16 @@ module DingDealer
 
       def render_show
         respond_to do |format|
-          format.html
+          format.html { render_show_with_html }
           format.json { render :json => generate_json(rest_run.current_object) }
         end
       end
 
-      def render_edit; end
+      def render_edit
+        respond_to do |format|
+          format.html { render_edit_with_html }
+        end
+      end
 
       def render_update
         if rest_run.current_object.valid?
@@ -310,6 +317,39 @@ module DingDealer
         end
       end
 
+    end
+
+
+
+    module ActionRendererForHtml
+      private
+
+      def render_html_with_widget
+        render :template => html_action_widget_template
+      end
+
+      def html_action_widget_template
+        rest_env.widget.action_mappings[action_name] ||= (
+          begin
+            default_template.path
+          rescue ActionView::MissingTemplate
+            [rest_env.widget.base_path, "#{action_name}_widget"].join('/')
+          end
+        )
+      end
+
+
+      alias :render_index_with_html :render_html_with_widget
+      alias :render_new_with_html   :render_html_with_widget
+      alias :render_show_with_html  :render_html_with_widget
+      alias :render_edit_with_html  :render_html_with_widget
+    end
+
+
+
+    module ActionRendererForJson
+      private
+
       def generate_json(node_or_array)
         structure = case node_or_array
         when Array; node_or_array.map{ |node| node.props }
@@ -319,6 +359,7 @@ module DingDealer
       end
 
     end
+
 
   end
 end

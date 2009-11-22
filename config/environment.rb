@@ -79,3 +79,5 @@ Rails::Initializer.run do |config|
   # config.frameworks -= [ :active_record ]
 
 end
+
+Erector::Widget.prettyprint_default= true
