@@ -1,5 +1,7 @@
 class Views::Widgets::Crud::ShowWidget < Views::Layouts::Application
+
   def render_content
-    text! helpers.quick_view_for(current_object)
+    widget Views::Widgets::Gizmos::QuickViewWidget.new(:gizmo => current_object)
   end
+
 end

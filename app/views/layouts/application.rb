@@ -13,16 +13,16 @@ class Views::Layouts::Application < Views::Widgets::Base
 
       body do
         div :class => :document do
-          render_main_navigation
-          render_collection_control
+          render_main_navigation        if Me.someone?
+          render_collection_control     if Me.someone? && !@discard_collection_control
           render_flash_message
           div :class => :content do
             div :class => :scope do
               render_content
-              render_scope_navigation
+              render_scope_navigation   if Me.someone?
             end
           end
-          render_footer
+          render_footer                 if Me.someone?
         end
       end
 
@@ -47,15 +47,15 @@ class Views::Layouts::Application < Views::Widgets::Base
 
   def render_main_navigation
     a '', :name => :top
-    text! helpers.main_navigation if Me.someone?
+    widget Views::Widgets::Navigation::MainNavigationWidget.new
   end
 
   def render_collection_control
-    text! helpers.collection_control_for if Me.someone? && !@discard_collection_control
+    widget Views::Widgets::Gizmos::CollectionControlWidget.new
   end
 
   def render_flash_message
-    text! helpers.flash_message
+    flash_message
   end
 
   # overwrite this
@@ -64,13 +64,12 @@ class Views::Layouts::Application < Views::Widgets::Base
   end
 
   def render_scope_navigation
-    text! helpers.scope_navigation if Me.someone?
+    widget Views::Widgets::Navigation::ScopeNavigationWidget.new
   end
 
   def render_footer
     hr :style => 'clear: both;'
-    text! helpers.footer_navigation if Me.someone?
+    widget Views::Widgets::Navigation::FooterNavigationWidget.new
   end
-
 
 end

@@ -8,7 +8,7 @@ class Views::Tags::FormWidget < Views::Widgets::Base
         f.submit
       end
     end
-    text! helpers.node_meta_info(current_object)
+    widget Views::Widgets::Gizmos::MetaInfoWidget.new(:gizmo => current_object)
   end
 
 end
