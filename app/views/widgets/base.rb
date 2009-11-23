@@ -26,11 +26,7 @@ class Views::Widgets::Base < Erector::Widget # Erector::RailsWidget
   end
 
   def flash_message
-    if notice = flash[:notice]
-      notice
-    elsif error = flash[:error]
-      error
-    end
+    flash[:error] || flash[:notice]
   end
 
   def join_dom_id_elements(*dom_id_elements)
