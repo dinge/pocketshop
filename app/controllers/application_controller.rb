@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   # after_filter :update_my_last_action, :if => Proc.new{ Me.someone? }
   after_filter :reset_me
 
-  helper :form, :navigation, :quick_view, :tag, :things
+  helper :quick_view
 
   filter_parameter_logging :password
   protect_from_forgery # :secret => 'ca7b3922b69a338bbbc85f5b3ee487cf'

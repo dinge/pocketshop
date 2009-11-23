@@ -66,6 +66,34 @@ module QuickViewHelper
     end
   end
 
+  def control_list_container(*args)
+    options = args.extract_options!
+    container = options.delete(:container) || :span
+    join_dom_classes_from_options!(options)
+  
+    elements = block_given? ? yield : args.flatten.compact
+  
+    content_tag container, options do
+      elements.join(' | ')
+    end
+  end
+
+  def join_dom_classes_from_options!(options)
+    if (dom_class = options[:class]).is_a?(Array)
+      options[:class] = dom_class.join(' ')
+    end
+  end
+
+  def dom_class_for_active_object(first, second)
+    first.to_s == second.to_s ? :active : nil
+  end
+
+  def tags
+    Tag.all.nodes.map do |tag|
+      tag.name
+    end
+  end
+
 
   # def flash_message
   #   if notice = flash[:notice]
