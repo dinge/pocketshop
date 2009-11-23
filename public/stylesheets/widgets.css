@@ -54,10 +54,11 @@ legend .object_control{
 
 
 /* things and thing controls */
-li {
+/*li {
   float:left;
   list-style-type: none;
 }
+*/
 
 .thing-container {
   border: 1px black dotted;

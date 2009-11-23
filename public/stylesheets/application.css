@@ -12,6 +12,31 @@ body {
 }
 
 
+/* ----------------------- system messages ------------------------------------------------*/
+
+.system_message {
+  padding: 5px 5px;
+}
+
+.notice_message {
+  background: #dfd;
+  border-top: 1px #bdb dotted;
+  border-bottom: 1px #bdb dotted;
+}
+
+.important_message {
+  background: #ffd;
+  border-top: 1px #ddb dotted;
+  border-bottom: 1px #ddb dotted;
+}
+
+.warning_message {
+  background: #fdd;
+  border-top: 1px #dbb dotted;
+  border-bottom: 1px #dbb dotted;
+}
+
+
 /* ----------------------- links ------------------------------------------------*/
 
 a {
@@ -60,6 +85,10 @@ legend {
 
 /* ----------------------- lists ------------------------------------------------*/
 
+li {
+  list-style-type: none;
+}
+
 dl{
   margin: 0 0 1em;
 }
@@ -72,4 +101,3 @@ dt {
 dd {
   margin: 0px 20px;
 }
-   

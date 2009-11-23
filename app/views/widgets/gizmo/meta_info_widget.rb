@@ -1,4 +1,4 @@
-class Views::Widgets::Gizmos::MetaInfoWidget < Views::Widgets::Base
+class Views::Widgets::Gizmo::MetaInfoWidget < Views::Widgets::Base
 
   def content
     unless @gizmo.new_record?

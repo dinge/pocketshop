@@ -1,14 +1,14 @@
-class Views::Tags::FormWidget < Views::Widgets::Base
+class Views::Tags::FormWidget < Views::Widgets::Form::Base
 
   def content
-    form_for current_object do |f|
-      helpers.field_set_with_control_for current_object do
+    form_for @gizmo do |f|
+      gizmo_container_widget @gizmo do
         f.label :name
         f.text_field :name
         f.submit
       end
     end
-    widget Views::Widgets::Gizmos::MetaInfoWidget.new(:gizmo => current_object)
+    widget Views::Widgets::Gizmo::MetaInfoWidget.new(:gizmo => @gizmo)
   end
 
 end

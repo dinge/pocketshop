@@ -51,7 +51,7 @@ class Views::Layouts::Application < Views::Widgets::Base
   end
 
   def render_collection_control
-    widget Views::Widgets::Gizmos::CollectionControlWidget.new
+    widget Views::Widgets::Gizmo::CollectionControlWidget.new
   end
 
   def render_flash_message

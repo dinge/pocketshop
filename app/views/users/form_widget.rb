@@ -1,8 +1,8 @@
-class Views::Users::FormWidget < Views::Widgets::Base
+class Views::Users::FormWidget < Views::Widgets::Form::Base
 
   def content
-    form_for current_object do |f|
-      helpers.field_set_with_control_for current_object do
+    form_for @gizmo do |f|
+      gizmo_container_widget @gizmo do
         f.label :name
         f.text_field :name
 
@@ -12,6 +12,7 @@ class Views::Users::FormWidget < Views::Widgets::Base
         f.submit
       end
     end
+    widget Views::Widgets::Gizmo::MetaInfoWidget.new(:gizmo => @gizmo)
   end
 
 end

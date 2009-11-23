@@ -1,4 +1,4 @@
-class Views::Widgets::Gizmos::CollectionControlWidget < Views::Widgets::Base
+class Views::Widgets::Gizmo::CollectionControlWidget < Views::Widgets::Base
 
   def content
     base_path = File.join("/", controller.class.name.underscore.gsub(/_controller$/, ''))

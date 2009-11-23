@@ -1,7 +1,7 @@
 class Views::Widgets::Crud::ShowWidget < Views::Layouts::Application
 
   def render_content
-    widget Views::Widgets::Gizmos::QuickViewWidget.new(:gizmo => current_object)
+    gizmo_widget(current_object, :state => controller.action_name)
   end
 
 end
