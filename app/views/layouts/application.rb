@@ -37,7 +37,7 @@ class Views::Layouts::Application < Views::Widgets::Base
   end
 
   def render_stylesheets
-    stylesheet_link_tag 'application', 'widgets', 'form'
+    stylesheet_link_tag 'application', 'widgets', 'form', 'table'
   end
 
   def render_other_header_informations

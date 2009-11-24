@@ -22,7 +22,7 @@ module Views::Widgets::WidgetHelper
     dom_classes.flatten.join(' ')
   end
 
-  def link_to_gizmo(gizmo, method = :show)
+  def link_to_gizmo(gizmo, method = :edit)
     link_to(gizmo.name.to_s, File.join(url_for(gizmo), method.to_s))
   end
 

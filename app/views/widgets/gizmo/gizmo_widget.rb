@@ -3,7 +3,6 @@ class Views::Widgets::Gizmo::GizmoWidget < Views::Widgets::Base
   after_initialize do
   end
 
-
   def content
     send("render_#{ @state || :show }")
   end
@@ -28,18 +27,23 @@ private
 
   def render_index
     # @gizmos.each { | gizmo | gizmo_widget(:gizmo => gizmo, :state => :show) }
+
     table do
-      @gizmos.each do |gizmo|
-        tr do
-          td do
-            widget Views::Widgets::Gizmo::ControlWidget.new(:gizmo => gizmo)
-          end
-          td do
-            link_to_gizmo(gizmo)
+      caption helpers.pluralize(@gizmos.size, @gizmos.first.class.model_name)
+      tbody do
+        @gizmos.each do |gizmo|
+          tr do
+            td do
+              widget Views::Widgets::Gizmo::ControlWidget.new(:gizmo => gizmo)
+            end
+            td do
+              link_to_gizmo(gizmo)
+            end
           end
         end
       end
     end
+
   end
 
   def render_edit
