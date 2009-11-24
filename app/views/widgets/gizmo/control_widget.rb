@@ -1,7 +1,6 @@
 class Views::Widgets::Gizmo::ControlWidget < Views::Widgets::Base
 
   def content
-    link_to_gizmo(@gizmo, :edit)
     control_list_container :class => [:object_control, helpers.dom_class(@gizmo)],
       :id => dom_id(@gizmo, :object_control) do
       [

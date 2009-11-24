@@ -1,7 +1,7 @@
 module Views::Widgets::WidgetCallerHelper
 
-  def gizmo_widget(gizmo, options = {})
-    widget Views::Widgets::Gizmo::GizmoWidget.new(:gizmo => gizmo, :options => options)
+  def render_gizmo_widget(options)
+    widget Views::Widgets::Gizmo::GizmoWidget.new(options)
   end
 
   def gizmo_container_widget(gizmo, &block)
