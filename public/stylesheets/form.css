@@ -3,9 +3,11 @@ form {
   padding: 0px;
 }
 
-input {
-  width: 250px;
+fieldset {
+  border: 1px solid #781351;
+  width: 450px; 
 }
+
 
 select,
 input,
@@ -14,7 +16,7 @@ textarea {
   border: 1px solid #aaa;
   padding: 5px;
   margin: 10px 0 0 0;
-  width: 350px;
+/*  width: 350px;*/
 }
 
 input:focus,
@@ -41,11 +43,15 @@ label {
   font-weight: bold;
 }
 
+input[type=submit],
 button {
   display: block;
   float: left;
   clear: both;
   margin: 1em 0 1em 90px;
+  size: 1em;
+  border: solid 0px ButtonFace;
+  background-color: buttonface;
 }
 
 input[type=checkbox] {
@@ -57,7 +63,7 @@ input[type=radio]:first-child  {
     margin-left: 10px;
 }
 */
-
+/*
 label .old_left {
   display: block;
   margin: 12px 10px 0;
@@ -67,4 +73,40 @@ label .old_left {
   clear: left;
   width: 70px;
   text-align: right;
+}*/
+
+
+/*form {
+  margin: 0px;
+  padding: 0px;
 }
+
+
+label {
+  width: 40px;
+  float: left;
+  clear: left;
+  width: 70px;
+  margin-right: 0.5em;
+  display: block
+}
+
+input,
+textarea {
+  color: #781351;
+  background: #fee3ad;
+  border: 1px solid #781351;
+  width: 100%;
+}
+
+fieldset {
+  border: 1px solid #781351;
+  width: 450px; 
+}
+
+legend { 
+  color: #fff;
+  background: #ffa20c;
+  border: 1px solid #781351;
+  padding: 2px 6px
+}*/
