@@ -12,11 +12,13 @@ class Views::Tools::PhraseMaker::Triples::Edit < Views::Layouts::Application
     p do
       table do
         thead do
-          th ''
-          grammar_attributes.each do |ga|
-            th do 
-              link_to_gizmo( current_object.send("phrase_as_#{ga}") ) # link to the phrase in header
-            end 
+          tr do
+            th ''
+            grammar_attributes.each do |ga|
+              th do 
+                link_to_gizmo( current_object.send("phrase_as_#{ga}") ) # link to the phrase in header
+              end 
+            end
           end
         end
         tbody do

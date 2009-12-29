@@ -1,43 +1,83 @@
 class Views::Layouts::Application < Views::Widgets::Base
 
+  Javascripts = %w(prototype effects dragdrop controls slider elbe application)
+  Stylesheets = %w(application navigations sidebar widgets form table) # new
+
+
   def content
     instruct
-
     html do
-
       head do
-        render_javascripts
-        render_stylesheets
-        render_other_header_informations
+        render_html_head
+      end
+      body do
+        render_html_body
+      end
+    end
+  end
+
+
+private
+
+  def render_html_head
+    render_javascripts
+    render_stylesheets
+    render_other_header_informations
+  end
+
+  def render_html_body
+    # a '', :name => :top
+    div :id => :page do
+
+      div :id => :header do
+        raw_link_to('&#8734;&#9733;&#9762;&#9764;', root_path, :id => :logo, :accesskey => 'h', :title => :home)
+        render_main_navigation
       end
 
-      body do
-        div :class => :document do
-          render_main_navigation        if Me.someone?
-          render_collection_control     if Me.someone? && !@discard_collection_control
+      div :id => :main do
+        div :id => :content do
           render_flash_message
-          div :class => :content do
-            div :class => :scope do
-              render_content
-              render_scope_navigation   if Me.someone?
-            end
-          end
-          render_footer                 if Me.someone?
+          render_content
         end
+        div :id => :sidebar do
+          render_sidebar
+        end
+        hr :class => :clearfix
       end
+
+      div :id => :footer do
+        render_footer
+        hr :class => :clearfix
+      end
+
+      link_to_top
 
     end
-
   end
+
+  # def render_html_body
+  #   div :class => :document do
+  #     render_main_navigation        if Me.someone?
+  #     render_collection_control     if Me.someone? && !@discard_collection_control
+  #     render_flash_message
+  #     div :class => :content do
+  #       div :class => :scope do
+  #         render_content
+  #         render_scope_navigation   if Me.someone?
+  #       end
+  #     end
+  #     render_footer                 if Me.someone?
+  #   end
+  # end
 
 
 
   def render_javascripts
-    javascript_include_tag :defaults, 'slider', 'elbe'
+    javascript_include_tag Javascripts
   end
 
   def render_stylesheets
-    stylesheet_link_tag 'application', 'widgets', 'form', 'table'
+    stylesheet_link_tag Stylesheets
   end
 
   def render_other_header_informations
@@ -46,13 +86,12 @@ class Views::Layouts::Application < Views::Widgets::Base
   end
 
   def render_main_navigation
-    a '', :name => :top
     widget Views::Widgets::Navigation::MainNavigationWidget.new
   end
 
-  def render_collection_control
-    widget Views::Widgets::Gizmo::CollectionControlWidget.new
-  end
+  # def render_collection_control
+  #   widget Views::Widgets::Gizmo::CollectionControlWidget.new
+  # end
 
   def render_flash_message
     flash_message
@@ -60,15 +99,15 @@ class Views::Layouts::Application < Views::Widgets::Base
 
   # overwrite this
   def render_content
-    p 'no content to render'
+    p 'nothing to render'
   end
 
-  def render_scope_navigation
+  def render_sidebar
+    widget Views::Widgets::Gizmo::CollectionControlWidget.new
     widget Views::Widgets::Navigation::ScopeNavigationWidget.new
   end
 
   def render_footer
-    hr :style => 'clear: both;'
     widget Views::Widgets::Navigation::FooterNavigationWidget.new
   end
 

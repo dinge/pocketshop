@@ -1,10 +1,8 @@
 class Views::Widgets::Navigation::MainNavigationWidget < Views::Widgets::Base
 
   def content
-    control_list_container :container => :div, :id => :main_navigation, :class => :navigation do
+    control_list_container :id => :main_navigation, :class => :navigation do
       [
-        helpers.link_to('home', root_path, :accesskey => 'h'),
-
         helpers.link_to('things',
           things_path,
           :class => dom_class_for_active_gizmo(:things, controller.controller_name),

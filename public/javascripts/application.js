@@ -7,7 +7,7 @@ document.observe("dom:loaded", function() {
 
 
 var logger = function(message) {
-  console.log(message);
+  // console.log(message);
 };
 
 Effect.DefaultOptions.duration = 0.25;

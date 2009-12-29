@@ -23,7 +23,7 @@ private
   end
 
   def link_to_triple(gizmo)
-    link_to_gizmo(gizmo, :name => '[e]')
+    link_to_gizmo(gizmo, :name => '&#9998;') # edit
     text! helpers.destroy_link_with_confirmation(gizmo, :method => :delete)
     Tools::PhraseMaker::Triple::GrammarAttributes.map do |ga|
       link_to_gizmo(gizmo.send("phrase_as_#{ga}"))

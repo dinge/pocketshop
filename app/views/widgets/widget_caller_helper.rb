@@ -10,13 +10,23 @@ module Views::Widgets::WidgetCallerHelper
 
   def control_list_container(*args, &block)
     options = args.extract_options!
-    container = options.delete(:container) || :span
+    container_tag = options.delete(:container_tag) || :ul
     join_dom_classes_from_options!(options)
 
     elements = block_given? ? yield : args.flatten.compact
 
-    send(container, options) do
-      text! elements.join(' | ')
+    if container_tag == :ul
+      ul(options) do
+        elements.each do |element|
+          li do
+            text! element
+          end
+        end
+      end
+    else
+      send(container_tag, options) do
+        text! elements.join(' ')
+      end
     end
   end
 

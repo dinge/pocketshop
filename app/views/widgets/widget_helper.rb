@@ -11,7 +11,9 @@ module Views::Widgets::WidgetHelper
   end
 
   def flash_message
-    flash[:error] || flash[:notice]
+    div :id => :flash_message do
+      flash[:error] || flash[:notice]
+    end
   end
 
   def join_dom_id_elements(*dom_id_elements)
@@ -25,11 +27,15 @@ module Views::Widgets::WidgetHelper
   def link_to_gizmo(gizmo, options = {})
     method  = options.delete(:method) || :edit
     name    = options.delete(:name) || gizmo.name.to_s
-    link_to(name, File.join(url_for(gizmo), method.to_s), options)
+    raw_link_to(name, File.join(url_for(gizmo), method.to_s), options)
   end
 
   def link_to_top
-    link_to('^', '#top')
+    raw_link_to('&uarr; top', :anchor => :top)
+  end
+
+  def raw_link_to(link_text, *args, &block)
+    rawtext(helpers.link_to(link_text, *args, &block))
   end
 
   def notice_message(*messages)

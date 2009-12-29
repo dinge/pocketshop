@@ -1,6 +1,9 @@
-table {
+@CHARSET "UTF-8";
+
+/*table {
   width: 100%;
 }
+*/
 
 .gizmo_index caption {
   font-size: 25px;
@@ -12,7 +15,6 @@ table {
 .gizmo_index td {
   padding:7px;
 }
-
 
 .gizmo_index td:first-child  {
   font-size: 0.8em;

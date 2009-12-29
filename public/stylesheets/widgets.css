@@ -1,55 +1,14 @@
-/* core widgets */
-
-.document{
-  margin: 1em auto;
-/*  width: 760px;*/
-}
-
-.navigation{
-  padding: 5px 5px;
-  background-color: #ddd;
-}
-
-#main_navigation {
-  font-size: 1.2em;
-}
-
-.content{
-
-}
-
-.scope{
-  width: 700px;
-  float: left;
-}
-
-.scope_navigation{
-  margin: 10px;
-  width: 100px;
-  float: right;
-  font-size: .8em;
-}
-
-
-#footer_navigation {
-  font-size: 0.8em;
-}
-
+@CHARSET "UTF-8";
 
 /* more special */
 
-.collection_control{
-  padding: 10px 5px;
-  text-align: right;
-  font-size: 1.0em;
-}
-
-legend .object_control{
+legend .object_control {
   font-size: 0.6em;
 }
 
-.node_meta_info {
+.node_meta_info li {
   font-size: 0.6em;
+  display:inline;
 }
 
 
@@ -68,7 +27,6 @@ legend .object_control{
 .drag-hover {
   border: 1px red solid;
 }
-
 
 /*.thing-container .drag-handle {
   opacity: 0.1;
