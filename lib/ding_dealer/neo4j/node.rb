@@ -109,16 +109,23 @@ module DingDealer
             raise(NotFoundException.new("can't find #{self.name} with query #{query.inspect}"))
         end
 
+        def short_name
+          model_name.split('::').last.humanize
+        end
+
         # overwriting Neo4j::NodeMixin.value_object
         def value_object
           @value_class ||= if neo_node_env.db.validations
             value_klass = create_value_class
             value_klass.send(:include, Node::Validations)
             value_klass.send(:include, ValueObjectExtensions::Validations)
+            value_klass.send(:extend,  ValueObjectExtensions::ClassMethods)
             value_klass
           else
             value_klass = create_value_class
             value_klass.send(:include, Node::ValidationStubs)
+            value_klass.send(:extend,  ValueObjectExtensions::ClassMethods)
+            value_klass.send(:include, "#{model_name}::SharedMethods".constantize) if const_defined?(:SharedMethods)
             value_klass
           end
         end
@@ -237,6 +244,12 @@ module DingDealer
 
 
       module ValueObjectExtensions
+        module ClassMethods
+          def short_name
+            model_name.split('::').last.humanize
+          end
+        end
+
         module Validations
           def initialize(*args)
             @errors = ActiveRecord::Errors.new(self)

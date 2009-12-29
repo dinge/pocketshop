@@ -4,9 +4,9 @@ class Views::Widgets::Gizmo::ContainerWidget < Views::Widgets::Base
     fieldset do
       legend do
         if @gizmo.new_record? #is_a?(Struct)
-          text "new " << @gizmo.class.model_name
+          text "new " << @gizmo.class.short_name
         else
-          link_to_gizmo(@gizmo, :edit)
+          link_to_gizmo(@gizmo, :method => :edit)
           widget Views::Widgets::Gizmo::ControlWidget.new(:gizmo => @gizmo)
         end
       end

@@ -22,8 +22,10 @@ module Views::Widgets::WidgetHelper
     dom_classes.flatten.join(' ')
   end
 
-  def link_to_gizmo(gizmo, method = :edit)
-    link_to(gizmo.name.to_s, File.join(url_for(gizmo), method.to_s))
+  def link_to_gizmo(gizmo, options = {})
+    method  = options.delete(:method) || :edit
+    name    = options.delete(:name) || gizmo.name.to_s
+    link_to(name, File.join(url_for(gizmo), method.to_s), options)
   end
 
   def link_to_top
@@ -49,6 +51,14 @@ module Views::Widgets::WidgetHelper
       end
     end
   end
+
+  def form_for(record_or_name_or_array, *args, &proc)
+    options = args.extract_options!
+    options[:builder] ||= Views::Widgets::Form::FormBuilder
+    args.push(options)
+    parent.form_for(record_or_name_or_array, *args, &proc)
+  end
+
 
   # def submit_button(label = 'save changes', options = {})
   #   options = options.reverse_merge(:type => :submit)

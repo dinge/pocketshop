@@ -1,5 +1,5 @@
 class IndexController < ApplicationController
   def index
-    redirect_to things_path
+    redirect_to tools_phrase_maker_triples_path
   end
 end

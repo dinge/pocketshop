@@ -2,19 +2,19 @@ table {
   width: 100%;
 }
 
-caption{
+.gizmo_index caption {
   font-size: 25px;
   padding-bottom: 10px;
   text-align: left;
   padding-left: 15%;
 }
 
-td {
+.gizmo_index td {
   padding:7px;
 }
 
 
-td:first-child  {
+.gizmo_index td:first-child  {
   font-size: 0.8em;
   padding-left: 30%;
   width: 80px;

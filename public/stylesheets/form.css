@@ -1,11 +1,29 @@
+/* ----------------------- fieldset ------------------------------------------------*/
+
+fieldset {
+  padding: 10px 30px;
+  margin: 0;
+  border: 1px dotted #aaa;
+/*  background: #ddd;*/
+  margin: 10px 0px;
+}
+
+legend {
+/*  color: #000;*/
+  padding: 0px 10px;
+  text-align: left;
+/*  margin: 0;*/
+  font-size: 1.4em;
+/*  font-weight: 400;*/
+/*  background: #aaa;*/
+}
+
+
+/* ----------------------- form ------------------------------------------------*/
+
 form {
   margin: 0px;
   padding: 0px;
-}
-
-fieldset {
-  border: 1px solid #781351;
-  width: 450px; 
 }
 
 
@@ -57,6 +75,38 @@ button {
 input[type=checkbox] {
   margin-top: 13px;
 }
+
+
+/* ----------------------- autocompleter ------------------------------------------------*/
+
+div.autocomplete {
+  position: absolute;
+  width: 250px;
+  background-color:white;
+  border: 1px solid #888;
+  margin: 0;
+  padding: 0;
+}
+
+div.autocomplete ul {
+  list-style-type:none;
+  margin: 0;
+  padding: 0;
+}
+
+div.autocomplete ul li.selected {
+  background-color: #ffb;
+}
+
+div.autocomplete ul li {
+  list-style-type: none;
+  display: block;
+  margin: 0;
+  padding: 2px;
+  height: 32px;
+  cursor: pointer;
+}
+
 
 /*
 input[type=radio]:first-child  {

@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   layout nil
+  helper :all
 
   before_filter :init_me
   before_filter :set_timezone

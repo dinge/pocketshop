@@ -54,6 +54,18 @@ ActionController::Routing::Routes.draw do |map|
     local.resources :sessions
   end
 
+  map.namespace :tools do |tool|
+    tool.namespace :phrase_maker do |phrase_maker|
+      phrase_maker.resources :phrases, :collection => { :autocomplete => :post }
+      phrase_maker.resources :triples
+    end
+  end
+
+  # map.with_options(:namespace => :tools) do |tool|
+  #   tool.with_options(:namespace => :phrase_maker) do |phrase_maker|
+  #     phrase_maker.resources :phrases
+  #   end
+  # end
 
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'

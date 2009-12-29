@@ -2,7 +2,7 @@
 
 .document{
   margin: 1em auto;
-  width: 760px;
+/*  width: 760px;*/
 }
 
 .navigation{
@@ -19,13 +19,13 @@
 }
 
 .scope{
-  width: 550px;
+  width: 700px;
   float: left;
 }
 
 .scope_navigation{
   margin: 10px;
-  width: 180px;
+  width: 100px;
   float: right;
   font-size: .8em;
 }

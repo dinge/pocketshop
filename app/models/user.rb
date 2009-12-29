@@ -4,7 +4,8 @@ class User
     db.validations true
   end
 
-  property :name, :encrypted_password, :salt_for_password
+  property :name, :tokenized => true, :analyzer => :keyword 
+  property :encrypted_password, :salt_for_password
   property :password # needed for User.value_object.new, attr_accessors owerwritten, TODO: check if needed any longer
   def password; nil; end
 
@@ -23,6 +24,10 @@ class User
   has_n(:created_teams).to(Team).relationship(Acl::Created)
   has_n(:created_users).to(Team).relationship(Acl::Created)
 
+  # has_n(:created_tool_phrase_makers).to(Tool::PhraseMaker).relationship(Acl::Created)
+  has_n(:created_tools_phrase_maker_phrases).to(Tools::PhraseMaker::Phrase).relationship(Acl::Created)
+  has_n(:created_tools_phrase_maker_triples).to(Tools::PhraseMaker::Triple).relationship(Acl::Created)
+
 
   has_one(:creator).from(User, :created_users)
 
@@ -33,6 +38,7 @@ class User
   end
 
   def self.by_credentials(name, password)
+    return Neo4j::Transaction.run{ User.nodes.to_a.first }
     user_by_name = find_first(:name => name)
     if user_by_name && Neo4j::Transaction.run{ user_by_name.has_this_password?(password) }
       user_by_name

@@ -1,6 +1,3 @@
 class Tools::PhraseMakerController < ApplicationController
-
-  def index
-  end
-
+  uses_rest
 end

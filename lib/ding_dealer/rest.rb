@@ -11,7 +11,7 @@ module DingDealer
       def uses_rest(options = {}, &block)
         Dsl.new(self).evaluate_dsl(&block).set_defaults
         include ControllerFilters
-        extend SingletonMethods
+        extend  SingletonMethods
         include PublicActions
         include ObjectInitalizations
         include ActionOperations
@@ -90,7 +90,7 @@ module DingDealer
     module ControllerFilters
       def self.included(base)
         base.class_eval do
-          around_filter :init_neo4j_transaction, :only => PublicActionMethods
+          around_filter :init_neo4j_transaction#, :only => PublicActionMethods
           before_filter { |controller| DingDealer::Rest::RestRun.init_rest_run(controller) }
           before_filter :dispatch_object_initialization, :only => PublicActionMethods
         end

@@ -1,8 +1,5 @@
 class Views::Widgets::Gizmo::GizmoWidget < Views::Widgets::Base
 
-  after_initialize do
-  end
-
   def content
     send("render_#{ @state || :show }")
   end
@@ -13,7 +10,7 @@ private
   def render_show
     fieldset do
       legend do
-        link_to_gizmo(@gizmo, :edit)
+        link_to_gizmo(@gizmo, :method => :edit)
         widget Views::Widgets::Gizmo::ControlWidget.new(:gizmo => @gizmo)
       end
       dl do
@@ -27,23 +24,17 @@ private
 
   def render_index
     # @gizmos.each { | gizmo | gizmo_widget(:gizmo => gizmo, :state => :show) }
-
-    table do
-      caption helpers.pluralize(@gizmos.size, @gizmos.first.class.model_name)
+    table :class => :gizmo_index do
+      caption helpers.pluralize(@gizmos.size, @gizmos.first.class.short_name) if @gizmos.first
       tbody do
         @gizmos.each do |gizmo|
           tr do
-            td do
-              widget Views::Widgets::Gizmo::ControlWidget.new(:gizmo => gizmo)
-            end
-            td do
-              link_to_gizmo(gizmo)
-            end
+            td { widget Views::Widgets::Gizmo::ControlWidget.new(:gizmo => gizmo) }
+            td { link_to_gizmo(gizmo) }
           end
         end
       end
     end
-
   end
 
   def render_edit
@@ -57,8 +48,8 @@ private
 
 
   def render_gizmo_or_auto_form
-    # form_widget_path = "/#{controller.controller_path}/form_widget.rb"
-    form_widget_path = (@gizmo.class.model_name.split("::").map{ |x| x.underscore.pluralize } << 'form_widget.rb').join('/')
+    form_widget_path = "#{controller.controller_path}/form_widget.rb"
+    #form_widget_path = (@gizmo.class.model_name.split("::").map{ |x| x.underscore.pluralize } << 'form_widget.rb').join('/')
     if ActiveSupport::Dependencies.search_for_file(form_widget_path)
       widget "Views::#{controller.controller_path.camelize}::FormWidget".constantize.new(:gizmo => @gizmo)
     else
