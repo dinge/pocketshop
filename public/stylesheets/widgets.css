@@ -4,11 +4,12 @@
 
 legend .object_control {
   font-size: 0.6em;
+  font-weight: bold;
 }
 
 .node_meta_info li {
   font-size: 0.6em;
-  display:inline;
+  display: inline;
 }
 
 

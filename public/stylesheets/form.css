@@ -1,24 +1,4 @@
 @CHARSET "UTF-8";
-/* ----------------------- fieldset ------------------------------------------------*/
-
-fieldset {
-  padding: 10px 30px;
-  margin: 0;
-  border: 1px solid #aaa;
-/*  background: #ddd;*/
-  margin: 10px 0px;
-}
-
-legend {
-/*  color: #000;*/
-  padding: 0px 10px;
-  text-align: left;
-/*  margin: 0;*/
-  font-size: 1.4em;
-/*  font-weight: 400;*/
-/*  background: #aaa;*/
-}
-
 
 /* ----------------------- form ------------------------------------------------*/
 
@@ -27,54 +7,56 @@ form {
   padding: 0px;
 }
 
+fieldset {
+  padding: 10px 30px;
+  margin: 0;
+  border: 1px solid #cccccc;
+}
 
-select,
+legend { 
+  margin: 15px;
+  padding: 0 15px;
+  text-align: left;
+  font-size: 1.8em;
+}
+
+label {
+  color: #666666;
+  font-weight: bold;
+  font-size: 0.8em;
+  padding: 1em 0 0.2em;
+  display: block;
+/*  float: left;*/
+/*  clear: left;*/
+}
+
 input,
+select,
 textarea {
-  background: #ddd;
-  border: 1px solid #aaa;
-  padding: 5px;
-  margin: 10px 0 0 0;
-/*  width: 350px;*/
+  font-size: 1em;
+}
+
+
+input[type=text],
+select,
+textarea {
+  border: 1px solid #cccccc;
+  width: 100%;
+  background: #eee;
 }
 
 input:focus,
 textarea:focus {
-  background: #eee;
-}
-
-select {
-  width: 362px;
-}
-
-textarea {
-  height: 100px;
-}
-
-label {
-  display: block;
-  margin: 5px 0px;
-  float: left;
-  clear: left;
-  width: 70px;
-
-  color: #555;
-  font-weight: bold;
-}
-
-input[type=submit],
-button {
-  display: block;
-  float: left;
-  clear: both;
-  margin: 1em 0 1em 90px;
-  size: 1em;
-  border: solid 0px ButtonFace;
-  background-color: buttonface;
+  background: #fefeef;
 }
 
 input[type=checkbox] {
   margin-top: 13px;
+}
+
+input[type=submit],
+button {
+  margin: 1em 0;
 }
 
 

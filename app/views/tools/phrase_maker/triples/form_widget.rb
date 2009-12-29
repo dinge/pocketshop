@@ -19,6 +19,7 @@ class Views::Tools::PhraseMaker::Triples::FormWidget < Views::Widgets::Form::Bas
                       :value => @gizmo.object_name,
                       :path => :autocomplete_tools_phrase_maker_phrases_path
 
+        f.submit 'save'
       end
     end
     widget Views::Widgets::Gizmo::MetaInfoWidget.new(:gizmo => @gizmo)
