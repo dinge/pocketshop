@@ -2,10 +2,6 @@
 
 /*S I D E B A R*/
 
-div#sidebar {
-  width: 18em;
-  float: right;
-}
 
 div#sidebar div.box {
   margin:0 0 2em 0;

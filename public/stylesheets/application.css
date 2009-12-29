@@ -33,7 +33,7 @@ body {
 */
 
 #page {
-  width: 80%;
+  width: 97%;
   margin: 0 auto;
   min-width: 910px;
   padding: 0 10px;
@@ -46,10 +46,16 @@ body {
 }
 
 #content {
-  width: 66%;
+  width: 70%;
   float: left;
   padding-bottom: 2em;
 }
+
+#sidebar {
+  width: 20%;
+  float: right;
+}
+
 
 #footer {
   color: #666;
