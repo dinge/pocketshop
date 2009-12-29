@@ -1,0 +1,76 @@
+@CHARSET "UTF-8";
+/* ----------------------------- general ------------------------------------ */
+/* all navigation li should be horizontal */
+.navigation li {
+  display: inline;
+}
+
+
+/* ----------------------------- main-navigation ------------------------------------ */
+#main_navigation {
+  margin: 0;
+  text-align: right;
+  font-size: 1.5em;
+  position: absolute;
+  top: 10px;
+  right: 0;
+  min-width: 510px;
+}
+
+#main_navigation li {
+  margin-left: 5px;
+  /* display: inline; */
+  /* float: right;*/ /* makes list horizontal here  */
+  /* display: block;*/
+}
+
+#main_navigation a {
+  color: #fff;
+}
+
+
+/* ----------------------------- footer-navigation ------------------------------------ */
+
+ul#footer_navigation{
+  padding: 0 8px;
+}
+
+/*
+#footer_navigation p.message {
+  float:right;
+  margin:.8em;
+}
+*/
+
+
+/* ----------------------------- collection control ------------------------------------ */
+
+.collection_control{
+/*  padding: 10px 5px;
+  text-align: right;
+*/  
+  font-size: 1.4em;
+}
+
+/* ----------------------------- misc ------------------------------------ */
+
+/*ul#usernav {
+  position:absolute;
+  bottom:15px;
+  left:0;
+  padding:0;
+  margin:0;
+}
+
+ul#usernav li{
+  display:inline;
+  list-style-type: none;
+  color:#999;
+  font-size:0.9em;
+}
+
+ul#usernav li a {
+  color:#fff;
+  text-decoration:underline;
+}
+*/
