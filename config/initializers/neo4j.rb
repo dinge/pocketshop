@@ -16,11 +16,11 @@ elsif Rails.env.production?
   end
 end
 
-if [Rails.env.testing?, Rails.env.development?].any?
+# if [Rails.env.testing?, Rails.env.development?].any?
   Lucene::Config[:store_on_file] = true
   Lucene::Config[:storage_path] = File.join(neo4j_base_path, 'lucene')
   Neo4j::Config[:storage_path] = File.join(neo4j_base_path, 'neo4j')
 
   puts "storing neo4j's lucene index in #{Lucene::Config[:storage_path]}"
   puts "storing neo4j's database in #{Neo4j::Config[:storage_path]}"
-end
+# end
