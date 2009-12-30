@@ -1,5 +1,7 @@
 class Local::SessionsController < ApplicationController
   skip_before_filter :redirect_to_login
+  # around_filter :init_neo4j_transaction, :only => :create
+ 
   before_filter :redirect_to_root, :if => Proc.new{ Me.someone? }, :except => :destroy
 
   def new
@@ -22,5 +24,9 @@ class Local::SessionsController < ApplicationController
     stop_local_session
     redirect_to root_path
   end
+
+  # def init_neo4j_transaction
+  #   ::Neo4j::Transaction.run{ yield }
+  # end
 
 end

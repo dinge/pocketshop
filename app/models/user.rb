@@ -38,7 +38,7 @@ class User
   end
 
   def self.by_credentials(name, password)
-    return Neo4j::Transaction.run{ User.nodes.to_a.first }
+    # return Neo4j::Transaction.run{ User.nodes.to_a.first }
     user_by_name = find_first(:name => name)
     if user_by_name && Neo4j::Transaction.run{ user_by_name.has_this_password?(password) }
       user_by_name

@@ -19,7 +19,7 @@ private
   end
 
   def headline
-    helpers.pluralize(@gizmos.size, @gizmos.first.class.short_name) << @append_to_headline.to_s 
+    helpers.pluralize(@gizmos.size, @gizmos.first.class.short_name) << @append_to_headline.to_s
   end
 
   def link_to_triple(gizmo)
@@ -27,7 +27,7 @@ private
     text! helpers.destroy_link_with_confirmation(gizmo, :method => :delete)
     Tools::PhraseMaker::Triple::GrammarAttributes.map do |ga|
       link_to_gizmo(gizmo.send("phrase_as_#{ga}"))
-    end 
+    end
   end
 
 end

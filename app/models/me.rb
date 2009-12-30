@@ -20,10 +20,10 @@ class Me
 
 
   # shorthand for some shell games
-  if Rails.env.development?
-    def Me.lars!
-      User.first_node.is_me_now
-    end
-  end
+  # if Rails.env.development?
+  #   def Me.lars!
+  #     User.first_node.is_me_now
+  #   end
+  # end
 
 end
