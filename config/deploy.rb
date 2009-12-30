@@ -7,7 +7,7 @@ set :scm, :git
 set :repository, "file://."
 set :deploy_via, :copy
 # set :copy_strategy, :export
-set :branch, "with_neo4j"
+set :branch, "master"
 set :git_enable_submodules, 1
 
 set :deploy_to, "/home/railshost/apps/#{application}"
