@@ -9,7 +9,7 @@ class Local::SessionsController < ApplicationController
   def create
     if @user = User.by_credentials(params[:user][:name], params[:user][:password])
       start_local_session_with(@user)
-      redirect_to root_path #@user.last_action || root_path
+      redirect_to_root #@user.last_action || root_path
     else
       @user = User.value_object.new
       @user.name = params[:user][:name]
@@ -22,5 +22,12 @@ class Local::SessionsController < ApplicationController
     stop_local_session
     redirect_to root_path
   end
+
+private
+
+  def redirect_to_root
+    redirect_to root_path
+  end
+
 
 end

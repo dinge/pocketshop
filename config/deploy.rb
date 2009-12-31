@@ -6,12 +6,8 @@ set :user, 'railshost'
 set :use_sudo, false
 
 set :scm, :git
-# set :repository, "file://."
 set :repository,  'http://github.com/roborails/dingdealer.git'
 set :deploy_via, :remote_cache
-
-# set :deploy_via, :copy
-# set :copy_strategy, :export
 
 set :branch, "master"
 set :git_enable_submodules, 1
@@ -28,7 +24,6 @@ after   'deploy:restart', 'deploy:cleanup'
 
 # check more at
 # http://github.com/guides/deploying-with-capistrano
-# set :deploy_via, :remote_cache
 # set :git_shallow_clone, 1
 
 # based on http://blog.raphinou.com/2008/12/capistrano-deployment-for-jetty-rails.html
