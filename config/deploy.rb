@@ -23,6 +23,9 @@ role :web, "roboterliebe.de"
 role :db,  "roboterliebe.de", :primary => true
 
 
+after   'deploy:restart', 'deploy:cleanup'
+
+
 # check more at
 # http://github.com/guides/deploying-with-capistrano
 # set :deploy_via, :remote_cache
