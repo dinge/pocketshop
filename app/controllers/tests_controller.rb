@@ -1,5 +1,4 @@
 class TestsController < ApplicationController
-  use_neo4j_transaction
   before_filter :init_items
 
   def with
