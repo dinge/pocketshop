@@ -10,6 +10,7 @@ if [[ -f $BASE_DIR/shared/pids/jetty_rails.pid ]] && ps ax | grep -f $BASE_DIR/s
 fi
 
 cd  $BASE_DIR/current
-$JRUBY --server -S jetty_rails -c config/jetty_rails.yml > $LOGFILE 2>&1 &
+# $JRUBY --server -S jetty_rails -c config/jetty_rails.yml > $LOGFILE 2>&1 &
+$JRUBY --server -S jetty_rails -c config/jetty_rails.yml > $LOGFILE &
 echo $! > $BASE_DIR/shared/pids/jetty_rails.pid
 echo "Starting Jetty process with pid $(cat $PID_FILE)"
