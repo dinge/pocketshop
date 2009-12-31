@@ -1,7 +1,7 @@
 #!/bin/sh
 # based on http://blog.raphinou.com/2008/12/capistrano-deployment-for-jetty-rails.html
 . script/jetty_config
-TIMESTAMP=$(date +%Y%m%d-%h:%m:%s)
+TIMESTAMP=$(date +%Y%m%d%H%M%S)
 LOGFILE="log/${TIMESTAMP}_jetty_rails.log"
 #check that previous process has been stopped correctly
 if [[ -f $BASE_DIR/shared/pids/jetty_rails.pid ]] && ps ax | grep -f $BASE_DIR/shared/pids/jetty_rails.pid  >/dev/null 2>&1 ; then
@@ -10,6 +10,6 @@ if [[ -f $BASE_DIR/shared/pids/jetty_rails.pid ]] && ps ax | grep -f $BASE_DIR/s
 fi
 
 cd  $BASE_DIR/current
-$JRUBY --server -S jetty_rails -c config/jetty_rails.yml > $LOGFILE &
+$JRUBY --server -S jetty_rails -c config/jetty_rails.yml > $LOGFILE 2>&1 &
 echo $! > $BASE_DIR/shared/pids/jetty_rails.pid
 echo "Starting Jetty process with pid $(cat $PID_FILE)"
