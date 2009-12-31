@@ -90,7 +90,9 @@ module DingDealer
     module ControllerFilters
       def self.included(base)
         base.class_eval do
-          around_filter :init_neo4j_transaction#, :only => PublicActionMethods
+          around_filter :init_neo4j_transaction_for_rest_methods,
+                        :unless => Proc.new { ::Neo4j::Transaction.running? }#, :only => PublicActionMethods
+
           before_filter { |controller| DingDealer::Rest::RestRun.init_rest_run(controller) }
           before_filter :dispatch_object_initialization, :only => PublicActionMethods
         end
@@ -98,8 +100,8 @@ module DingDealer
 
       private
 
-      def init_neo4j_transaction
-        ::Neo4j::Transaction.run{ yield }
+      def init_neo4j_transaction_for_rest_methods
+        ::Neo4j::Transaction.run { yield }
       end
 
       def dispatch_object_initialization

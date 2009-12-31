@@ -162,7 +162,7 @@ describe "a controller instance", ' with default convention based settings', :ty
   controller_name 'beans'
 
   before(:all) { start_neo4j }
-  before(:each) { controller.stub!(:render_html_with_widget).and_return('some_non_existing_template_path') }
+  before(:each) { controller.stub!(:render_html_with_widget).and_return('stubbing_the_errector_widget') }
   before(:each) { controller.stub!(:render).and_return(false) }
   after(:all) { stop_neo4j }
 
