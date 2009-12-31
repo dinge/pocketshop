@@ -2,7 +2,8 @@
 # based on http://blog.raphinou.com/2008/12/capistrano-deployment-for-jetty-rails.html
 . script/jetty_config
 TIMESTAMP=$(date +%Y%m%d%H%M%S)
-LOGFILE="log/${TIMESTAMP}_jetty_rails.log"
+#LOGFILE="log/${TIMESTAMP}_jetty_rails.log"
+LOGFILE="log/jetty_rails.log"
 #check that previous process has been stopped correctly
 if [[ -f $BASE_DIR/shared/pids/jetty_rails.pid ]] && ps ax | grep -f $BASE_DIR/shared/pids/jetty_rails.pid  >/dev/null 2>&1 ; then
   echo "We could have the previous process still running! $(cat $PID_FILE )" >&1
