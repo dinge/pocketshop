@@ -1,3 +1,5 @@
+default_run_options[:pty] = true
+
 set :application, "dingbank"
 
 set :user, 'railshost'
@@ -5,7 +7,7 @@ set :use_sudo, false
 
 set :scm, :git
 # set :repository, "file://."
-set :repository,  'git://github.com/roborails/dingdealer.git'
+set :repository,  'http://github.com/roborails/dingdealer.git'
 set :deploy_via, :remote_cache
 
 # set :deploy_via, :copy
