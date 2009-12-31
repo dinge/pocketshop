@@ -5,7 +5,7 @@ module ControllerExtensions::AuthentificationHandling
   # after_filter :update_my_last_action, :if => Proc.new{ Me.someone? }
 
   def init_and_reset_me
-    #reset_me
+    reset_me
     init_me
     yield
     reset_me
