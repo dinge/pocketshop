@@ -1,0 +1,76 @@
+== 0.3.1 / 2009-07-25
+ * Feature, extension -	find path between given pair of nodes (#58)
+ * Fix a messy exception on GET /nodes/UnknownClassName (#57)
+ * Bug  - exception on GET /nodes/classname/rel if rel is a has_one relationship (#56)
+ * Bug: GET /nodes/classname missing out nodes with no properties (#55)
+ * Bug: Lucene sorting caused exception if there were no documents (#54)
+ * Bug:	reindexer fails to connect nodes to the IndexNode (#53)
+
+== 0.3.0 / 2009-06-25
+* Neo4j should track node changes
+* RESTful support for lucene queries, sorting and paging
+* RESTful support for Relationships
+* RESTful support for Node and properties
+* Experimental support for Master-Slave	Replication via REST
+* RESTful Node representation should contain hyperlinks to relationships
+* Added some handy method like first and empty? on relationships
+* Use new neo4j: neo-1.0-b8
+* Add an event handler for create/delete nodes start/stop neo, update property/relationship
+* The NodeMixin should behave like a hash, added [] and []= methods
+* Support list topology - has_list and belongs_to_list Neo4j::NodeMixin Classmethods
+* Should be possible to add relationships without declaring them (Neo4j#relationships.outgoing(:friends) << node)
+* Neo4j extensions file structure, should be easy to create your own extensions
+* Rename relation to relationship (Neo4j::Relations => Neo4j::Relationships, DynamicRelation => Relationship) [data incompatible change]
+* Auto Transaction is now optional
+* Setting Float properties fails under JRuby1.2.0
+* Bug: Indexing relationships does not work
+* Make the ReferenceNode include Neo4j::NodeMixin
+* Added handy Neo4j class that simply includes the Neo4j::NodeMixin
+* Neo4j::IndexNode now holds references to all nodes (Neo4j.ref_node -> Neo4j::IndexNode -> ...)
+
+
+== 0.2.1 / 2009-03-15
+* Refactoring of lucene indexing of the node space (28)
+* Fixed bug on Neo4j::Nodemixin#property? (#22)
+
+
+== 0.2.0 / 2009-01-20
+* Impl. Neo4j::Node#traverse - enables traversal and filtering using TraversalPosition info (#17,#19)
+* Impl. traversal to any depth (#15)
+* Impl. traversal several relationships type at the same time (#16)
+* Fixed a Lucene timezone bug (#20)
+* Lots of refactoring of the neo4j.rb traversal code and RSpecs
+
+== 0.1.0 / 2008-12-18
+* Property can now be of any type (and not only String, Fixnum, Float)
+* Indexing and Query with Date and DateTime
+* YARD documentation
+* Properties can be removed
+* A property can be set to nil (it will then be removed).
+
+== 0.0.7 / 2008-12-10
+* Added method to_param and methods on the value object needed for Ruby on Rails
+* Impl. update from a value object/hash for a node
+* Impl. generation of value object classes/instances from a node.
+* Refactoring the Transaction handling (reuse PlaceboTransaction instances if possible)
+* Removed the need to start and stop neo. It will be done automatically when needed.
+
+
+== 0.0.6 / 2008-12-03
+* Removed the configuration from the Neo4j.start method. Now exist in Neo4j::Config and Lucene::Config.
+* Implemented sort_by method.
+* Lazy loading of search result. Execute the query and load the nodes only if needed.
+* Added support to use lucene query language, example: Person.find("name:foo AND age:42")
+* All test now uses RAM based lucene indexes.
+
+== 0.0.5 / 2008-11-17
+* Supports keeping lucene index in memory instead of on disk
+* Added support for lucene full text search
+* Fixed so neo4j runs on JRuby 1.1.5
+* Implemented support for reindex all instances of a node class. This is needed if the lucene index is kept in memory or if the index is changed.
+* Added ReferenceNode. All nodes now have a relationship from this reference node.
+* Lots of refactoring
+* Added the IMDB example. It shows how to create a neo database, lucene queries and node traversals.
+
+== 0.0.4 / 2008-10-23
+* First release to rubyforge
