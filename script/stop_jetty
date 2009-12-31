@@ -5,10 +5,10 @@
 #check that we talk about a jetty_rails process
 if [[ -f $PID_FILE ]] && (ps ax | grep -f $PID_FILE | grep jetty_rails > /dev/null)  ; then
   echo "Killing Jetty process $(cat $PID_FILE)"
+  kill $(<$PID_FILE)
+  rm $PID_FILE
 else
   echo "This doesn't seem to be a jetty_rails process! See PID: $(cat $PID_FILE) " >&1
-  exit 1
+  # exit 1
 fi
 
-kill $(<$PID_FILE)
-rm $PID_FILE
