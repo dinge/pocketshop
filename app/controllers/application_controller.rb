@@ -12,11 +12,13 @@ class ApplicationController < ActionController::Base
   filter_parameter_logging :password
   protect_from_forgery # :secret => 'ca7b3922b69a338bbbc85f5b3ee487cf'
 
-
+  
   def init_me
-    reset_me
-    if session[:user_id] && user = User.load(session[:user_id])
-      user.is_me_now
+    #reset_me
+    Neo4j::Transaction.run do
+      if session[:user_id] && user = User.load(session[:user_id])
+        user.is_me_now
+      end
     end
   end
 
