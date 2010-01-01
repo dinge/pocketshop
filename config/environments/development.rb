@@ -17,3 +17,14 @@ config.action_controller.perform_caching             = false
 config.action_mailer.raise_delivery_errors = false
 
 # config.threadsafe!
+
+
+# setting up neo4j database location
+neo4j_base_path = File.join(Rails.root, 'tmp')
+Lucene::Config[:store_on_file]  = true
+Lucene::Config[:storage_path]   = File.join(neo4j_base_path, 'lucene')
+Neo4j::Config[:storage_path]    = File.join(neo4j_base_path, 'neo4j')
+
+puts "storing neo4j's lucene index in #{Lucene::Config[:storage_path]}"
+puts "storing neo4j's database in #{Neo4j::Config[:storage_path]}"
+

@@ -28,6 +28,7 @@ Rails::Initializer.run do |config|
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
   # config.gem "aws-s3", :lib => "aws/s3"
+  config.gem "neo4j", :version => "0.3.1"
 
   # config.gem 'punycode'
 
@@ -80,4 +81,6 @@ Rails::Initializer.run do |config|
 
 end
 
+require 'neo4j/extensions/reindexer'
+# require 'neo4j/mixins/dynamic_accessor'
 Erector::Widget.prettyprint_default= true

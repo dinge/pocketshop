@@ -3,7 +3,7 @@ class Thing
     db do
       meta_info true
       validations true
-      dynamic_properties true
+      # dynamic_properties true
     end
     acl.default_visibility true
   end

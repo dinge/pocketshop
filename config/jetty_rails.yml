@@ -3,7 +3,7 @@
 :port: 3000
 :environment: production
 :jruby_min_runtimes: 1
-:jruby_max_runtimes: 2
+:jruby_max_runtimes: 1
 :thread_pool_max: 40
 :thread_pool_min: 1
 :acceptor_size: 20
