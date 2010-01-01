@@ -1,14 +1,15 @@
 class Tools::PhraseMaker::Triple < ActiveRecord::Base
   is_a_neo_node do
     db.meta_info true
+    # db.validations false
   end
 
   GrammarAttributes = %w(subject predicate object)
 
   has_one(:creator).from(User, :created_tools_phrase_maker_triples)
-  has_one(:phrase_as_subject).from(Tools::PhraseMaker::Phrase, :triples_as_subject)
-  has_one(:phrase_as_predicate).from(Tools::PhraseMaker::Phrase, :triples_as_predicate)
-  has_one(:phrase_as_object).from(Tools::PhraseMaker::Phrase, :triples_as_object)
+  has_one(:phrase_as_subject).to(Tools::PhraseMaker::Phrase)
+  has_one(:phrase_as_predicate).to(Tools::PhraseMaker::Phrase)
+  has_one(:phrase_as_object).to(Tools::PhraseMaker::Phrase)
 
 
 

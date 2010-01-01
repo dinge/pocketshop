@@ -5,15 +5,19 @@ class ApplicationController < ActionController::Base
   include ControllerExtensions::AuthentificationHandling
 
   around_filter :init_neo4j_transaction
+  before_filter :start_debugger
   around_filter :init_and_reset_me
   before_filter :redirect_to_login, :if => Proc.new{ Me.none? }
-
   before_filter :set_timezone
 
   filter_parameter_logging :password
   protect_from_forgery # :secret => 'ca7b3922b69a338bbbc85f5b3ee487cf'
 
-
+  def start_debugger
+    # debugger
+    1==1
+    1==1
+  end
 
   def init_neo4j_transaction
     Neo4j::Transaction.run{ yield }
