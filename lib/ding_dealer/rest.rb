@@ -43,6 +43,7 @@ module DingDealer
                                     :collection_symbol, :object_instance_symbol, :collection_instance_symbol)
           paths     dingsl_accessor(:object, :collection, :new, :edit)
           widget    dingsl_accessor(:base_path => 'widgets/crud', :action_mappings => {})
+          assets    dingsl_accessor(:additional_javascripts, :additional_stylesheets)
           dsl
         end
 

@@ -1,5 +1,6 @@
 module Views::Widgets::WidgetHelper
 
+
   def join_dom_classes_from_options!(options)
     if (dom_class = options[:class]).is_a?(Array)
       options[:class] = dom_class.join(' ')

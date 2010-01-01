@@ -1,6 +1,6 @@
 class Views::Layouts::Application < Views::Widgets::Base
 
-  Javascripts = %w(prototype effects dragdrop controls slider elbe application)
+  Javascripts = %w(prototype effects dragdrop controls slider application elbe)
   Stylesheets = %w(application navigations sidebar widgets form table phrase_maker) # new
 
 
@@ -74,10 +74,20 @@ private
 
   def render_javascripts
     javascript_include_tag Javascripts
+    unless (additional_javascripts = controller.rest_env.assets.additional_javascripts).blank?
+      [additional_javascripts].flatten.each do |javascript|
+        javascript_include_tag javascript
+      end
+    end
   end
 
   def render_stylesheets
     stylesheet_link_tag Stylesheets
+    unless (additional_stylesheets = controller.rest_env.assets.additional_stylesheets).blank?
+      [additional_stylesheets].flatten.each do |stylesheet|
+        stylesheet_link_tag stylesheet
+      end
+    end
   end
 
   def render_other_header_informations
