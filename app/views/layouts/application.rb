@@ -1,7 +1,7 @@
 class Views::Layouts::Application < Views::Widgets::Base
 
   Javascripts = %w(prototype effects dragdrop controls slider application elbe)
-  Stylesheets = %w(application navigations sidebar widgets form table phrase_maker) # new
+  Stylesheets = %w(application navigations sidebar widgets form table) # new
 
 
   def content
