@@ -28,6 +28,8 @@ private
     Tools::PhraseMaker::Triple::GrammarAttributes.map do |ga|
       if value = gizmo.send("phrase_as_#{ga}")
         link_to_gizmo(value) 
+      else
+        "no value"
       end
     end
   end
