@@ -106,7 +106,7 @@ module Neo4j
           ret = yield tx
         rescue Exception => e
           #$NEO_LOGGER.warn{e.backtrace.join("\n")}
-          tx.failure
+          tx.failure unless tx == nil
           raise e  
         ensure
           tx.finish  unless tx == nil
