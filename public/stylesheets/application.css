@@ -7,7 +7,7 @@ body {
   font-family: 'Lucida Sans Unicode', 'Lucida Grande', 'Trebuchet MS', Verdana, Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background:#fefefe url(/images/header_background_black.png) repeat-x 0 0;
+  background:#fefefe url(/images/header_background.png) repeat-x 0 0;
 }
 
 #header {
@@ -71,11 +71,12 @@ body {
   float: right;
 }
 
-
 #footer {
-  color: #666;
-  background: #eee;
-  font-size: .8em;
+  color: #555;
+/*  background:#999;*/
+  background:#999 url(/images/footer_background.png) repeat-x 0 0;
+  font-size: .9em;
+  font-weight: bold;
   text-align: left;
   min-width: 910px;
 /*  margin: 0 auto 20px auto;*/
@@ -83,8 +84,8 @@ body {
 }
 
 #footer {
-  -moz-border-radius: 8px;
-  -webkit-border-radius: 8px;
+  -moz-border-radius: 12px;
+  -webkit-border-radius: 12px;
 }
 
 

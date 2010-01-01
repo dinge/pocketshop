@@ -11,6 +11,8 @@ fieldset {
   padding: 10px 30px;
   margin: 0;
   border: 1px solid #cccccc;
+  -moz-border-radius: 12px;
+  -webkit-border-radius: 12px;
 }
 
 legend { 
@@ -33,7 +35,9 @@ label {
 input,
 select,
 textarea {
-  font-size: 1em;
+  font-size: 1.2em;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
 }
 
 
@@ -57,6 +61,11 @@ input[type=checkbox] {
 input[type=submit],
 button {
   margin: 1em 0;
+  background:#eee url(/images/header_background.png) repeat-x 0 0;
+  border: 0;
+  color: #fefefe;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
 }
 
 
