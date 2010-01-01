@@ -39,13 +39,30 @@ describe "Neo4j::NodeMixin#has_one " do
     person = Person.new
 
     # when
-    person.address = Address.new {|a| a.city = 'malmoe'; a.road = 'my road'}
+    address = Address.new {|a| a.city = 'malmoe'; a.road = 'my road'}
+    person.address = address
 
     # then
     person.address.should be_kind_of(Address)
     person.address.people.to_a.size.should == 1
     person.address.people.to_a.should include(person)
   end
+
+
+  it "should update a relationship with assignment like node1.rel = node2 and delete an old relationship" do
+    # given
+    person = Person.new
+
+    # when
+    address = Address.new {|a| a.city = 'malmoe'; a.road = 'my road'}
+    person.address = address
+    address2 = Address.new  {|a| a.city = 'hamburg'; a.road = 'my road'}
+
+    # then
+    person.address = address2
+    person.address.should == address2
+  end
+
 
   it "should create a relationship with the new method, like node1.rel.new(node2)" do
     # given

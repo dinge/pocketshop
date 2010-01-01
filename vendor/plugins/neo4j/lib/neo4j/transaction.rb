@@ -109,7 +109,7 @@ module Neo4j
           tx.failure
           raise e  
         ensure
-          tx.finish  unless tx.blank?
+          tx.finish  unless tx == nil
         end      
         ret
       end  
