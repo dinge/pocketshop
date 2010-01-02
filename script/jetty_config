@@ -5,8 +5,8 @@
 #add the JRE bin directory to path
 PATH=$PATH:/usr/lib/jvm/java-6-sun-1.6.0.12/jre/bin/
 #Base directory for deployment
-# BASE_DIR=/home/railshost/apps/dingbank
-BASE_DIR="$(pwd)/../"
+BASE_DIR=/home/railshost/apps/dingbank
+# BASE_DIR="$(pwd)/../"
 #Jruby executable to use
 # JRUBY=/usr/bin/jruby
 JRUBY=$(which jruby)
