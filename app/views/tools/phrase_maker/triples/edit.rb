@@ -16,7 +16,9 @@ class Views::Tools::PhraseMaker::Triples::Edit < Views::Layouts::Application
             th ''
             grammar_attributes.each do |ga|
               th do 
-                link_to_gizmo( current_object.send("phrase_as_#{ga}") ) # link to the phrase in header
+                if value = current_object.send("phrase_as_#{ga}")
+                  link_to_gizmo( value ) # link to the phrase in header
+                end
               end 
             end
           end
