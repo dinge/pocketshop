@@ -140,7 +140,12 @@ module Neo4j
 
     # :api: private
     def update_document(document, node)
-      @properties.each {|prop| document[prop.to_sym] = node.send(prop)}
+      @properties.each do |prop|
+        value = node.send(prop) 
+        value = value.downcase if value.respond_to?(:downcase)
+        document[prop.to_sym] = value
+      end
+      # @properties.each {|prop| document[prop.to_sym] = node.send(prop)}
     end
   end
 

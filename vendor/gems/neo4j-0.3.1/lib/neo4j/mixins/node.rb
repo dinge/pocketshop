@@ -655,6 +655,7 @@ module Neo4j
       def has_one(rel_type)
 
         module_eval(%Q{def #{rel_type}=(value)
+                        relationship('#{rel_type}').delete if relationship?('#{rel_type}')
                         r = Relationships::HasN.new(self,'#{rel_type.to_s}')
                         r << value
                     end},  __FILE__, __LINE__)
