@@ -15,13 +15,9 @@ class Views::Widgets::Gizmo::ControlWidget < Views::Widgets::Base
           :accesskey => 'e',
           :title => :edit) ,
 
-        helpers.destroy_link_with_confirmation(@gizmo, :method => :delete)
+        helpers.destroy_link_with_confirmation(@gizmo)
       ]
     end
   end
 
 end
-
-
-    # link_to_gizmo(gizmo, :name => '&#9998;') # edit
-    # text! helpers.destroy_link_with_confirmation(gizmo, :method => :delete)

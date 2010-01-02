@@ -325,6 +325,7 @@ module DingDealer
       def render_destroy
         respond_to do |format|
           format.html { redirect_to rest_run.collection_path }
+          format.js     if rest_env.respond_to.js
         end
       end
 

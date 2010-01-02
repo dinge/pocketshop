@@ -1,0 +1,3 @@
+gizmo = controller.rest_run.current_object
+page[dom_id(gizmo)].fade
+# page[dom_id(gizmo)].shrink :direction => "top-left"

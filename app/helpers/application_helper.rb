@@ -1,7 +1,7 @@
 module ApplicationHelper
   def destroy_link_with_confirmation(*args)
     options      = args.first || {}
-    html_options = args.second
+    html_options = args.second || {}
 
     dom_id_suffix       = rand(self.object_id)
     confirmation_dom_id = "destroy_confirmation_%s" % dom_id_suffix
@@ -23,8 +23,14 @@ module ApplicationHelper
       page[accept_dom_id].toggle
     end +
 
-    link_to(' &#10004; ',
-      options,
-      html_options.merge(:id => accept_dom_id, :style => 'display:none;'))
+    if html_options.delete(:remote)
+      link_to_remote(' &#10004; ',
+        { :url => url_for(options), :method => :delete },
+        html_options.merge(:id => accept_dom_id, :style => 'display:none;'))
+    else
+      link_to(' &#10004; ',
+        options,
+        html_options.merge(:id => accept_dom_id, :style => 'display:none;', :method => :delete))
+    end
   end
 end

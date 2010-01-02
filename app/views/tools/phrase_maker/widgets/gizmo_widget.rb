@@ -19,7 +19,7 @@ private
           link_to_triple(gizmo)
         else
           link_to_gizmo(gizmo)
-          text! helpers.destroy_link_with_confirmation(gizmo, :method => :delete)
+          text! helpers.destroy_link_with_confirmation(gizmo)
         end
       end
     end
@@ -40,7 +40,7 @@ private
     end
     span(:style => 'display:none;', :class => :control) do
       link_to_gizmo(gizmo, :name => '&#9998;') # edit
-      text! helpers.destroy_link_with_confirmation(gizmo, :method => :delete)
+      text! helpers.destroy_link_with_confirmation(gizmo, :remote => :true)
     end
   end
 
