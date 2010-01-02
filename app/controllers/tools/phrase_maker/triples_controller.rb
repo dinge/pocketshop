@@ -1,6 +1,7 @@
 class Tools::PhraseMaker::TriplesController < ApplicationController
   uses_rest do
     model.klass Tools::PhraseMaker::Triple
+    respond_to.js true 
     assets do
       additional_javascripts 'tools/phrase_maker/phrase_maker'
       additional_stylesheets 'tools/phrase_maker/phrase_maker'
@@ -13,10 +14,16 @@ private
   def render_create_with_success
     respond_to do |format|
       format.html { redirect_to rest_run.collection_path }
+      format.js
     end
   end
 
-  alias :render_update_with_success :render_create_with_success
+  def render_update_with_success
+    respond_to do |format|
+      format.html { redirect_to rest_run.collection_path }
+      format.js
+    end
+  end
 
 
   def init_index

@@ -44,6 +44,7 @@ module DingDealer
           paths     dingsl_accessor(:object, :collection, :new, :edit)
           widget    dingsl_accessor(:base_path => 'widgets/crud', :action_mappings => {})
           assets    dingsl_accessor(:additional_javascripts, :additional_stylesheets)
+          respond_to dingsl_accessor(:html, :js)
           dsl
         end
 
@@ -80,6 +81,12 @@ module DingDealer
             edit        rec_ident.dom_class(rest_env.model.klass, :edit)      unless edit
             new         rec_ident.dom_class(rest_env.model.klass, :new)       unless new
           end
+
+          respond_to do
+            html true
+            js   false    unless js
+          end
+
         end
 
         self
@@ -273,6 +280,7 @@ module DingDealer
         respond_to do |format|
           flash[:notice] = 'successfully created.'
           format.html { redirect_to rest_run.object_path(:edit) }
+          format.js     if rest_env.respond_to.js
         end
       end
 

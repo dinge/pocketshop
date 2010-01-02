@@ -1,5 +1,8 @@
 document.observe("dom:loaded", function() {
 
+  $('tools_phrase_maker_triple_subject_name').focus();
+
+
   document.observe("mouse_event:out", function(event) {
     var container = $(Event.element(event.memo)).up('.tools_phrase_maker_triple');
     if(container != undefined ) {

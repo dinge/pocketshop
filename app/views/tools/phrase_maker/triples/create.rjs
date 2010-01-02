@@ -1,0 +1,13 @@
+gizmo = controller.rest_run.current_object
+
+page.insert_html :top, :tools_phrase_maker_triples, 
+  Erector::Rails.render(
+    Views::Tools::PhraseMaker::Widgets::GizmoWidget,
+    controller, 
+    :gizmo => gizmo, :state => :show)
+
+
+page[dom_id(gizmo)].hide
+page[dom_id(gizmo)].visual_effect :grow
+page[:new_tools_phrase_maker_triple].reset
+page[:tools_phrase_maker_triple_subject_name].focus

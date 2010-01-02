@@ -125,6 +125,7 @@ module DingDealer
             value_klass = create_value_class
             value_klass.send(:include, Node::ValidationStubs)
             value_klass.send(:extend,  ValueObjectExtensions::ClassMethods)
+            value_klass.send(:include, ValueObjectExtensions::InstanceMethods)
             value_klass.send(:include, "#{model_name}::SharedMethods".constantize) if const_defined?(:SharedMethods)
             value_klass
           end
@@ -264,7 +265,8 @@ module DingDealer
 
 
         module InstanceMethods
-          attr_accessor :id, :new_record
+          attr_accessor :new_record
+          attr_writer :id
 
           def to_param
             name.blank? ? id.to_s : "#{id}-#{name.parameterize}"
@@ -274,6 +276,11 @@ module DingDealer
           def new_record?
             @new_record ? @new_record : ! defined?(@_updated)
           end
+
+          def id
+            @id
+          end
+
         end
       end
 

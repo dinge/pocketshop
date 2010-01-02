@@ -8,6 +8,23 @@ module Views::Widgets::WidgetCallerHelper
     widget Views::Widgets::Gizmo::ContainerWidget.new(:gizmo => gizmo, &block)
   end
 
+
+  def form_for(record_or_name_or_array, *args, &proc)
+    options = args.extract_options!
+    options[:builder] ||= Views::Widgets::Form::FormBuilder
+    args.push(options)
+    parent.form_for(record_or_name_or_array, *args, &proc)
+  end
+
+  def remote_form_for(record_or_name_or_array, *args, &proc)
+    options = args.extract_options!
+    options[:builder] ||= Views::Widgets::Form::FormBuilder
+    args.push(options)
+    parent.remote_form_for(record_or_name_or_array, *args, &proc)
+  end
+
+
+
   def control_list_container(*args, &block)
     options = args.extract_options!
     container_tag = options.delete(:container_tag) || :ul
