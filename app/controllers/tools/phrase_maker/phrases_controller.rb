@@ -1,6 +1,7 @@
 class Tools::PhraseMaker::PhrasesController < ApplicationController
   uses_rest do
     model.klass Tools::PhraseMaker::Phrase
+    assets.additional_javascripts 'tools/phrase_maker/phrase_maker'
   end
 
   def autocomplete

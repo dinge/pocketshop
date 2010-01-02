@@ -3,12 +3,12 @@ var Elbe = {};
 Elbe.MouseEvent = {};
 Elbe.MouseEvent.Delegator = {
   over: function(event) {
-    logger("over");
+    // logger("over");
     document.fire("mouse_event:over", event);
   },
 
   out: function(event) {
-    logger("out");
+    // logger("out");
     document.fire("mouse_event:out", event);
   }
 };
@@ -114,4 +114,4 @@ Elbe.MouseEvent.DraggableObserver = {
 
 };
 
-Elbe.MouseEvent.DraggableObserver.run();
+// Elbe.MouseEvent.DraggableObserver.run();

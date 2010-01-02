@@ -1,8 +1,10 @@
 class Tools::PhraseMaker::TriplesController < ApplicationController
   uses_rest do
     model.klass Tools::PhraseMaker::Triple
-    assets.additional_javascripts 'tools/phrase_maker/triples'
-    assets.additional_stylesheets 'tools/phrase_maker/phrase_maker'
+    assets do
+      additional_javascripts 'tools/phrase_maker/phrase_maker'
+      additional_stylesheets 'tools/phrase_maker/phrase_maker'
+    end
   end
 
 

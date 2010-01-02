@@ -4,9 +4,9 @@ private
 
   def render_index
     h4 headline if @gizmos.any? && !@discard_headline
-    ul do
+    ul(:id => :tools_phrase_maker_triples) do
       @gizmos.each do |gizmo|
-        li do
+        li :id => dom_id(gizmo), :class => dom_class(gizmo) do
           if gizmo.is_a?(Tools::PhraseMaker::Triple)
             link_to_triple(gizmo)
           else
@@ -23,14 +23,16 @@ private
   end
 
   def link_to_triple(gizmo)
-    link_to_gizmo(gizmo, :name => '&#9998;') # edit
-    text! helpers.destroy_link_with_confirmation(gizmo, :method => :delete)
     Tools::PhraseMaker::Triple::GrammarAttributes.map do |ga|
       if value = gizmo.send("phrase_as_#{ga}")
-        link_to_gizmo(value) 
+        link_to_gizmo(value, :class => ga) 
       else
         "no value"
       end
+    end
+    span(:style => 'display:none;', :class => :control) do
+      link_to_gizmo(gizmo, :name => '&#9998;') # edit
+      text! helpers.destroy_link_with_confirmation(gizmo, :method => :delete)
     end
   end
 
