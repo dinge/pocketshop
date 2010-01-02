@@ -5,6 +5,9 @@
   width: 29%;
 }
 
+#tools_phrase_maker_triples .wrapper {
+  width: 1em;
+}
 
 #tools_phrase_maker_triples a {
   font-size: 1.2em;
@@ -30,13 +33,12 @@
   color: #200909;
 }
 
-
 .tools_phrase_maker_triple .control {
   font-size: 0.8em!important;
 }
 
-.tools_phrase_maker_triple.active {
-/*  font-size: 1.8em!important;*/
+.tools_phrase_maker_triple .wrapper.active {
+  border: 1px solid #420909;
+  padding: 4px 0;
+  margin-left: -1px;
 }
-
-

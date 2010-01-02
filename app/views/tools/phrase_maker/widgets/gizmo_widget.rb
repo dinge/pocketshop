@@ -7,11 +7,13 @@ private
     ul(:id => :tools_phrase_maker_triples) do
       @gizmos.each do |gizmo|
         li :id => dom_id(gizmo), :class => dom_class(gizmo) do
-          if gizmo.is_a?(Tools::PhraseMaker::Triple)
-            link_to_triple(gizmo)
-          else
-            link_to_gizmo(gizmo)
-            text! helpers.destroy_link_with_confirmation(gizmo, :method => :delete)
+          span :class => :wrapper do
+            if gizmo.is_a?(Tools::PhraseMaker::Triple)
+              link_to_triple(gizmo)
+            else
+              link_to_gizmo(gizmo)
+              text! helpers.destroy_link_with_confirmation(gizmo, :method => :delete)
+            end
           end
         end
       end

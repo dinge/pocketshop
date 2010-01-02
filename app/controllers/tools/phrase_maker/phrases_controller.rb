@@ -28,8 +28,7 @@ private
   def autocompleter_widget
     widget = Views::Widgets::Misc::AutocompleterResponse.new( :search_term => params[:autocompleter_value] ) do
       [ "name:%s~0.5" % widget.filtered_search_term,  # proximity operator (like near or within)
-        "name:%s*" % widget.filtered_search_term,
-        {:name => '%s*' % widget.filtered_search_term} ].map do |search_phrase|
+        "name:%s*" % widget.filtered_search_term ].map do |search_phrase|
         Tools::PhraseMaker::Phrase.find(search_phrase).to_a
       end.flatten.uniq.sort_by(&:name)
     end

@@ -5,7 +5,6 @@ document.observe("dom:loaded", function() {
     if(container != undefined ) {
       var control = container.down('.control');
       if(control != undefined) {
-        container.removeClassName('active');
         control.hide();
       }
     }
@@ -16,9 +15,24 @@ document.observe("dom:loaded", function() {
     if(container != undefined ) {
       var control = container.down('.control');
       if(control != undefined) {
-        container.addClassName('active');
         control.show();
       }
+    }
+  });
+
+
+
+  document.observe("mouse_event:out", function(event) {
+    var container = $(Event.element(event.memo)).up('.tools_phrase_maker_triple .control');
+    if(container != undefined ) {
+      container.up('.tools_phrase_maker_triple .wrapper').removeClassName('active');
+    }
+  });
+
+  document.observe("mouse_event:over", function(event) {
+    var container = $(Event.element(event.memo)).up('.tools_phrase_maker_triple .control');
+    if(container != undefined ) {
+      container.up('.tools_phrase_maker_triple .wrapper').addClassName('active');
     }
   });
 
