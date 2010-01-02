@@ -5,8 +5,17 @@
   width: 29%;
 }
 
-#tools_phrase_maker_triples {
+
+#tools_phrase_maker_triples a {
   font-size: 1.2em;
+  padding: 4px;
+}
+
+#tools_phrase_maker_triples a:focus,
+#tools_phrase_maker_triples a:hover,
+#tools_phrase_maker_triples a:active,
+#tools_phrase_maker_triples a.active {
+  padding: 3px;
 }
 
 #tools_phrase_maker_triples .subject {
@@ -25,3 +34,9 @@
 .tools_phrase_maker_triple .control {
   font-size: 0.8em!important;
 }
+
+.tools_phrase_maker_triple.active {
+/*  font-size: 1.8em!important;*/
+}
+
+

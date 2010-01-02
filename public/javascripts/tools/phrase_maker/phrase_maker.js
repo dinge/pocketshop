@@ -5,6 +5,7 @@ document.observe("dom:loaded", function() {
     if(container != undefined ) {
       var control = container.down('.control');
       if(control != undefined) {
+        container.removeClassName('active');
         control.hide();
       }
     }
@@ -15,6 +16,7 @@ document.observe("dom:loaded", function() {
     if(container != undefined ) {
       var control = container.down('.control');
       if(control != undefined) {
+        container.addClassName('active');
         control.show();
       }
     }
