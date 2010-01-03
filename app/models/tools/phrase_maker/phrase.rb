@@ -12,4 +12,10 @@ class Tools::PhraseMaker::Phrase
   has_n(:triples_as_subject).from(Tools::PhraseMaker::Triple, :phrase_as_subject)
   has_n(:triples_as_predicate).from(Tools::PhraseMaker::Triple, :phrase_as_predicate)
   has_n(:triples_as_object).from(Tools::PhraseMaker::Triple, :phrase_as_object)
+
+
+  def triples_as(grammar_attribute)
+    send('triples_as_%s' % grammar_attribute)
+  end
+
 end

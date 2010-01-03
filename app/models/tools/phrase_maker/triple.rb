@@ -12,6 +12,9 @@ class Tools::PhraseMaker::Triple < ActiveRecord::Base
   has_one(:phrase_as_object).to(Tools::PhraseMaker::Phrase)
 
 
+  def phrase_as(grammar_attribute)
+    send('phrase_as_%s' % grammar_attribute)
+  end
 
   module SharedMethods
     def subject_name; end

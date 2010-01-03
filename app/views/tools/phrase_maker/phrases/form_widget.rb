@@ -6,7 +6,7 @@ class Views::Tools::PhraseMaker::Phrases::FormWidget < Views::Widgets::Form::Bas
         f.text_field :name
       end
     end
-    widget Views::Widgets::Gizmo::MetaInfoWidget.new(:gizmo => @gizmo)
+    # widget Views::Widgets::Gizmo::MetaInfoWidget.new(:gizmo => @gizmo)
   end
 
 end

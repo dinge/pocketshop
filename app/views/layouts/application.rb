@@ -1,7 +1,7 @@
 class Views::Layouts::Application < Views::Widgets::Base
 
-  Javascripts = %w(prototype effects dragdrop controls slider application elbe)
-  Stylesheets = %w(application navigations sidebar widgets form table) # new
+  Javascripts = %w(prototype effects dragdrop controls slider application elbe vendor/livepipe/livepipe vendor/livepipe/tabs)
+  Stylesheets = %w(application navigations sidebar widgets form table tabs) # new
 
 
   def content

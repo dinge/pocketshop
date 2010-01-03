@@ -56,7 +56,7 @@ body {
 
 #main {
   text-align: left;
-  min-height: 20em;
+  min-height: 80em;
   padding-top: 2em;
 }
 
@@ -185,6 +185,8 @@ a:active,
 a.active {
   border: 1px solid #420909;
   padding: 2px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
 }
 
 a:hover {

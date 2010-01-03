@@ -22,7 +22,7 @@ class Views::Tools::PhraseMaker::Triples::FormWidget < Views::Widgets::Form::Bas
         f.submit 'save'
       end
     end
-    widget Views::Widgets::Gizmo::MetaInfoWidget.new(:gizmo => @gizmo)
+    # widget Views::Widgets::Gizmo::MetaInfoWidget.new(:gizmo => @gizmo)
   end
 
 end

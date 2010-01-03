@@ -2,9 +2,9 @@ class Views::Tools::PhraseMaker::Widgets::RelationshipsWidget < Views::Widgets::
 
   def content
     widget Views::Tools::PhraseMaker::Widgets::GizmoWidget.new( 
-              :gizmos => @gizmo.send("triples_as_#{@method}"), 
+              :gizmos => @gizmo.triples_as(@method), 
               :state => :index,
-              :discard_headline => true )
+              :discard_headline => false )
   end
 
 end

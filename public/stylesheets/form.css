@@ -64,8 +64,8 @@ button {
   background:#eee url(/images/header_background.png) repeat-x 0 0;
   border: 0;
   color: #fefefe;
-  -moz-border-radius: 15px;
-  -webkit-border-radius: 15px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
 }
 
 
