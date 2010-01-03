@@ -9,7 +9,7 @@ document.observe("dom:loaded", function() {
   };
 
   document.observe("mouse_event:out", function(event) {
-    var container = $(Event.element(event.memo)).up('.tools_phrase_maker_triple');
+    var container = $(Event.element(event.memo)).up('.phrase_maker_gizmo');
     if(container != undefined ) {
       var control = container.down('.control');
       if(control != undefined) {
@@ -19,7 +19,7 @@ document.observe("dom:loaded", function() {
   });
 
   document.observe("mouse_event:over", function(event) {
-    var container = $(Event.element(event.memo)).up('.tools_phrase_maker_triple');
+    var container = $(Event.element(event.memo)).up('.phrase_maker_gizmo');
     if(container != undefined ) {
       var control = container.down('.control');
       if(control != undefined) {
@@ -31,16 +31,16 @@ document.observe("dom:loaded", function() {
 
 
   document.observe("mouse_event:out", function(event) {
-    var container = $(Event.element(event.memo)).up('.tools_phrase_maker_triple .control');
+    var container = $(Event.element(event.memo)).up('.phrase_maker_gizmo .control');
     if(container != undefined ) {
-      container.up('.tools_phrase_maker_triple .wrapper').removeClassName('active');
+      container.up('.phrase_maker_gizmo .wrapper').removeClassName('active');
     }
   });
 
   document.observe("mouse_event:over", function(event) {
-    var container = $(Event.element(event.memo)).up('.tools_phrase_maker_triple .control');
+    var container = $(Event.element(event.memo)).up('.phrase_maker_gizmo .control');
     if(container != undefined ) {
-      container.up('.tools_phrase_maker_triple .wrapper').addClassName('active');
+      container.up('.phrase_maker_gizmo .wrapper').addClassName('active');
     }
   });
 

@@ -1,6 +1,7 @@
 class Tools::PhraseMaker::PhrasesController < ApplicationController
   uses_rest do
     model.klass Tools::PhraseMaker::Phrase
+    respond_to.js true 
     assets do
       additional_javascripts 'tools/phrase_maker/phrase_maker'
       additional_stylesheets 'tools/phrase_maker/phrase_maker'

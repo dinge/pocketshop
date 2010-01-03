@@ -5,39 +5,39 @@
   width: 29%;
 }
 
-.tools_phrase_maker_triples .wrapper {
+.phrase_maker_gizmo .wrapper {
   width: 1em;
 }
 
-.tools_phrase_maker_triples a {
+.phrase_maker_gizmo a {
   font-size: 1.2em;
   padding: 4px;
 }
 
-.tools_phrase_maker_triples a:focus,
-.tools_phrase_maker_triples a:hover,
-.tools_phrase_maker_triples a:active,
-.tools_phrase_maker_triples a.active {
+.phrase_maker_gizmo a:focus,
+.phrase_maker_gizmo a:hover,
+.phrase_maker_gizmo a:active,
+.phrase_maker_gizmo a.active {
   padding: 3px;
 }
 
-.tools_phrase_maker_triples .subject {
+.phrase_maker_gizmo .subject {
   color: #610000;
 }
 
-.tools_phrase_maker_triples .predicate {
+.phrase_maker_gizmo .predicate {
   color: #420909;
 }
 
-.tools_phrase_maker_triples .object {
+.phrase_maker_gizmo .object {
   color: #200909;
 }
 
-.tools_phrase_maker_triple .control {
+.phrase_maker_gizmo .control {
   font-size: 0.8em!important;
 }
 
-.tools_phrase_maker_triple .wrapper.active {
+.phrase_maker_gizmo .wrapper.active {
   border: 1px solid #420909;
   padding: 4px 0;
   margin-left: -1px;

@@ -31,6 +31,10 @@ private
 
       div :id => :header do
         raw_link_to('&#8734;&#9733;&#9762;&#9764;', root_path, :id => :logo, :accesskey => 'h', :title => :home)
+        image_tag('ajax_loading_indicator_arrows.gif',
+          :size => '20x20', 
+          :id => :ajax_loading_indicator, 
+          :style => 'display:none;')
         render_main_navigation
       end
 
@@ -55,22 +59,7 @@ private
     end
   end
 
-  # def render_html_body
-  #   div :class => :document do
-  #     render_main_navigation        if Me.someone?
-  #     render_collection_control     if Me.someone? && !@discard_collection_control
-  #     render_flash_message
-  #     div :class => :content do
-  #       div :class => :scope do
-  #         render_content
-  #         render_scope_navigation   if Me.someone?
-  #       end
-  #     end
-  #     render_footer                 if Me.someone?
-  #   end
-  # end
-
-
+# if Me.someone? && !@discard_collection_control
 
   def render_javascripts
     javascript_include_tag Javascripts
@@ -98,10 +87,6 @@ private
   def render_main_navigation
     widget Views::Widgets::Navigation::MainNavigationWidget.new
   end
-
-  # def render_collection_control
-  #   widget Views::Widgets::Gizmo::CollectionControlWidget.new
-  # end
 
   def render_flash_message
     flash_message

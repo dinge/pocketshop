@@ -1,0 +1,4 @@
+gizmo = controller.rest_run.current_object
+page.select('#%s' % dom_id(gizmo)).each do |gizmo|
+  gizmo.fade  
+end

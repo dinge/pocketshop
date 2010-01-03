@@ -13,13 +13,12 @@ private
 
   def render_show(gizmo = nil)
     gizmo ||= @gizmo
-    li :id => dom_id(gizmo), :class => dom_class(gizmo) do
+    li :id => dom_id(gizmo), :class => :phrase_maker_gizmo do
       span :class => :wrapper do
         if gizmo.is_a?(Tools::PhraseMaker::Triple)
           link_to_triple(gizmo)
         else
-          link_to_gizmo(gizmo)
-          text! helpers.destroy_link_with_confirmation(gizmo)
+          link_to_phrase(gizmo)
         end
       end
     end
@@ -30,17 +29,24 @@ private
     helpers.pluralize(@gizmos.size, @gizmos.first.class.short_name) << @append_to_headline.to_s
   end
 
-  def link_to_triple(gizmo)
+  def link_to_triple(triple)
     Tools::PhraseMaker::Triple::GrammarAttributes.map do |ga|
-      if value = gizmo.send("phrase_as_#{ga}")
-        link_to_gizmo(value, :class => ga) 
+      if value = triple.send("phrase_as_#{ga}")
+        link_to_gizmo(value, :class => ga)
       else
-        "no value"
+        text " ... "
       end
     end
     span(:style => 'display:none;', :class => :control) do
-      link_to_gizmo(gizmo, :name => '&#9998;') # edit
-      text! helpers.destroy_link_with_confirmation(gizmo, :remote => :true)
+      link_to_gizmo(triple, :name => '&#9998;') # edit
+      text! helpers.destroy_link_with_confirmation(triple, :remote => :true)
+    end
+  end
+
+  def link_to_phrase(phrase)
+    link_to_gizmo(phrase)
+    span(:style => 'display:none;', :class => :control) do
+      text! helpers.destroy_link_with_confirmation(phrase, :remote => :true)
     end
   end
 
