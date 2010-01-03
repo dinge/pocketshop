@@ -28,7 +28,7 @@ private
 
   def init_index
     rest_run.current_collection = rest_run.my_created_collection.sort_by do |triple|
-      triple.subject_name.to_s
+      triple.subject_name.downcase.parameterize
     end
   end
 

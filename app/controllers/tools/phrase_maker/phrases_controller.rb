@@ -25,7 +25,7 @@ private
 
   def init_index
     rest_run.current_collection = Tools::PhraseMaker::Phrase.nodes.sort_by do |phrase|
-      phrase.name.to_s
+      phrase.name.downcase.parameterize
     end
   end
 
