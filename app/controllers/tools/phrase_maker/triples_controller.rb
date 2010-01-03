@@ -49,6 +49,10 @@ private
   end
 
   def existing_or_new_phrase(name_of_phrase)
+    # 1==1
+    # debugger
+    # 1==1
+    # 1==1
     Tools::PhraseMaker::Phrase.find_first(:name => name_of_phrase) || Tools::PhraseMaker::Phrase.new(:name => name_of_phrase)
   end
 end

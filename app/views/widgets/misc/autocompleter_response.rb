@@ -13,7 +13,7 @@ class Views::Widgets::Misc::AutocompleterResponse < Views::Widgets::Base
   end
 
   def collection
-    @collection ||= [filtered_search_term, @collection_proc.call.map(&:name)].flatten.uniq
+    @collection ||= [@collection_proc.call.map(&:name)].flatten.uniq #filtered_search_term, 
   end
 
   def filtered_search_term
