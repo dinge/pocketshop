@@ -44,15 +44,9 @@ private
 
   def connect_phrases
     Tools::PhraseMaker::Triple::GrammarAttributes.each do |ga|
-      rest_run.current_object.send("phrase_as_#{ga}=", existing_or_new_phrase(rest_run.current_params_hash["#{ga}_name"]))
+      rest_run.current_object.send("phrase_as_#{ga}=", 
+        Tools::PhraseMaker::Phrase.existing_or_new_phrase(rest_run.current_params_hash["#{ga}_name"]) )
     end
   end
 
-  def existing_or_new_phrase(name_of_phrase)
-    # 1==1
-    # debugger
-    # 1==1
-    # 1==1
-    Tools::PhraseMaker::Phrase.find_first(:name => name_of_phrase) || Tools::PhraseMaker::Phrase.new(:name => name_of_phrase)
-  end
 end

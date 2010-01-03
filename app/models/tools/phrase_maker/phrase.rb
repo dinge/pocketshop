@@ -23,6 +23,12 @@ class Tools::PhraseMaker::Phrase
     traverse.incoming(:phrase_as_subject, :phrase_as_object, :phrase_as_predicate)
   end
 
+  def self.existing_or_new_phrase(name_of_phrase)
+    Tools::PhraseMaker::Phrase.find_first(:name => name_of_phrase.downcase) ||
+      Tools::PhraseMaker::Phrase.new(:name => name_of_phrase)
+  end
+
+
   def self.filter_by_grammar_attribute(phrases, grammar_attribute)
     phrases.select do |phrase|
       phrase.triples_as(grammar_attribute).to_a.any?
