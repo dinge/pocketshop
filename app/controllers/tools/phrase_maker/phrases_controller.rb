@@ -14,7 +14,6 @@ class Tools::PhraseMaker::PhrasesController < ApplicationController
 
 private
 
-
   def render_create_with_success
     respond_to do |format|
       format.html { redirect_to rest_run.collection_path }
@@ -25,7 +24,9 @@ private
 
 
   def init_index
-    rest_run.current_collection = Tools::PhraseMaker::Phrase.nodes
+    rest_run.current_collection = Tools::PhraseMaker::Phrase.nodes.sort_by do |phrase|
+      phrase.name.to_s
+    end
   end
 
   def autocompleter_widget
