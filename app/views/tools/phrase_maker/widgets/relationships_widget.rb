@@ -4,7 +4,7 @@ class Views::Tools::PhraseMaker::Widgets::RelationshipsWidget < Views::Widgets::
     widget Views::Tools::PhraseMaker::Widgets::GizmoWidget.new( 
               :gizmos => @gizmo.triples_as(@method), 
               :state => :index,
-              :discard_headline => false )
+              :discard_headline => @discard_headline )
   end
 
 end

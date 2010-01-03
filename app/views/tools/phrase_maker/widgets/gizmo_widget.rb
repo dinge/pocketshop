@@ -4,7 +4,7 @@ private
 
   def render_index
     h4 headline if @gizmos.any? && !@discard_headline
-    ul(:id => :tools_phrase_maker_triples) do
+    ul(:class => :tools_phrase_maker_triples) do
       @gizmos.each do |gizmo|
         render_show(gizmo)
       end

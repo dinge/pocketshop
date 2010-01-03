@@ -16,6 +16,11 @@ class Tools::PhraseMaker::Phrase
 
   def triples_as(grammar_attribute)
     send('triples_as_%s' % grammar_attribute)
+    # traverse.incoming('triples_as_%s' % grammar_attribute)
+  end
+
+  def triples
+    traverse.incoming(:phrase_as_subject, :phrase_as_object, :phrase_as_predicate)
   end
 
 end

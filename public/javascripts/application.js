@@ -13,7 +13,7 @@ document.observe("dom:loaded", function() {
       linkSelector: function(tab_container){
         return tab_container.select('li').map( function(list_element) {
           var link = new Element('a', { 
-            href: list_element.getAttribute('data-tab-id') 
+            href: '#' + list_element.getAttribute('data-tab-id') 
           }).update(list_element.innerHTML);
           list_element.update(link);
           return link;
