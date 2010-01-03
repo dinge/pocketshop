@@ -37,7 +37,7 @@ Control.Tabs = Class.create({
             hideFunction: Element.hide
         };
         Object.extend(this.options,options || {});
-        (typeof(this.options.linkSelector == 'string') ? 
+        (typeof(this.options.linkSelector) == 'string' ? 
             $(tab_list_container).select(this.options.linkSelector) : 
             this.options.linkSelector($(tab_list_container))
         ).findAll(function(link){
