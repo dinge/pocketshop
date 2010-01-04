@@ -27,10 +27,16 @@ private
 
 
   def init_index
-    rest_run.current_collection = rest_run.my_created_collection.sort_by do |triple|
+    rest_run.current_collection = Tools::PhraseMaker::Triple.nodes.sort_by do |triple|
       triple.subject_name.to_s.downcase.parameterize
     end
   end
+
+  # def init_index
+  #   rest_run.current_collection = rest_run.my_created_collection.sort_by do |triple|
+  #     triple.subject_name.to_s.downcase.parameterize
+  #   end
+  # end
 
   def operate_create
     super
