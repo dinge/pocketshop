@@ -30,7 +30,7 @@ document.observe("dom:loaded", function() {
 
       Edge: {
           color: '#aaa',
-          type: 'line',
+          type: 'arrow',
           dim: 300
       },
 
