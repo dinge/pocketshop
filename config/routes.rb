@@ -56,7 +56,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.namespace :tools do |tool|
     tool.namespace :phrase_maker do |phrase_maker|
-      phrase_maker.resources :phrases, :collection => { :autocomplete => :post }
+      phrase_maker.resources :phrases, :collection => { :autocomplete => :post }, :member => { :json_for_graph => :get }
       phrase_maker.resources :triples
     end
   end

@@ -1,9 +1,10 @@
 class Tools::PhraseMaker::PhrasesController < ApplicationController
+
   uses_rest do
     model.klass Tools::PhraseMaker::Phrase
-    respond_to.js true 
+    respond_to.js true
     assets do
-      additional_javascripts 'tools/phrase_maker/phrase_maker'
+      additional_javascripts ['jit-yc', 'tools/phrase_maker/phrase_maker', 'tools/phrase_maker/phrases_visualization']
       additional_stylesheets 'tools/phrase_maker/phrase_maker'
     end
   end
@@ -13,7 +14,36 @@ class Tools::PhraseMaker::PhrasesController < ApplicationController
   end
 
 
+  def json_for_graph
+    phrase = Tools::PhraseMaker::Phrase.load(params[:id])
+    struct = {
+      :id => phrase.id,
+      :name => phrase.name,
+      :children => iterate(phrase, params[:start_role], params[:end_role], 10)
+    }
+    render :json => struct
+  end
+
+
+
 private
+
+  def iterate(phrase, start_role, end_role, max_iterations, iteration = 0)
+    iteration += 1
+    phrase.triples_as(start_role).map do |triple|
+      puts triple.phrase_as(end_role).name
+      puts iteration
+        {
+          :id => triple.phrase_as(end_role).id,
+          :name => triple.phrase_as(end_role).name,
+          :children =>
+            iteration < max_iterations ?
+              iterate(triple.phrase_as(end_role), start_role, end_role, max_iterations, iteration) :
+              []
+        }
+    end
+  end
+
 
   def render_create_with_success
     respond_to do |format|

@@ -32,6 +32,7 @@ class Views::Tools::PhraseMaker::Phrases::Edit < Views::Layouts::Application
             :gizmo => current_object,
             :method => ga,
             :discard_headline => true )
+          div '', :id => 'canvas_for_%s' % ga if %w(subject object).include?(ga)
         end
       end
     end
