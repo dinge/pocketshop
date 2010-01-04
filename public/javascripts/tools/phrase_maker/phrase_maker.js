@@ -1,3 +1,51 @@
+Tools.PhraseMaker = {};
+
+Tools.PhraseMaker.Tabs = {
+  Options: function() {
+    return { beforeChange: Tools.PhraseMaker.Tabs.beforeChange };
+  },
+
+  beforeChange: function(oldTabElement, newTabElement) {
+    switch (newTabElement.id) {
+      case 'tab_subject':
+        Tools.PhraseMaker.GraphVisualization.loadGraph('subject');
+        break;
+      case 'tab_object':
+        Tools.PhraseMaker.GraphVisualization.loadGraph('object');
+        break;
+    }
+  }
+};
+
+
+
+Tools.PhraseMaker.GraphVisualization = {
+  loadGraph: function(grammar_attribute) {
+
+    if(!$('canvas_for_' + grammar_attribute)) {
+      var canvas = new Canvas('canvas_for_' + grammar_attribute, {
+        injectInto: 'graph_visualization_for_' + grammar_attribute,
+        width: 700,
+        height: 700,
+        backgroundCanvas: Visualization.RgraphSetups.BackgroundCircles 
+      });
+
+      var rgraph = new RGraph(canvas, Visualization.RgraphSetups.GrapOptions());
+
+      new Ajax.Request(location.href.gsub(/edit$/, 'json_for_graph?start_role=' + grammar_attribute), {
+        method: 'get',
+        onSuccess: function(response) {
+          rgraph.loadJSON(response.responseJSON);
+          rgraph.refresh();
+        }
+      });
+    }
+
+  }
+};
+
+
+
 document.observe("dom:loaded", function() {
 
   if($('tools_phrase_maker_triple_subject_name')) {

@@ -8,14 +8,17 @@ class Views::Tools::PhraseMaker::Phrases::Edit < Views::Layouts::Application
   def render_relationships
     grammar_attributes = Tools::PhraseMaker::Triple::GrammarAttributes
 
-    ul :class => :tab_control do
+    ul :class => :tab_control, 'data-tab-options-callback' => 'Tools.PhraseMaker.Tabs.Options'  do
       li 'data-tab-id' => 'tab_all' do
         text '%s (%s)' % ['all', current_object.triples.to_a.size ]
       end
       grammar_attributes.each do |ga|
-        li 'data-tab-id' => 'tab_%s' % ga do
+        li 'data-tab-id' => 'tab_%s' % ga  do
           text 'as %s (%s)' % [ga, current_object.triples_as(ga).size ]
         end
+      end
+      li 'data-tab-id' => 'tab_phrase_merger' do
+        text 'Phrase-Merger'
       end
     end
 
@@ -32,8 +35,11 @@ class Views::Tools::PhraseMaker::Phrases::Edit < Views::Layouts::Application
             :gizmo => current_object,
             :method => ga,
             :discard_headline => true )
-          div '', :id => 'canvas_for_%s' % ga if %w(subject object).include?(ga)
+          div '', :id => 'graph_visualization_for_%s' % ga if %w(subject object).include?(ga)
         end
+      end
+      div :id => 'tab_phrase_merger' do
+        widget Views::Tools::PhraseMaker::Widgets::PhraseMergerWidget.new(:phrase => current_object)
       end
     end
 
