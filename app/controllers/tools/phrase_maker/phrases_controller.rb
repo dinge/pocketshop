@@ -4,10 +4,17 @@ class Tools::PhraseMaker::PhrasesController < ApplicationController
     model.klass Tools::PhraseMaker::Phrase
     respond_to.js true
     assets do
-      additional_javascripts ['vendor/jit-yc', 'visualization/rgraph_setups', 'tools/phrase_maker/phrase_maker']
+      additional_javascripts [
+        'vendor/jit-yc', 
+        'visualization/rgraph_setups', 
+        'tools/phrase_maker/phrase_maker', 
+        'tools/phrase_maker/phrase_graph'
+      ]
       additional_stylesheets 'tools/phrase_maker/phrase_maker'
     end
   end
+
+
 
   def autocomplete
     render_widget autocompleter_widget
@@ -15,45 +22,14 @@ class Tools::PhraseMaker::PhrasesController < ApplicationController
 
 
   def json_for_graph
-    phrase = Tools::PhraseMaker::Phrase.load(params[:id])
-    end_role = params[:start_role] == 'subject' ? 'object' : 'subject'
-    struct = {
-      :id => phrase.id,
-      :name => phrase.name,
-      :data =>  {  
-        "$dim" => node_size
-      },
-      :children => iterate(phrase, params[:start_role], end_role, 10)
-    }
-    render :json => struct
+    render :json => Tools::PhraseMaker::GraphPresenter.new(
+      :phrase => Tools::PhraseMaker::Phrase.load(params[:id]),
+      :start_role => params[:start_role]
+    ).render
   end
-
 
 
 private
-
-  def node_size(number = 0)
-    # 6 - (number * 1)
-    4
-  end
-
-  def iterate(phrase, start_role, end_role, max_iterations, iteration = 0)
-    iteration += 1
-    phrase.triples_as(start_role).map do |triple|
-      {
-        :id => triple.phrase_as(end_role).id,
-        :name => triple.phrase_as(end_role).name,
-        :data =>  {  
-          "$dim" => node_size(iteration)
-        },
-        :children =>
-          iteration < max_iterations ?
-            iterate(triple.phrase_as(end_role), start_role, end_role, max_iterations, iteration) :
-            []
-      }
-    end
-  end
-
 
   def render_create_with_success
     respond_to do |format|
