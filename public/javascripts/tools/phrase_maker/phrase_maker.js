@@ -51,7 +51,7 @@ Tools.PhraseMaker.GraphVisualization = {
         graphInit.graph.op.sum(response.responseJSON, { 
           type: 'fade:con',
           hideLabels: false,
-          duration: 500
+          duration: 1300
         });
         // graphInit.graph.refresh();
       }
@@ -75,6 +75,8 @@ Tools.PhraseMaker.GraphVisualization = {
       height:     700,
       backgroundCanvas: Visualization.RgraphSetups.BackgroundCircles
     });
+
+    // RGraph, Hypertree, TM.Squarified, ST
 
     return this.instances[ident] = { 
       graph:  new RGraph(canvas, Visualization.RgraphSetups.grapOptions(ident)),
