@@ -6,12 +6,13 @@ Tools.PhraseMaker.Tabs = {
   },
 
   beforeChange: function(oldTabElement, newTabElement) {
+    phrase_id = parseInt(location.pathname.match(/phrases\/(.+)\/edit/)[1]);
     switch (newTabElement.id) {
       case 'tab_subject':
-        Tools.PhraseMaker.GraphVisualization.loadGraph('subject');
+        Tools.PhraseMaker.GraphVisualization.loadGraph('subject', phrase_id);
         break;
       case 'tab_object':
-        Tools.PhraseMaker.GraphVisualization.loadGraph('object');
+        Tools.PhraseMaker.GraphVisualization.loadGraph('object', phrase_id);
         break;
     }
   }
@@ -20,28 +21,68 @@ Tools.PhraseMaker.Tabs = {
 
 
 Tools.PhraseMaker.GraphVisualization = {
-  loadGraph: function(grammar_attribute) {
 
-    if(!$('canvas_for_' + grammar_attribute)) {
-      var canvas = new Canvas('canvas_for_' + grammar_attribute, {
-        injectInto: 'graph_visualization_for_' + grammar_attribute,
-        width: 700,
-        height: 700,
-        backgroundCanvas: Visualization.RgraphSetups.BackgroundCircles 
-      });
+  instances: {},
 
-      var rgraph = new RGraph(canvas, Visualization.RgraphSetups.GrapOptions());
+  loadGraph: function(ident, node_id, reload) {
+    var graphInit = this.initGraph(ident, node_id);
 
-      new Ajax.Request(location.href.gsub(/edit$/, 'json_for_graph?start_role=' + grammar_attribute), {
+    if(graphInit.reload == true || reload) {
+      new Ajax.Request(graphInit.url, {
         method: 'get',
         onSuccess: function(response) {
-          rgraph.loadJSON(response.responseJSON);
-          rgraph.refresh();
+          graphInit.graph.loadJSON(response.responseJSON);
+          graphInit.graph.refresh();
+          graphInit.reload = false;
         }
       });
     }
+  },
 
+  appendtoGraph: function(ident, node_id) {
+    var graphInit = this.initGraph(ident);
+
+    // graphInit.graph.refresh();
+
+    new Ajax.Request(this.url(ident, node_id), {
+      method: 'get',
+      onSuccess: function(response) {
+        graphInit.graph.root = node_id;
+        graphInit.graph.op.sum(response.responseJSON, { 
+          type: 'fade:con',
+          hideLabels: false,
+          duration: 500
+        });
+        // graphInit.graph.refresh();
+      }
+    });
+
+
+  },
+
+  url: function(ident, node_id) {
+    return '/tools/phrase_maker/phrases/' + node_id + '/json_for_graph?start_role=' + ident;
+  },
+
+  initGraph: function(ident, node_id) {
+    if(this.instances[ident]) {
+      return this.instances[ident];
+    }
+
+    var canvas = new Canvas('canvas_for_' + ident, {
+      injectInto: 'graph_visualization_for_' + ident,
+      width:      700,
+      height:     700,
+      backgroundCanvas: Visualization.RgraphSetups.BackgroundCircles
+    });
+
+    return this.instances[ident] = { 
+      graph:  new RGraph(canvas, Visualization.RgraphSetups.grapOptions(ident)),
+      reload: true,
+      url:    this.url(ident, node_id),
+    };
   }
+
 };
 
 

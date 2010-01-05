@@ -1,6 +1,7 @@
 Visualization.RgraphSetups = {
 
-  GrapOptions: function() {
+  grapOptions: function(ident) {
+    
     return {
       Node: {
         color: '#000000'
@@ -14,10 +15,9 @@ Visualization.RgraphSetups = {
 
       onCreateLabel: function(domElement, node){
         domElement.innerHTML = node.name;
-        logger(this);
-        // domElement.onclick = function(){
-        //     rgraph_for_object.onClick(node.id);
-        // };
+        domElement.onclick = function(){
+          Tools.PhraseMaker.GraphVisualization.appendtoGraph(ident, node.id);
+        };
       },
 
       onPlaceLabel: function(domElement, node){
