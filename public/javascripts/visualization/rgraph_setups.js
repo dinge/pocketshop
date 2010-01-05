@@ -50,7 +50,7 @@ Visualization.RgraphSetups = {
 
         } else if(node._depth == 1){
           style.color = "#333";
-          style.fontSize = "1.0em";
+          style.fontSize = "1.1em";
 
         } else if(node._depth >= 2){
           style.fontSize = "0.7em";

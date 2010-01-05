@@ -1,4 +1,4 @@
-class Tools::PhraseMaker::Triple < ActiveRecord::Base
+class Tools::PhraseMaker::Triple# < ActiveRecord::Base
   is_a_neo_node do
     db.meta_info true
     # db.validations false

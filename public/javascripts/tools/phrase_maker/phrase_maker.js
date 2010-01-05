@@ -19,76 +19,6 @@ Tools.PhraseMaker.Tabs = {
 };
 
 
-
-Tools.PhraseMaker.GraphVisualization = {
-
-  instances: {},
-
-  loadGraph: function(ident, node_id, reload) {
-    var graphInit = this.initGraph(ident, node_id);
-
-    if(graphInit.reload == true || reload) {
-      new Ajax.Request(graphInit.url, {
-        method: 'get',
-        onSuccess: function(response) {
-          graphInit.graph.loadJSON(response.responseJSON);
-          graphInit.graph.refresh();
-          graphInit.reload = false;
-        }
-      });
-    }
-  },
-
-  appendtoGraph: function(ident, node_id) {
-    var graphInit = this.initGraph(ident);
-
-    // graphInit.graph.refresh();
-
-    new Ajax.Request(this.url(ident, node_id), {
-      method: 'get',
-      onSuccess: function(response) {
-        graphInit.graph.root = node_id;
-        graphInit.graph.op.sum(response.responseJSON, { 
-          type: 'fade:con',
-          hideLabels: false,
-          duration: 1300
-        });
-        // graphInit.graph.refresh();
-      }
-    });
-
-
-  },
-
-  url: function(ident, node_id) {
-    return '/tools/phrase_maker/phrases/' + node_id + '/json_for_graph?start_role=' + ident;
-  },
-
-  initGraph: function(ident, node_id) {
-    if(this.instances[ident]) {
-      return this.instances[ident];
-    }
-
-    var canvas = new Canvas('canvas_for_' + ident, {
-      injectInto: 'graph_visualization_for_' + ident,
-      width:      700,
-      height:     700,
-      backgroundCanvas: Visualization.RgraphSetups.BackgroundCircles
-    });
-
-    // RGraph, Hypertree, TM.Squarified, ST
-
-    return this.instances[ident] = { 
-      graph:  new RGraph(canvas, Visualization.RgraphSetups.grapOptions(ident)),
-      reload: true,
-      url:    this.url(ident, node_id),
-    };
-  }
-
-};
-
-
-
 document.observe("dom:loaded", function() {
 
   if($('tools_phrase_maker_triple_subject_name')) {
@@ -99,9 +29,14 @@ document.observe("dom:loaded", function() {
     $('tools_phrase_maker_phrase_name').focus();
   };
 
+
   document.observe("mouse_event:out", function(event) {
     var container = $(Event.element(event.memo)).up('.phrase_maker_gizmo');
     if(container != undefined ) {
+      $$('.same_gizmo').each( function(element) {
+        element.removeClassName('same_gizmo');
+      });
+
       var control = container.down('.control');
       if(control != undefined) {
         control.hide();
@@ -112,10 +47,25 @@ document.observe("dom:loaded", function() {
   document.observe("mouse_event:over", function(event) {
     var container = $(Event.element(event.memo)).up('.phrase_maker_gizmo');
     if(container != undefined ) {
+
       var control = container.down('.control');
       if(control != undefined) {
         control.show();
       }
+
+      var hovered = container.select(':hover');
+      if(hovered.any()) {
+        same_gizmos = $$( '.' + $w(hovered.first().className).last() );
+        if(same_gizmos.size() >= 2) {
+          same_gizmos.each( function(element) {
+            element.addClassName('same_gizmo');
+          });
+        } else {
+          hovered.first().shake({distance: 3});
+        }
+      }
+
+
     }
   });
 

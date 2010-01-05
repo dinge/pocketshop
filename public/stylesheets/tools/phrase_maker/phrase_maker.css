@@ -42,3 +42,8 @@
   padding: 4px 0;
   margin-left: -1px;
 }
+
+a.same_gizmo {
+/*  color: #008800!important;*/
+  color: #00aa00!important;
+}

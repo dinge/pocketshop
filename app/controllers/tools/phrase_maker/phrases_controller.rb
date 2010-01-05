@@ -15,7 +15,6 @@ class Tools::PhraseMaker::PhrasesController < ApplicationController
   end
 
 
-
   def autocomplete
     render_widget autocompleter_widget
   end

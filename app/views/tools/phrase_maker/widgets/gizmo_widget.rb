@@ -31,8 +31,8 @@ private
 
   def link_to_triple(triple)
     Tools::PhraseMaker::Triple::GrammarAttributes.map do |ga|
-      if value = triple.send("phrase_as_#{ga}")
-        link_to_gizmo(value, :class => ga)
+      if phrase = triple.phrase_as(ga)
+        link_to_gizmo(phrase, :class => '%s %s' % [ga, dom_id(phrase)])
       else
         text " ... "
       end
