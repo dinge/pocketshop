@@ -19,7 +19,7 @@ Visualization.RgraphSetups = {
       transition: Trans.Elastic.easeOut,
       interpolation: 'polar',
 
-      levelDistance: 100,
+      levelDistance: 90,
 
       onBeforePlotLine: function(adj){
         adj.data.$lineWidth = 1;
@@ -77,7 +77,7 @@ Visualization.RgraphSetups = {
     impl: {
       init: function(){},
       plot: function(canvas, ctx){
-        var times = 3, d = Visualization.RgraphSetups.grapOptions().levelDistance;
+        var times = 5, d = Visualization.RgraphSetups.grapOptions().levelDistance;
         var pi2 = Math.PI * 2;
         for (var i = 1; i <= times; i++) {
           ctx.beginPath();
