@@ -61,6 +61,8 @@ ActionController::Routing::Routes.draw do |map|
         :member => { :json_for_graph => :get, :phrase_merger => :get }
       phrase_maker.resources :triples
     end
+
+    tool.resources :graph_viewer
   end
 
   # map.with_options(:namespace => :tools) do |tool|

@@ -2,18 +2,21 @@ class Tools::PhraseMaker::PhrasesController < ApplicationController
 
   before_filter :init_phrase, :only => [:phrase_merger, :json_for_graph]
 
-  uses_rest do
-    model.klass Tools::PhraseMaker::Phrase
-    respond_to.js true
+  uses_page do
     assets do
       additional_javascripts [
-        'vendor/jit-yc', 
-        'visualization/rgraph_setups', 
-        'tools/phrase_maker/phrase_maker', 
+        'vendor/jit-yc',
+        'visualization/rgraph_setups',
+        'tools/phrase_maker/phrase_maker',
         'tools/phrase_maker/phrase_graph'
       ]
       additional_stylesheets 'tools/phrase_maker/phrase_maker'
     end
+  end
+
+  uses_rest do
+    model.klass Tools::PhraseMaker::Phrase
+    respond_to.js true
   end
 
   def autocomplete

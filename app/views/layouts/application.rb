@@ -20,9 +20,9 @@ class Views::Layouts::Application < Views::Widgets::Base
 private
 
   def render_html_head
-    render_javascripts
     render_stylesheets
     render_other_header_informations
+    render_javascripts
   end
 
   def render_html_body
@@ -63,18 +63,22 @@ private
 
   def render_javascripts
     javascript_include_tag Javascripts
-    unless (additional_javascripts = controller.rest_env.assets.additional_javascripts).blank?
-      [additional_javascripts].flatten.each do |javascript|
-        javascript_include_tag javascript
+    if controller.respond_to?(:page_env)
+      unless (additional_javascripts = controller.page_env.assets.additional_javascripts).blank?
+        [additional_javascripts].flatten.each do |javascript|
+          javascript_include_tag javascript
+        end
       end
     end
   end
 
   def render_stylesheets
     stylesheet_link_tag Stylesheets
-    unless (additional_stylesheets = controller.rest_env.assets.additional_stylesheets).blank?
-      [additional_stylesheets].flatten.each do |stylesheet|
-        stylesheet_link_tag stylesheet
+    if controller.respond_to?(:page_env)
+      unless (additional_stylesheets = controller.page_env.assets.additional_stylesheets).blank?
+        [additional_stylesheets].flatten.each do |stylesheet|
+          stylesheet_link_tag stylesheet
+        end
       end
     end
   end

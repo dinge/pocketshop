@@ -17,6 +17,7 @@ Object.class_eval do
 end
 
 ActionController::Base.class_eval do
+  include DingDealer::Page
   include DingDealer::Rest
   include DingDealer::Acl
 end

@@ -1,11 +1,15 @@
 class Tools::PhraseMaker::TriplesController < ApplicationController
-  uses_rest do
-    model.klass Tools::PhraseMaker::Triple
-    respond_to.js true 
+  
+  uses_page do
     assets do
       additional_javascripts 'tools/phrase_maker/phrase_maker'
       additional_stylesheets 'tools/phrase_maker/phrase_maker'
     end
+  end
+
+  uses_rest do
+    model.klass Tools::PhraseMaker::Triple
+    respond_to.js true 
   end
 
 
