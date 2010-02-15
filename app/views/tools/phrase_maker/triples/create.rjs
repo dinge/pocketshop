@@ -1,10 +1,7 @@
 gizmo = controller.rest_run.current_object
 
-page.insert_html :top, :tools_phrase_maker_triples, 
-  Erector::Rails.render(
-    Views::Tools::PhraseMaker::Widgets::GizmoWidget,
-    controller, 
-    :gizmo => gizmo, :state => :show)
+page.insert_html :top, :tools_phrase_maker_triples,
+  render_widget( Views::Tools::PhraseMaker::Widgets::GizmoWidget, :gizmo => gizmo, :state => :show )
 
 page[:headline_tools_phrase_maker_triple].replace_html '%s Triples' % Tools::PhraseMaker::Triple.all.to_a.size
 page[dom_id(gizmo)].hide

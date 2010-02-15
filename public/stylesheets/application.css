@@ -164,8 +164,9 @@ hr.clearfix {
 
 .warning_message {
   background: #fdd;
-  border-top: 1px #dbb dotted;
-  border-bottom: 1px #dbb dotted;
+  border: 1px #dbb dotted;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
 }
 
 

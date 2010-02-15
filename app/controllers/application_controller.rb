@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   include ControllerExtensions::AuthentificationHandling
 
   around_filter :init_neo4j_transaction
-  before_filter :start_debugger
+  before_filter :start_debugger         if Rails.env.development?
   around_filter :init_and_reset_me
   before_filter :redirect_to_login, :if => Proc.new{ Me.none? }
   before_filter :set_timezone

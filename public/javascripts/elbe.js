@@ -10,6 +10,10 @@ Elbe.MouseEvent.Delegator = {
   out: function(event) {
     // logger("out");
     document.fire("mouse_event:out", event);
+  },
+
+  click: function(event) {
+    document.fire("mouse_event:click", event);
   }
 };
 

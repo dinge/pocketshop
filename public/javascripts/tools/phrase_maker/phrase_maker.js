@@ -14,6 +14,9 @@ Tools.PhraseMaker.Tabs = {
       case 'tab_object':
         Tools.PhraseMaker.GraphVisualization.loadGraph('object', phrase_id);
         break;
+      case 'tab_phrase_merger':
+        new Ajax.Request('/tools/phrase_maker/phrases/' + phrase_id + '/phrase_merger', { method: 'get' });
+        break;
     }
   }
 };

@@ -41,6 +41,8 @@
   border: 1px solid #420909;
   padding: 4px 0;
   margin-left: -1px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
 }
 
 a.same_gizmo {

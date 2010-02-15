@@ -39,7 +39,6 @@ class Views::Tools::PhraseMaker::Phrases::Edit < Views::Layouts::Application
         end
       end
       div :id => 'tab_phrase_merger' do
-        widget Views::Tools::PhraseMaker::Widgets::PhraseMergerWidget.new(:phrase => current_object)
       end
     end
 

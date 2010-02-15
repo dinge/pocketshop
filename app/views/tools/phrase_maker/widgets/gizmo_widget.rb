@@ -38,15 +38,15 @@ private
       end
     end
     span(:style => 'display:none;', :class => :control) do
-      link_to_gizmo(triple, :name => '&#9998;') # edit
-      text! helpers.destroy_link_with_confirmation(triple, :remote => :true)
+      link_to_gizmo(triple, :name => EditIcon) # edit
+      destroy_link_with_confirmation(triple, :remote => :true)
     end
   end
 
   def link_to_phrase(phrase)
     link_to_gizmo(phrase)
     span(:style => 'display:none;', :class => :control) do
-      text! helpers.destroy_link_with_confirmation(phrase, :remote => :true)
+      destroy_link_with_confirmation(phrase, :remote => :true)
     end
   end
 

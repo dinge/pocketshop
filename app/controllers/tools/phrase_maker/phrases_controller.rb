@@ -1,5 +1,7 @@
 class Tools::PhraseMaker::PhrasesController < ApplicationController
 
+  before_filter :init_phrase, :only => [:phrase_merger, :json_for_graph]
+
   uses_rest do
     model.klass Tools::PhraseMaker::Phrase
     respond_to.js true
@@ -14,21 +16,24 @@ class Tools::PhraseMaker::PhrasesController < ApplicationController
     end
   end
 
-
   def autocomplete
     render_widget autocompleter_widget
   end
 
+  def phrase_merger
+    respond_to { |wants| wants.js }
+  end
 
   def json_for_graph
-    render :json => Tools::PhraseMaker::GraphPresenter.new(
-      :phrase => Tools::PhraseMaker::Phrase.load(params[:id]),
-      :start_role => params[:start_role]
-    ).render
+    render :json => Tools::PhraseMaker::GraphPresenter.new(:phrase => @phrase, :start_role => params[:start_role]).render
   end
 
 
 private
+
+  def init_phrase
+    @phrase = Tools::PhraseMaker::Phrase.load(params[:id])
+  end
 
   def render_create_with_success
     respond_to do |format|
