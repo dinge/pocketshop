@@ -6,7 +6,7 @@ Tools.PhraseMaker.Tabs = {
   },
 
   beforeChange: function(oldTabElement, newTabElement) {
-    phrase_id = parseInt(location.pathname.match(/phrases\/(.+)\/edit/)[1]);
+    var phrase_id = parseInt( location.pathname.match(/phrases\/(.+)\/edit/)[1], 10);
     switch (newTabElement.id) {
       case 'tab_subject':
         Tools.PhraseMaker.GraphVisualization.loadGraph('subject', phrase_id);
@@ -24,13 +24,9 @@ Tools.PhraseMaker.Tabs = {
 
 document.observe("dom:loaded", function() {
 
-  if($('tools_phrase_maker_triple_subject_name')) {
-    $('tools_phrase_maker_triple_subject_name').focus();
-  };
+  if($('tools_phrase_maker_triple_subject_name')) $('tools_phrase_maker_triple_subject_name').focus();
 
-  if($('tools_phrase_maker_phrase_name')) {
-    $('tools_phrase_maker_phrase_name').focus();
-  };
+  if($('tools_phrase_maker_phrase_name')) $('tools_phrase_maker_phrase_name').focus();
 
 
   document.observe("mouse_event:out", function(event) {

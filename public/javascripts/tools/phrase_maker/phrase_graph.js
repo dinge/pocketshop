@@ -39,7 +39,7 @@ Tools.PhraseMaker.GraphVisualization = {
   },
 
   url: function(ident, node_id) {
-    return '/tools/phrase_maker/phrases/' + node_id + '/json_for_graph?start_role=' + ident;
+    return '/tools/phrase_maker/phrases/' + node_id + '/json_for_grammar_based_graph?start_role=' + ident;
   },
 
   initGraph: function(ident, node_id) {
