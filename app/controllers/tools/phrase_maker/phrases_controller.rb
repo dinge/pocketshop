@@ -1,6 +1,6 @@
 class Tools::PhraseMaker::PhrasesController < ApplicationController
 
-  before_filter :init_phrase, :only => [:phrase_merger, :json_for_grammar_based_graph]
+  before_filter :init_phrase, :only => [:phrase_merger, :json_for_path_based_graph, :json_for_grammar_based_graph]
 
   uses_page do
     assets do
@@ -27,8 +27,12 @@ class Tools::PhraseMaker::PhrasesController < ApplicationController
     respond_to { |wants| wants.js }
   end
 
-  def json_for_grammar_based_graph
+  def json_for_path_based_graph
     render :json => Views::Tools::PhraseMaker::GraphPresenter.new(:phrase => @phrase, :start_role => params[:start_role]).render
+  end
+
+  def json_for_grammar_based_graph
+    render :json => Views::Tools::PhraseMaker::GrammarBasedGraphPresenter.new(:phrase => @phrase, :start_role => params[:start_role]).render
   end
 
 

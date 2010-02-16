@@ -58,7 +58,10 @@ ActionController::Routing::Routes.draw do |map|
     tool.namespace :phrase_maker do |phrase_maker|
       phrase_maker.resources :phrases,
         :collection => { :autocomplete => :post },
-        :member => { :json_for_grammar_based_graph => :get, :phrase_merger => :get }
+        :member => {
+          :json_for_path_based_graph => :get,
+          :json_for_grammar_based_graph => :get,
+          :phrase_merger => :get }
       phrase_maker.resources :triples
     end
 
