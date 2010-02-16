@@ -59,7 +59,7 @@ Tools.PhraseMaker.GraphVisualization = {
     return this.instances[ident] = { 
       graph:  new RGraph(canvas, Visualization.RgraphSetups.grapOptions(ident)),
       reload: true,
-      url:    this.url(ident, node_id),
+      url:    this.url(ident, node_id)
     };
   }
 
