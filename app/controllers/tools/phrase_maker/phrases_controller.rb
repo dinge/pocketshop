@@ -19,6 +19,8 @@ class Tools::PhraseMaker::PhrasesController < ApplicationController
     respond_to.js true
   end
 
+
+
   def autocomplete
     render_widget autocompleter_widget
   end
@@ -28,7 +30,7 @@ class Tools::PhraseMaker::PhrasesController < ApplicationController
   end
 
   def json_for_path_based_graph
-    render :json => Views::Tools::PhraseMaker::GraphPresenter.new(:phrase => @phrase, :start_role => params[:start_role]).render
+    render :json => Views::Tools::PhraseMaker::PhraseCentricGraphPresenter.new(:phrase => @phrase, :grammar_attribute => params[:grammar_attribute]).render
   end
 
   def json_for_grammar_based_graph

@@ -15,13 +15,8 @@ class Tools::GraphViewerController < ApplicationController
   def index
     respond_to do |wants|
       wants.html
-      wants.json do
-        xx = GraphPresenter.new.render
-        # debugger
-        render :json => xx
-      end
+      wants.json { render :json => GraphPresenter.new.render }
     end
-    # render :json => Tools::PhraseMaker::GraphPresenter.new(:phrase => @phrase, :start_role => params[:start_role]).render
   end
 
 

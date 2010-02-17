@@ -19,12 +19,12 @@ Tools.GraphViewer.GraphVisualization = {
       injectInto: 'graph_visualization',
       width:      700,
       height:     700,
-      backgroundCanvas: Visualization.RgraphSetups.BackgroundCircles
+      backgroundCanvas: Visualization.Rgraph.Setups.BackgroundCircles
     });
 
     // RGraph, Hypertree, TM.Squarified, ST
     return {
-      graph: new RGraph(canvas, Visualization.RgraphSetups.grapOptions('graph_viewer')),
+      graph: new RGraph(canvas, Visualization.Rgraph.Setups.graphOptions(this)),
       url: '/tools/graph_viewer.json'
     };
   }

@@ -21,15 +21,18 @@
   padding: 3px;
 }
 
-.phrase_maker_gizmo .subject {
+.phrase_maker_gizmo .subject,
+.graph_visualization .subject {
   color: #610000;
 }
 
-.phrase_maker_gizmo .predicate {
+.phrase_maker_gizmo .predicate,
+.graph_visualization .predicate {
   color: #420909;
 }
 
-.phrase_maker_gizmo .object {
+.phrase_maker_gizmo .object,
+.graph_visualization .object {
   color: #200909;
 }
 
@@ -48,4 +51,21 @@
 a.same_gizmo {
 /*  color: #008800!important;*/
   color: #00aa00!important;
+}
+
+
+
+.graph_visualization .subject {
+  color: #610000;
+  font-size: 1.5em;
+}
+
+.graph_visualization .predicate {
+  color: #420909;
+  font-size: 0.9em;
+}
+
+.graph_visualization .object {
+  color: #200909;
+  font-size: 1.0em;
 }

@@ -28,6 +28,7 @@ class Views::Tools::PhraseMaker::Phrases::Edit < Views::Layouts::Application
           :gizmos => current_object.triples.to_a, 
           :state => :index, 
           :discard_headline => true )
+          div '', :id => :phrase_centric_graph_visualization, :class => :graph_visualization
       end
       grammar_attributes.each do |ga|
         div :id => 'tab_%s' % ga, :class => :tools_phrase_maker_triples do

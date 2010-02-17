@@ -25,9 +25,11 @@ Tools.PhraseMaker.Tabs = {
 document.observe("dom:loaded", function() {
 
   if($('tools_phrase_maker_triple_subject_name')) $('tools_phrase_maker_triple_subject_name').focus();
+  if($('tools_phrase_maker_phrase_name'))         $('tools_phrase_maker_phrase_name').focus();
 
-  if($('tools_phrase_maker_phrase_name')) $('tools_phrase_maker_phrase_name').focus();
 
+  var phrase_id = parseInt( location.pathname.match(/phrases\/(.+)\/edit/)[1], 10);
+  Tools.PhraseMaker.PhraseCentricGraphVisualization.loadGraph(phrase_id);
 
   document.observe("mouse_event:out", function(event) {
     var container = $(Event.element(event.memo)).up('.phrase_maker_gizmo');
@@ -48,9 +50,7 @@ document.observe("dom:loaded", function() {
     if(container != undefined ) {
 
       var control = container.down('.control');
-      if(control != undefined) {
-        control.show();
-      }
+      if(control != undefined) control.show();
 
       var hovered = container.select(':hover');
       if(hovered.any()) {
@@ -72,16 +72,12 @@ document.observe("dom:loaded", function() {
 
   document.observe("mouse_event:out", function(event) {
     var container = $(Event.element(event.memo)).up('.phrase_maker_gizmo .control');
-    if(container != undefined ) {
-      container.up('.phrase_maker_gizmo .wrapper').removeClassName('active');
-    }
+    if(container != undefined ) container.up('.phrase_maker_gizmo .wrapper').removeClassName('active');
   });
 
   document.observe("mouse_event:over", function(event) {
     var container = $(Event.element(event.memo)).up('.phrase_maker_gizmo .control');
-    if(container != undefined ) {
-      container.up('.phrase_maker_gizmo .wrapper').addClassName('active');
-    }
+    if(container != undefined ) container.up('.phrase_maker_gizmo .wrapper').addClassName('active');
   });
 
 });
