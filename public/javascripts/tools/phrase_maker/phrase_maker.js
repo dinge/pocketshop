@@ -28,8 +28,12 @@ document.observe("dom:loaded", function() {
   if($('tools_phrase_maker_phrase_name'))         $('tools_phrase_maker_phrase_name').focus();
 
 
-  var phrase_id = parseInt( location.pathname.match(/phrases\/(.+)\/edit/)[1], 10);
-  Tools.PhraseMaker.PhraseCentricGraphVisualization.loadGraph(phrase_id);
+  var match;
+  if(match = location.pathname.match(/phrases\/(.+)\/edit/)) {
+    var phrase_id = parseInt( match[1], 10);
+    Tools.PhraseMaker.PhraseCentricGraphVisualization.loadGraph(phrase_id);
+  }
+
 
   document.observe("mouse_event:out", function(event) {
     var container = $(Event.element(event.memo)).up('.phrase_maker_gizmo');
