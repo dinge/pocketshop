@@ -16,9 +16,9 @@ private
       [triple.phrase_as(first_grammar_attribute), triple.phrase_as(last_grammar_attribute)]
     end.sort_by do |grouper_phrases, grouped_triples|
       grouper_phrases.first.name
-    end.each do |predicate, triples|
-      link_to_phrase(predicate.first)
-      link_to_phrase(predicate.last)
+    end.each do |grouper_phrases, triples|
+      link_to_phrase(grouper_phrases.first)
+      link_to_phrase(grouper_phrases.last)
       widget Views::Tools::PhraseMaker::Widgets::GizmoWidget.new(
                 :gizmos => triples,
                 :state => :index,
