@@ -50,7 +50,7 @@ module DingDealer
 
       module InstanceMethods
         def id
-          neo_relationship_id
+          neo_id
         end
       end
 
@@ -66,7 +66,7 @@ module DingDealer
             alias_method_chain :created_at, :typecast
             alias_method_chain :updated_at, :typecast
 
-            alias_method_chain :set_property, :hooks
+            # alias_method_chain :set_property, :hooks
           end
         end
 
@@ -78,12 +78,12 @@ module DingDealer
         end
 
         def created_at_with_typecast
-          return nil if (created_date = get_property('created_at')).blank?
+          return nil if (created_date = self[:created_at].blank?)
           DateTime.parse(created_date)
         end
 
         def updated_at_with_typecast
-          return nil if (updated_date = get_property('updated_at')).blank?
+          return nil if (updated_date = self[:updated_at].blank?)
           DateTime.parse(updated_date)
         end
 

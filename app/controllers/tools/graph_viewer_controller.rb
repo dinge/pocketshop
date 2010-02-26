@@ -25,7 +25,7 @@ class Tools::GraphViewerController < ApplicationController
  
     def initialize
       # @start_node =  Neo4j::IndexNode.instance
-      @start_node = Neo4j::IndexNode.instance.relationships.both.nodes.map.rand
+      @start_node = Neo4j::IndexNode.instance.rels.both.nodes.map.rand
       @max_iterations = 2
     end
 
@@ -47,7 +47,7 @@ class Tools::GraphViewerController < ApplicationController
 
     def iterate(parent_node, iteration = 0)
       iteration += 1
-      parent_node.relationships.both.nodes.reject{ |n| n == Neo4j::IndexNode.instance }.map do |node|
+      parent_node.rels.both.nodes.reject{ |n| n == Neo4j::IndexNode.instance }.map do |node|
         {
           :id => node.id,
           :name => display_name(node),

@@ -66,7 +66,7 @@ describe Word do
       end
 
       it "the relationships should be the same" do
-        @palace.relationships.incoming(:words).to_a.should == @language.relationships.outgoing(:words).to_a
+        @palace.rels.incoming(:words).to_a.should == @language.rels.outgoing(:words).to_a
       end
     end
 

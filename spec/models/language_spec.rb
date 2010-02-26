@@ -36,9 +36,9 @@ describe Language do
       end
 
       it "the relationships should be the same instance" do
-        language_relationship_ids = @language.relationships.outgoing(:words).map(&:id)
+        language_relationship_ids = @language.rels.outgoing(:words).map(&:id)
         word_relationship_ids     =
-          (@palace.relationships.incoming(:words).map(&:id) + @lock.relationships.incoming(:words).map(&:id)).flatten
+          (@palace.rels.incoming(:words).map(&:id) + @lock.rels.incoming(:words).map(&:id)).flatten
 
         (language_relationship_ids - word_relationship_ids).should be_empty
       end

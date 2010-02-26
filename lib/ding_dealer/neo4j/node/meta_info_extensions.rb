@@ -22,16 +22,16 @@ module DingDealer
 
           def self.on_node_created(node)
             if has_meta_info_methods?(node)
-              node.set_property('created_at', DateTime.now.utc)
-              node.set_property('updated_at', DateTime.now.utc)
-              node.set_property('version', 1)
+              node[:created_at] = DateTime.now.utc
+              node[:updated_at] = DateTime.now.utc
+              node[:version]    = 1
             end
           end
 
           def self.on_property_changed(node, key, old_value, new_value)
             if has_meta_info_methods?(node) && ! MetaMethods.include?(key)
-              node.set_property('updated_at', DateTime.now.utc)
-              node.set_property('version', node.version += 1)
+              node[:updated_at] = DateTime.now.utc
+              node[:version]    = node.version += 1
             end
           end
 

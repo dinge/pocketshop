@@ -50,9 +50,9 @@ describe Concept::AttributeRelationship do
 
       context "in comparison of the relationships" do
         it "the relationship instances should be the same" do
-          concept_relationships =  @whisky.relationships.outgoing(:attributes).to_a
+          concept_relationships =  @whisky.rels.outgoing(:attributes).to_a
           value_relationships   =
-            @taste.relationships.incoming(:attributes).to_a + @age.relationships.incoming(:attributes).to_a
+            @taste.rels.incoming(:attributes).to_a + @age.rels.incoming(:attributes).to_a
 
           concept_relationships.should == value_relationships
           concept_relationships.should be_any
@@ -60,9 +60,9 @@ describe Concept::AttributeRelationship do
         end
 
         it "the relationships should be directed" do
-          @whisky.relationships.incoming(:attributes).to_a.should be_empty
-          @taste.relationships.outgoing(:attributes).to_a.should be_empty
-          @age.relationships.outgoing(:attributes).to_a.should be_empty
+          @whisky.rels.incoming(:attributes).to_a.should be_empty
+          @taste.rels.outgoing(:attributes).to_a.should be_empty
+          @age.rels.outgoing(:attributes).to_a.should be_empty
         end
       end
 
@@ -98,9 +98,9 @@ describe Concept::AttributeRelationship do
 
       context "in comparison of the relationships" do
         it "the relationship instances should be the same" do
-          concept_relationship_ids          = @whisky.relationships.outgoing(:attributes).map(&:id)
-          value_relationship_ids            = @taste.relationships.incoming(:attributes).map(&:id)
-          embedded_concept_relationship_ids = @distillery.relationships.incoming(:attributes).map(&:id)
+          concept_relationship_ids          = @whisky.rels.outgoing(:attributes).map(&:id)
+          value_relationship_ids            = @taste.rels.incoming(:attributes).map(&:id)
+          embedded_concept_relationship_ids = @distillery.rels.incoming(:attributes).map(&:id)
 
           (concept_relationship_ids - (value_relationship_ids + embedded_concept_relationship_ids)).should be_empty
 
@@ -110,9 +110,9 @@ describe Concept::AttributeRelationship do
         end
 
         it "the relationships should be directed" do
-          @whisky.relationships.incoming(:attributes).to_a.should be_empty
-          @taste.relationships.outgoing(:attributes).to_a.should be_empty
-          @distillery.relationships.outgoing(:attributes).to_a.should be_empty
+          @whisky.rels.incoming(:attributes).to_a.should be_empty
+          @taste.rels.outgoing(:attributes).to_a.should be_empty
+          @distillery.rels.outgoing(:attributes).to_a.should be_empty
         end
 
       end
@@ -138,7 +138,7 @@ describe Concept::AttributeRelationship do
       # @whisky.attributes << @age
       # # @whisky.class::Defaults.keys
       # #debugger
-      # @whisky.relationships.outgoing(:attributes)[@age]
+      # @whisky.rels.outgoing(:attributes)[@age]
       # 
     end
 

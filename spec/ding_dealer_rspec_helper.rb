@@ -17,7 +17,7 @@ def fixed_datetime
 end
 
 def delete_all_nodes_from(*klasses)
-  klasses.each{ |klass| klass.all.nodes.each(&:delete) }
+  klasses.each{ |klass| klass.all.nodes.each(&:del) }
 end
 
 def restart_transaction

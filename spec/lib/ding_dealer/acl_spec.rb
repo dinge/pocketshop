@@ -40,9 +40,7 @@ end
 undefine_class :Dummy, :DummiesController
 
 class Dummy
-  is_a_neo_node do
-    db.dynamic_properties true
-  end
+  is_a_neo_node
 
   property :name
 

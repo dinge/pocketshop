@@ -18,7 +18,6 @@ module DingDealer
           end
 
           include ::Neo4j::NodeMixin
-          include ::Neo4j::DynamicAccessorMixin if neo_node_env.db.dynamic_properties
           extend  SingletonMethods
           include Node::MetaInfoExtensions      if neo_node_env.db.meta_info
           include InstanceMethods
@@ -40,7 +39,7 @@ module DingDealer
           end
 
           @node_klass.neo_node_env = dingsl_accessor do
-            db  dingsl_accessor(:meta_info => false, :dynamic_properties => false, :validations => false)
+            db  dingsl_accessor(:meta_info => false, :validations => false)
             defaults DingDealer::OpenStruct.new
             acl dingsl_accessor(:default_visibility => false)
             dsl
@@ -58,21 +57,21 @@ module DingDealer
 
 
       module SingletonMethods
-        def load(neo_node_id)
+        def load_node(neo_id)
           ::Neo4j::Transaction.run do
-            ::Neo4j.load(neo_node_id)
+            ::Neo4j.load_node(neo_id)
           end
         end
 
         # loads an neo node by it's node id,
         # raises if this does not is an instance of the calling class
         #
-        # @param [Fixnum] neo_node_id the neo node id
+        # @param [Fixnum] neo_id the neo node id
         # @return [NeoNodeInstance] an instance of a neo node
         # @example loading a node
-        #   "Concept.load!(22)" #=> concept instance
-        def load!(neo_node_id)
-          node = load(neo_node_id)
+        #   "Concept.load_node!(22)" #=> concept instance
+        def load_node!(neo_id)
+          node = load_node(neo_id)
           raise NotFoundException unless node.is_a?(self)
           node
         end
@@ -197,7 +196,7 @@ module DingDealer
         end
 
         def id
-          neo_node_id
+          neo_id
         end
 
         def to_param
@@ -205,7 +204,7 @@ module DingDealer
         end
 
         def <=>(other)
-          neo_node_id <=> other.neo_node_id
+          neo_id <=> other.neo_id
         end
 
         def update!(hash)
@@ -232,11 +231,13 @@ module DingDealer
           update(properties)
         end
 
+
+
       protected
 
         def set_default_values
           neo_node_env.defaults.to_hash.each do |property, value|
-            set_property(property, value) if get_property(property).blank?
+            self[property] = value if self[property].blank?
           end
         end
 

@@ -12,7 +12,7 @@ module ControllerExtensions::AuthentificationHandling
   end
 
   def init_me
-    if session[:user_id] && user = User.load(session[:user_id])
+    if session[:user_id] && user = User.load_load(session[:user_id])
       user.is_me_now
     end
   end

@@ -36,7 +36,9 @@ class Concept
     new_word = Word.to_word(wording, lingo)
     old_word = localized_name(lingo)
     if new_word != old_word
-      relationships.outgoing(:name_words)[old_word].delete if old_word
+      if old_word && !(rel = name_words_rels[old_word]).blank?
+        rel.del
+      end
       name_words << new_word
       new_word
     else
@@ -66,9 +68,9 @@ end
     # case relationship
     # when Concept::LocalizedNameRelationship
     #   if relationship.relationship_type == :name_words
-    #     relationship.start_node.relationships.outgoing(:name_words).nodes.select do |word|
+    #     relationship.start_node.rels.outgoing(:name_words).nodes.select do |word|
     #       word.language.code == 'en' && word != relationship.end_node
-    #     end.each(&:delete)
+    #     end.each(&:del)
     #   end
     # end
   # end

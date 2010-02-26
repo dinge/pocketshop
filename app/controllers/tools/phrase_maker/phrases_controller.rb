@@ -41,7 +41,7 @@ class Tools::PhraseMaker::PhrasesController < ApplicationController
 private
 
   def init_phrase
-    @phrase = Tools::PhraseMaker::Phrase.load(params[:id])
+    @phrase = Tools::PhraseMaker::Phrase.load_node(params[:id])
   end
 
   def render_create_with_success

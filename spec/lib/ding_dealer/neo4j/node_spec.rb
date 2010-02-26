@@ -17,7 +17,6 @@ describe DingDealer::Neo4j::Node, :shared => true do
       is_a_neo_node do
         db do
           meta_info true
-          dynamic_properties true
           validations true
         end
         defaults do
@@ -101,7 +100,6 @@ describe "a neo node class" do
     db_env = OtherThing.neo_node_env.db
     db_env.should be_a_kind_of(DingDealer::Struct)
     db_env.meta_info.should be_true
-    db_env.dynamic_properties.should be_true
     db_env.validations.should be_true
     SomeThing.neo_node_env.db.validations.should_not be_true
   end
@@ -153,15 +151,15 @@ describe "a neo node class" do
   describe "loading a single node" do
     context "by id" do
       it "should be able to load a node instance by id" do
-        SomeThing.load(2).should == @somethings.first
+        SomeThing.load_node(2).should == @somethings.first
       end
 
       it "should raise no exception if loaded node is an instance of the same class" do
-        lambda { OtherThing.load(5) }.should_not raise_error(DingDealer::Neo4j::Node::NotFoundException)
+        lambda { OtherThing.load_node(5) }.should_not raise_error(DingDealer::Neo4j::Node::NotFoundException)
       end
 
       it "should raise an exception if loaded node is an instance of an other class" do
-        lambda { SomeThing.load!(5) }.should raise_error(DingDealer::Neo4j::Node::NotFoundException)
+        lambda { SomeThing.load_node!(5) }.should raise_error(DingDealer::Neo4j::Node::NotFoundException)
       end
 
     end
@@ -234,8 +232,8 @@ describe "a neo node instance" do
   it_should_behave_like "DingDealer::Neo4j::Node"
 
   context "in general" do
-    it "should have the same id as it's neo_node_id" do
-      @something.id.should be @something.neo_node_id
+    it "should have the same id as it's neo_id" do
+      @something.id.should be @something.neo_id
     end
 
     it 'should return #{id}_#{name} calling to_param' do
@@ -295,17 +293,6 @@ describe "a neo node instance", ' from a class' do
   it_should_behave_like "DingDealer::Neo4j::Node"
 
   describe "without any special options" do
-    context 'like enabled dynamic_properties' do
-      it "should not have dynamic properties" do
-        @something.should_not respond_to(:unexisting_property)
-      end
-
-      it "should raise an exception calling an unexisting property" do
-        lambda { @something.unexisting_property }.should raise_error(NoMethodError)
-      end
-    end
-
-
     context 'like enabled meta_info' do
       it "should not have a created_at property" do
         lambda { @something.created_at }.should raise_error(NoMethodError)
@@ -352,15 +339,6 @@ describe "a neo node instance", ' from a class' do
 
 
   describe "with enabled special options" do
-    context "like dynamic_properties" do
-      it "should have dynamic properties" do
-        @otherthing.should_not respond_to(:any_dynamic_property)
-        @otherthing.should_not respond_to(:any_dynamic_property=)
-
-        @otherthing.any_dynamic_property = "suppe" # uses method_missing
-        @otherthing.any_dynamic_property.should == 'suppe'
-      end
-    end
 
     context "like meta_info" do
       it "should have the property created_at returning a DateTime" do
@@ -379,7 +357,7 @@ describe "a neo node instance", ' from a class' do
       it "should update and return the DateTime it was updated" do
         last_update_at = @otherthing.updated_at
         sleep 2
-        @otherthing.suppe = "lecker"
+        @otherthing[:suppe] = "lecker"
         @otherthing.updated_at.in_time_zone.to_datetime.should be_close(DateTime.now.in_time_zone.to_datetime, 0.00002)
         # @otherthing.updated_at.in_time_zone.should be == DateTime.now.in_time_zone
         @otherthing.updated_at.in_time_zone.to_s.should_not == last_update_at.in_time_zone.to_s
@@ -392,7 +370,7 @@ describe "a neo node instance", ' from a class' do
 
       it "should increment the version property with every update" do
         old_version = @otherthing.version
-        @otherthing.tieger = "hungrig"
+        @otherthing[:tieger] = "hungrig"
         @otherthing.version.should be old_version + 1
       end
     end

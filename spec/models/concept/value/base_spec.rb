@@ -34,9 +34,9 @@ describe Concept::Value::Base do
     end
 
     it 'should inherit some basic association methods' do
-      OtherThing.relationships_info[:creator].should be_true
-      OtherThing.relationships_info[:shared_concepts][:type].should == :attributes
-      OtherThing.relationships_info[:shared_concepts][:relationship].should == Concept::AttributeRelationship
+      OtherThing.decl_relationships[:creator].should be_true
+      OtherThing.decl_relationships[:shared_concepts].to_type.should == :attributes
+      OtherThing.decl_relationships[:shared_concepts].relationship_class.should == Concept::AttributeRelationship
     end
 
     it 'should inherit the basic neo node env' do
