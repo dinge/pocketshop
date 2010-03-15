@@ -54,7 +54,7 @@ private
 
   def connect_phrases
     Tools::PhraseMaker::Triple::GrammarAttributes.each do |ga|
-      rest_run.current_object.send("phrase_as_#{ga}=", 
+      rest_run.current_object.send("phrase_as_#{ga}=",
         Tools::PhraseMaker::Phrase.existing_or_new_phrase(rest_run.current_params_hash["#{ga}_name"]) )
     end
   end
