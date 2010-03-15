@@ -40,3 +40,16 @@ class Word
     end
   end
 end
+
+
+# force property indexer to downcase all strings in index
+class Word
+  @_property_indexer = indexer.property_indexer
+  def @_property_indexer.update_document(document, node)
+    puts "llll"
+    @properties.each do |prop|
+      value = node.send(prop)
+      document[prop.to_sym] = value.respond_to?(:downcase) ? value.downcase : value
+    end
+  end
+end
