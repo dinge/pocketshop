@@ -58,9 +58,7 @@ module DingDealer
 
       module SingletonMethods
         def load_node(neo_id)
-          ::Neo4j::Transaction.run do
-            ::Neo4j.load_node(neo_id)
-          end
+          ::Neo4j.load_node(neo_id)
         end
 
         # loads an neo node by it's node id,
@@ -76,31 +74,17 @@ module DingDealer
           node
         end
 
-        def property_names
-          properties_info.keys
-        end
-
-        def properties?(*properties)
-          properties.empty? ? false : properties.flatten.all?{ |property| property?(property) }
-        end
-
         def nodes
-          ::Neo4j::Transaction.run { all.nodes.to_a }
+          all.nodes.to_a
         end
 
         # not sure if this is the best way
-        def first_node
-          all.nodes.min
-        end
-
-        # not sure if this is the best way
-        def last_node
-          all.nodes.max
+        def first
+          all.nodes.first
         end
 
         def find_first(query = nil, &block)
-          matches = find(query, &block)
-          matches.size > 0 ? ::Neo4j::Transaction.run{ matches[0] } : nil
+          find(query, &block).first
         end
 
         def find_first!(query=nil, &block)
@@ -190,7 +174,7 @@ module DingDealer
       module InstanceMethods
         def init_node(*args)
           if (properties = args.first).is_a?(Hash)
-            update(properties) 
+            update(properties)
           end
           set_default_values
         end
@@ -209,14 +193,13 @@ module DingDealer
 
         def update!(hash)
           if hash.keys.all?{ |key| property?(key) }
-            ::Neo4j::Transaction.run do
-              update(hash)
-            end
+            update(hash)
           else
             raise NoMethodError.new("#{self.name} does not have all of this properties #{hash.keys.join(',')}")
           end
         end
 
+        # rails needs this for formbuilders an more
         def new_record?
           false
         end

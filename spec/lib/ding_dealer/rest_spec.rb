@@ -274,7 +274,7 @@ describe "a controller instance", ' with default convention based settings', :ty
     context 'with invalid values' do
       before(:each) do
         Me.now = mock(User, :created_beans => [])
-        @number_of_all_beans = Bean.nodes.size
+        @number_of_all_beans = ::Neo4j::Transaction.run { Bean.nodes.size }
       end
 
       it "should #create with errors", ' without changing the node' do
@@ -289,7 +289,7 @@ describe "a controller instance", ' with default convention based settings', :ty
         bean.should_not be_valid
         bean.should have(1).error_on(:name)
 
-        Bean.nodes.size.should == @number_of_all_beans
+        ::Neo4j::Transaction.run { Bean.nodes.size.should == @number_of_all_beans }
       end
 
       it "should #update with errors", ' without changing the node' do

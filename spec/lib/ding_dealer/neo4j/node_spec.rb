@@ -90,12 +90,6 @@ end
 describe "a neo node class" do
   it_should_behave_like "DingDealer::Neo4j::Node"
 
-  it "should return it's property names" do
-    SomeThing.should have(2).property_names
-    SomeThing.property_names.should be_include(:name)
-    SomeThing.property_names.should be_include(:age)
-  end
-
   it "db options should be configurable" do
     db_env = OtherThing.neo_node_env.db
     db_env.should be_a_kind_of(DingDealer::Struct)
@@ -131,7 +125,7 @@ describe "a neo node class" do
 
     it "they should be only instances it's own class" do
       SomeThing.nodes.each do |thing|
-        thing.should be_an_instance_of(SomeThing)
+        thing.should be_an_instance_of SomeThing
       end
     end
   end
@@ -167,12 +161,12 @@ describe "a neo node class" do
 
     context "by other criteria" do
       it "should be able to load it's first created node" do
-        SomeThing.first_node.should == @somethings.first
+        SomeThing.first.should == @somethings.first
       end
 
-      it "should be able to load it's last created node" do
-        SomeThing.last_node.should == @somethings.last
-      end
+      # it "should be able to load it's last created node" do
+      #   SomeThing.last.should == @somethings.last
+      # end
     end
   end
 
@@ -342,7 +336,7 @@ describe "a neo node instance", ' from a class' do
 
     context "like meta_info" do
       it "should have the property created_at returning a DateTime" do
-        @otherthing.created_at.should be_an_instance_of(DateTime)
+        @otherthing.created_at.should be_an_instance_of DateTime
       end
 
       it "should return the DateTime it was created" do
@@ -351,7 +345,7 @@ describe "a neo node instance", ' from a class' do
       end
 
       it "should return the DateTime it was updated" do
-        @otherthing.updated_at.should be_an_instance_of(DateTime)
+        @otherthing.updated_at.should be_an_instance_of DateTime
       end
 
       it "should update and return the DateTime it was updated" do
@@ -506,13 +500,13 @@ describe "special validating node create and update methods" do
 
   context "with valid values" do
     it "new_with_validations should create the node and return it" do
-      old_number_of_cats = Cat.nodes.size
+      old_number_of_cats = ::Neo4j::Transaction.run { Cat.nodes.size }
 
       cat = Cat.new_with_validations(:name => "dieter")
 
       cat.should be_valid
-      cat.should be_an_instance_of(Cat)
-      Cat.nodes.size.should be old_number_of_cats + 1
+      cat.should be_an_instance_of Cat
+      ::Neo4j::Transaction.run { Cat.nodes.size.should be old_number_of_cats + 1 }
     end
 
     it "update_with_validations should update the node and return it" do
@@ -522,7 +516,7 @@ describe "special validating node create and update methods" do
       valid_updated_cat = Cat.update_with_validations(valid_cat, :name => 'valid_due_update')
 
       valid_updated_cat.should be_valid
-      valid_updated_cat.should be_an_instance_of(Cat)
+      valid_updated_cat.should be_an_instance_of Cat
       valid_updated_cat.name.should == 'valid_due_update'
 
       valid_updated_cat.should be valid_cat
@@ -532,13 +526,13 @@ describe "special validating node create and update methods" do
 
   context "with invalid values" do
     it "new_with_validations should not create the node and return a ValueObject with errors" do
-      old_number_of_cats = Cat.nodes.size
+      old_number_of_cats = ::Neo4j::Transaction.run { Cat.nodes.size }
 
       cat = Cat.new_with_validations(:name => 'ts')
 
       cat.should_not be_valid
-      cat.should be_an_instance_of(Neo4j::CatValueObject)
-      Cat.nodes.size.should be old_number_of_cats
+      cat.should be_an_instance_of Neo4j::CatValueObject
+      ::Neo4j::Transaction.run { Cat.nodes.size.should be old_number_of_cats }
     end
 
     it "update_with_validations should not update the node and return a ValueObject with errors" do
@@ -547,7 +541,7 @@ describe "special validating node create and update methods" do
       invalid_updated_cat = Cat.update_with_validations(valid_cat, :name => 'ts')
 
       invalid_updated_cat.should_not be_valid
-      invalid_updated_cat.should be_an_instance_of(Neo4j::CatValueObject)
+      invalid_updated_cat.should be_an_instance_of Neo4j::CatValueObject
       invalid_updated_cat.name.should == 'ts'
 
       ::Neo4j::Transaction.run do
