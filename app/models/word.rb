@@ -46,7 +46,6 @@ end
 class Word
   @_property_indexer = indexer.property_indexer
   def @_property_indexer.update_document(document, node)
-    puts "llll"
     @properties.each do |prop|
       value = node.send(prop)
       document[prop.to_sym] = value.respond_to?(:downcase) ? value.downcase : value
