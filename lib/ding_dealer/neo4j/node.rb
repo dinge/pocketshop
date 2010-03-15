@@ -146,7 +146,7 @@ module DingDealer
                 node = node_or_attributes_hash
               end
 
-              node.update_with_attribute_writer_calls(attributes_hash)
+              node.update(attributes_hash)
 
               unless node.valid?
                 raise InvalidRecord.new( invalid_node_to_invalid_value_object(node, options[:new_record_for_value_object]) )
@@ -190,7 +190,7 @@ module DingDealer
       module InstanceMethods
         def init_node(*args)
           if (properties = args.first).is_a?(Hash)
-            update_with_attribute_writer_calls(properties)
+            update(properties) 
           end
           set_default_values
         end
@@ -220,17 +220,6 @@ module DingDealer
         def new_record?
           false
         end
-
-        def update_with_attribute_writer_calls(properties)
-          properties.each do |property, value|
-            if respond_to?(:"#{property}=")
-              properties.delete(property)
-              send(:"#{property}=", value)
-            end
-          end
-          update(properties)
-        end
-
 
 
       protected
