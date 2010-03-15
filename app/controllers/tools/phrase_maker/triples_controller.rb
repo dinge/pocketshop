@@ -31,7 +31,7 @@ private
 
 
   def init_index
-    rest_run.current_collection = Tools::PhraseMaker::Triple.nodes.sort_by do |triple|
+    rest_run.current_collection = Tools::PhraseMaker::Triple.to_a.sort_by do |triple|
       triple.subject_name.to_s.downcase.parameterize
     end
   end

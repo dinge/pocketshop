@@ -125,38 +125,38 @@ describe Concept do
       end
 
       it "it should only change the name when it's a new one" do
-        initial_number_of_words = Word.nodes.size
+        initial_number_of_words = Word.to_a.size
 
         first_castle_word = @palace_concept.set_localized_name('castle')
 
-        Word.should have(initial_number_of_words + 1).nodes
+        Word.to_a.size.should be initial_number_of_words + 1
 
         second_castle_word = @palace_concept.set_localized_name('castle')
 
-        Word.should have(initial_number_of_words + 1).nodes
+        Word.to_a.size.should be initial_number_of_words + 1
         second_castle_word.should == first_castle_word
 
         first_palace_word = @palace_concept.set_localized_name(@palace)
 
         @palace_concept.name.should == @palace.to_s
-        Word.should have(initial_number_of_words + 1).nodes
+        Word.to_a.size.should be initial_number_of_words + 1
         first_palace_word.should_not == first_castle_word
 
         first_kindergarten_word = @palace_concept.set_localized_name('kindergarten')
 
-        Word.should have(initial_number_of_words + 2).nodes
+        Word.to_a.size.should be initial_number_of_words + 2
         @palace_concept.name.should == 'kindergarten'
         first_kindergarten_word.should_not == first_castle_word
         first_kindergarten_word.should_not == first_palace_word
 
         second_kindergarten_word = @palace_concept.set_localized_name('kindergarten', :de)
-        Word.should have(initial_number_of_words + 3).nodes
+        Word.to_a.size.should be initial_number_of_words + 3
         second_kindergarten_word.should_not == first_kindergarten_word
         second_kindergarten_word.language.should == @deutsch
 
         new_kindergarten_word = Word.new_uniqe_from_language(:name => 'kindergarten', :language => @deutsch)
         third_kindergarten_word = @palace_concept.set_localized_name(new_kindergarten_word)
-        Word.should have(initial_number_of_words + 3).nodes
+        Word.to_a.size.should be initial_number_of_words + 3
         third_kindergarten_word.should == second_kindergarten_word
         new_kindergarten_word.should == third_kindergarten_word
       end

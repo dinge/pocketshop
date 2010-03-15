@@ -54,7 +54,7 @@ private
 
 
   def init_index
-    rest_run.current_collection = Tools::PhraseMaker::Phrase.nodes.sort_by do |phrase|
+    rest_run.current_collection = Tools::PhraseMaker::Phrase.to_a.sort_by do |phrase|
       phrase.name.to_s.downcase.parameterize
     end
   end

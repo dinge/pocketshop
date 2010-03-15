@@ -197,7 +197,7 @@ describe "a controller instance", ' with default convention based settings', :ty
       end
 
       it "should #create" do
-        number_of_all_nodes = Bean.nodes.size
+        number_of_all_nodes = Bean.to_a.size
 
         post :create, :bean => { :name => 'salt' }
         bean = assigns(:bean)
@@ -211,7 +211,7 @@ describe "a controller instance", ' with default convention based settings', :ty
 
         bean.should be_valid
         bean.errors.should be_empty
-        Bean.nodes.to_a.size.should == number_of_all_nodes + 1
+        Bean.to_a.size.should == number_of_all_nodes + 1
       end
 
       it "should #index" do
@@ -274,7 +274,7 @@ describe "a controller instance", ' with default convention based settings', :ty
     context 'with invalid values' do
       before(:each) do
         Me.now = mock(User, :created_beans => [])
-        @number_of_all_beans = ::Neo4j::Transaction.run { Bean.nodes.size }
+        @number_of_all_beans = ::Neo4j::Transaction.run { Bean.to_a.size }
       end
 
       it "should #create with errors", ' without changing the node' do
@@ -289,7 +289,7 @@ describe "a controller instance", ' with default convention based settings', :ty
         bean.should_not be_valid
         bean.should have(1).error_on(:name)
 
-        ::Neo4j::Transaction.run { Bean.nodes.size.should == @number_of_all_beans }
+        ::Neo4j::Transaction.run { Bean.to_a.size.should == @number_of_all_beans }
       end
 
       it "should #update with errors", ' without changing the node' do
@@ -312,7 +312,7 @@ describe "a controller instance", ' with default convention based settings', :ty
           original_bean.name.should == 'tiger'
         end
 
-        # Bean.nodes.size.should == @number_of_all_beans
+        # Bean.to_a.size.should == @number_of_all_beans
       end
     end
   end

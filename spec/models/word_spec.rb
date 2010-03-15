@@ -23,27 +23,27 @@ describe Word do
       deutsch = Language.new(:code => 'de')
 
       # restart_transaction
-      Word.should have(:no).nodes
+      Word.to_a.size.should be 0
       Word.new_uniqe_from_language(:name => 'angst', :language => english)
 
-      Word.should have(1).nodes
+      Word.to_a.size.should be 1
 
       first_english_kindergarten = Word.new_uniqe_from_language(:name => 'kindergarten', :language => english)
 
-      Word.should have(2).nodes
+      Word.to_a.size.should be 2
 
       second_english_kindergarten = Word.new_uniqe_from_language(:name => 'kindergarten', :language => english)
-      Word.should have(2).nodes
+      Word.to_a.size.should be 2
       first_english_kindergarten.should == second_english_kindergarten
 
 
       first_german_kindergarten = Word.new_uniqe_from_language(:name => 'kindergarten', :language => deutsch)
-      Word.should have(3).nodes
+      Word.to_a.size.should be 3
       first_german_kindergarten.should_not == first_english_kindergarten
       first_german_kindergarten.should_not == second_english_kindergarten
 
       second_german_kindergarten = Word.new_uniqe_from_language(:name => 'kindergarten', :language => deutsch)
-      Word.should have(3).nodes
+      Word.to_a.size.should be 3
       first_german_kindergarten.should == second_german_kindergarten
     end
 

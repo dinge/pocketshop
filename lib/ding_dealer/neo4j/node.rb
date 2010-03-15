@@ -74,7 +74,7 @@ module DingDealer
           node
         end
 
-        def nodes
+        def to_a
           all.nodes.to_a
         end
 

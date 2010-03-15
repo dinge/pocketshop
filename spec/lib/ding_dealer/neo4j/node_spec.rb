@@ -120,11 +120,11 @@ describe "a neo node class" do
 
   describe "loading a collection of nodes" do
     it "they should be all nodes of this class" do
-      SomeThing.nodes.size.should be @somethings.size
+      SomeThing.to_a.size.should be @somethings.size
     end
 
     it "they should be only instances it's own class" do
-      SomeThing.nodes.each do |thing|
+      SomeThing.to_a.each do |thing|
         thing.should be_an_instance_of SomeThing
       end
     end
@@ -500,13 +500,13 @@ describe "special validating node create and update methods" do
 
   context "with valid values" do
     it "new_with_validations should create the node and return it" do
-      old_number_of_cats = ::Neo4j::Transaction.run { Cat.nodes.size }
+      old_number_of_cats = ::Neo4j::Transaction.run { Cat.to_a.size }
 
       cat = Cat.new_with_validations(:name => "dieter")
 
       cat.should be_valid
       cat.should be_an_instance_of Cat
-      ::Neo4j::Transaction.run { Cat.nodes.size.should be old_number_of_cats + 1 }
+      ::Neo4j::Transaction.run { Cat.to_a.size.should be old_number_of_cats + 1 }
     end
 
     it "update_with_validations should update the node and return it" do
@@ -526,13 +526,13 @@ describe "special validating node create and update methods" do
 
   context "with invalid values" do
     it "new_with_validations should not create the node and return a ValueObject with errors" do
-      old_number_of_cats = ::Neo4j::Transaction.run { Cat.nodes.size }
+      old_number_of_cats = ::Neo4j::Transaction.run { Cat.to_a.size }
 
       cat = Cat.new_with_validations(:name => 'ts')
 
       cat.should_not be_valid
       cat.should be_an_instance_of Neo4j::CatValueObject
-      ::Neo4j::Transaction.run { Cat.nodes.size.should be old_number_of_cats }
+      ::Neo4j::Transaction.run { Cat.to_a.size.should be old_number_of_cats }
     end
 
     it "update_with_validations should not update the node and return a ValueObject with errors" do
