@@ -299,6 +299,10 @@ describe "a neo node instance", ' from a class' do
       it "should not have a version property" do
         lambda { @something.version }.should raise_error(NoMethodError)
       end
+
+      it "should not have a uuid property" do
+        lambda { @something.uuid }.should raise_error(NoMethodError)
+      end
     end
 
 
@@ -367,6 +371,17 @@ describe "a neo node instance", ' from a class' do
         @otherthing[:tieger] = "hungrig"
         @otherthing.version.should be old_version + 1
       end
+
+      it "should return it's uuid" do
+        @otherthing.should respond_to(:uuid)
+        old_uuid = @otherthing.uuid
+
+        java.util.UUID.from_string( @otherthing.uuid ).version.should == 4
+
+        @otherthing[:changes] = 'value'
+        @otherthing.uuid.should == old_uuid
+      end
+
     end
 
 

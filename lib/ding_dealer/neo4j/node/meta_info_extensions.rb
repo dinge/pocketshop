@@ -8,37 +8,42 @@ module DingDealer
             property  :created_at, :type => DateTime
             property  :updated_at, :type => DateTime
             property  :version
+            property  :uuid
 
             index     :created_at, :type => DateTime
             index     :updated_at, :type => DateTime
             index     :version
+            index     :uuid
 
-            ::Neo4j.event_handler.add(EventHandlerHooks)
+            ::Neo4j.event_handler.add( EventHandlerHooks.new(base) )
           end
         end
 
         class EventHandlerHooks
-          MetaMethods = %w(created_at updated_at version)
+          MetaMethods = %w(created_at updated_at version uuid)
 
-          def self.on_node_created(node)
-            if has_meta_info_methods?(node)
+          def initialize(node_klass)
+            @node_klass = node_klass
+          end
+
+          def on_node_created(node)
+            if node.is_a?(@node_klass)
               node[:created_at] = DateTime.now.utc
               node[:updated_at] = DateTime.now.utc
               node[:version]    = 1
+              node[:uuid]       = java.util.UUID.randomUUID.to_s
             end
           end
 
-          def self.on_property_changed(node, key, old_value, new_value)
-            if has_meta_info_methods?(node) && ! MetaMethods.include?(key)
+          def on_property_changed(node, key, old_value, new_value)
+            if node.is_a?(@node_klass) && ! MetaMethods.include?(key) # don't update when a meta attribute itsself changed
               node[:updated_at] = DateTime.now.utc
-              node[:version]    = node.version += 1
+              node[:version]    = node[:version] += 1
             end
           end
 
-          def self.has_meta_info_methods?(node)
-            node.class.properties?(MetaMethods)
-          end
         end
+
       end
 
     end
