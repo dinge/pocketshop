@@ -4,7 +4,7 @@ class User
     db.validations true
   end
 
-  property :name, :tokenized => true, :analyzer => :keyword 
+  property :name, :tokenized => true, :analyzer => :keyword
   property :encrypted_password, :salt_for_password
   property :password # needed for User.value_object.new, attr_accessors owerwritten, TODO: check if needed any longer
   def password; nil; end
@@ -60,7 +60,10 @@ class User
   end
 
   def self.generate_salt
-    Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{rand.to_s}--")
+    returning(salt = '') do
+      64.times { salt << (i = Kernel.rand(62); i += ((i < 10) ? 48 : ((i < 36) ? 55 : 61 ))).chr }
+    end
+    # Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{rand.to_s}--")
   end
 
   def has_this_password?(password)

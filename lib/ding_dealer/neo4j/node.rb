@@ -1,3 +1,5 @@
+require 'neo4j/extensions/meta_info'
+
 module DingDealer
   module Neo4j
 
@@ -19,7 +21,7 @@ module DingDealer
 
           include ::Neo4j::NodeMixin
           extend  SingletonMethods
-          include Node::MetaInfoExtensions      if neo_node_env.db.meta_info
+          include ::Neo4j::MetaInfo             if neo_node_env.db.meta_info
           include InstanceMethods
           include Node::Validations             if neo_node_env.db.validations
           include Node::ValidationStubs         unless neo_node_env.db.validations

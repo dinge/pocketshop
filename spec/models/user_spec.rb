@@ -101,7 +101,7 @@ describe User do
       it "should be a hexdigest with 40 chars length" do
         first_salt = User.generate_salt
         first_salt.should be_instance_of(String)
-        first_salt.size.should be 40
+        first_salt.size.should be 64
       end
 
       it "should be a random uniq value" do
@@ -152,7 +152,7 @@ describe User do
         context "the salt" do
           it "should be defined" do
             @user.salt_for_password.should be_instance_of(String)
-            @user.salt_for_password.size.should be 40
+            @user.salt_for_password.size.should be 64
           end
         end
       end
