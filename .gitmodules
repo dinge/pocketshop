@@ -1,3 +1,6 @@
 [submodule "vendor/plugins/neo4j"]
 	path = vendor/plugins/neo4j
 	url = git@github.com:dinge/neo4j.git
+[submodule "vendor/rails"]
+	path = vendor/rails
+	url = git@github.com:dinge/rails.git
