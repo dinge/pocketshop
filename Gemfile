@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gem 'rails', :path => '/Users/scolex/rails/dev/dinge/dingdealer/vendor/rails'
 
-gem 'sqlite3-ruby', :require => 'sqlite3'
+# gem 'sqlite3-ruby', :require => 'sqlite3'
 
 # Use unicorn as the web server
 # gem 'unicorn'
