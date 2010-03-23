@@ -1,4 +1,4 @@
-Xxx::Application.routes.draw do |map|
+Dingdealer::Application.routes.draw do |map|
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
