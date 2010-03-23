@@ -1,7 +1,9 @@
-log
-tmp
+log/*.log
+tmp/**/*
 .DS_Store
 coverage
 doc
 databases
 .yardoc
+.bundle
+db/*.sqlite3
