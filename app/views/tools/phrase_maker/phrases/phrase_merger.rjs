@@ -1,1 +1,0 @@
-page[:tab_phrase_merger].replace_html render_widget Views::Tools::PhraseMaker::Widgets::PhraseMergerWidget, :phrase => @phrase
