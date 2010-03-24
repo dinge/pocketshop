@@ -4,3 +4,6 @@
 [submodule "vendor/rails"]
 	path = vendor/rails
 	url = git@github.com:dinge/rails.git
+[submodule "vendor/gems/minimal"]
+	path = vendor/gems/minimal
+	url = git@github.com:dinge/minimal.git

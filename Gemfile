@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rails',  :path => 'vendor/rails'
+gem 'minimal', :path => 'vendor/gems/minimal'
 gem 'kos',    :path => 'vendor/gems/kos-0.0.1'
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
