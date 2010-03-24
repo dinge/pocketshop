@@ -1,8 +1,9 @@
 source 'http://rubygems.org'
 
-gem 'rails',  :path => 'vendor/rails'
+gem 'rails', :path => 'vendor/rails'
+gem 'ding_dealer', :path => 'vendor/gems/ding_dealer'
 gem 'minimal', :path => 'vendor/gems/minimal'
-gem 'kos',    :path => 'vendor/gems/kos-0.0.1'
+gem 'kos', :path => 'vendor/gems/kos-0.0.1'
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 
