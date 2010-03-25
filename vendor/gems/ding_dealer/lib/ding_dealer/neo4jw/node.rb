@@ -1,7 +1,8 @@
+asds
 require 'neo4j/extensions/meta_info'
 
 module DingDealer
-  module Neo4j
+  module Neo4jw
 
     module Node
       class NotFoundException < StandardError; end

@@ -16,25 +16,11 @@ Gem::Specification.new do |s|
     "LICENSE",
      "README.rdoc"
   ]
-  s.files = [
-    ".document",
-     ".gitignore",
-     "LICENSE",
-     "README.rdoc",
-     "Rakefile",
-     "VERSION",
-     "test/ding_dealer_legacy_test.rb",
-     "test/test_helper.rb"
-  ]
   s.homepage = %q{http://github.com/dinge/ding_dealer_legacy}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.6}
   s.summary = %q{TODO: one-line summary of your gem}
-  s.test_files = [
-    "test/ding_dealer_legacy_test.rb",
-     "test/test_helper.rb"
-  ]
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
@@ -42,10 +28,13 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<thoughtbot-shoulda>, [">= 0"])
+      s.add_runtime_dependency(%q<neo4j>, [">= 0"])
     else
       s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
+      s.add_dependency(%q<neo4j>, [">= 0"])
     end
   else
     s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
+    s.add_dependency(%q<neo4j>, [">= 0"])
   end
 end
