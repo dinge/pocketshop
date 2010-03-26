@@ -3,7 +3,7 @@ class Kos::BattlemerchantCao::ProductCategory
   #   db.meta_info true
   # end
 
-  include ::Neo4j::NodeMixin
+  include Neo4j::NodeMixin
 
   property :name
   property :source_id
@@ -20,13 +20,13 @@ class Kos::BattlemerchantCao::ProductCategory
 
 
   def self.root_categories
-    to_a.select{ |c| c.parent.blank? }
+    to_a.select { |c| c.parent.blank? }
   end
 
   def self_and_all_children
-    all_children = children.to_a.inject([self] + children.to_a) do |array, child|
-      child.children.each { array << c }
-      array
+    all_children = children.to_a.inject([self] + children.to_a) do |memo, child|
+      child.children.each { memo << c }
+      memo
     end
 
     def all_children.products

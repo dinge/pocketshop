@@ -4,6 +4,14 @@ class Kos::BattlemerchantCao::Product
   # end
   include Neo4j::NodeMixin 
 
+  # kox.io do
+  #   
+  # end
+  # 
+  # kos.import do
+  #   
+  # end
+
   property :name
   property :article_number
   property :price
@@ -37,5 +45,11 @@ class Kos::BattlemerchantCao::Product
   def products_of_same_categories_and_their_children
     categories.map { |category| category.self_and_all_children.products }.flatten.uniq
   end
+
+
+
+  class Importer
+
+  end  
 
 end

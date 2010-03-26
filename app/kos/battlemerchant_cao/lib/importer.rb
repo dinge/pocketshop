@@ -16,6 +16,10 @@ class Kos::BattlemerchantCao::Importer
     ""
   end
 
+  # graph.run do
+  #   
+  # end
+
   def self.iconv_instance
     @_iconv_instance ||= Iconv.new('utf-8', 'latin1')
   end
@@ -25,7 +29,7 @@ class Kos::BattlemerchantCao::Importer
     read_yaml_file( ImportRootPath.join('yamls', 'cao_product.yaml').to_s ).each do |record|
       Neo4j::Transaction.run do
         puts iconv_instance.iconv(record['kurzname'])
-        Tools::MiniShop::Product.new(
+        parent::Product.new(
           :name           => iconv_instance.iconv(record['kurzname']),
           :article_number => record['artnum'],
           :price          => record['vk5b'],
@@ -39,7 +43,7 @@ class Kos::BattlemerchantCao::Importer
     read_yaml_file( ImportRootPath.join('yamls', 'cao_category.yaml').to_s ).each do |record|
       Neo4j::Transaction.run do
         puts iconv_instance.iconv(record['name'])
-        Tools::MiniShop::ProductCategory.new(
+        parent::ProductCategory.new(
           :name             => iconv_instance.iconv(record['name']),
           :source_id        => record['id'],
           :source_parent_id => record['top_id']
@@ -52,8 +56,8 @@ class Kos::BattlemerchantCao::Importer
     read_yaml_file( ImportRootPath.join('yamls', 'cao_product_category.yaml').to_s ).each do |record|
       Neo4j::Transaction.run do
         putc "."
-        product = Tools::MiniShop::Product.find_first(:source_id => record['artikel_id'])
-        product_category = Tools::MiniShop::ProductCategory.find_first(:source_id => record['kat_id'])
+        product = parent::Product.find_first(:source_id => record['artikel_id'])
+        product_category = parent::ProductCategory.find_first(:source_id => record['kat_id'])
         if product && product_category
           product.categories << product_category
         end
@@ -64,10 +68,10 @@ class Kos::BattlemerchantCao::Importer
   def self.import_product_images
     require "rio"
     Neo4j::Transaction.run do
-      Tools::MiniShop::Product.to_a.each do |product|
+      parent::Product.to_a.each do |product|
         putc "."
         next if product.article_number.blank?
-        img = Tools::MiniShop::YamlImporter::ProductImagePathTemplate % product.article_number
+        img = ProductImagePathTemplate % product.article_number
         ['', 'b', 'c'].each do |image_suffix|
           destination_file = ImportRootPath.join('images', '%s%s.jpg' % [product.article_number, image_suffix])
           next if File.exists?(destination_file)
