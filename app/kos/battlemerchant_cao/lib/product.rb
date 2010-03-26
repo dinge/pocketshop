@@ -1,7 +1,8 @@
 class Kos::BattlemerchantCao::Product
-  is_a_neo_node do
-    db.meta_info true
-  end
+  # is_a_neo_node do
+  #   db.meta_info true
+  # end
+  include Neo4j::NodeMixin 
 
   property :name
   property :article_number
@@ -13,7 +14,7 @@ class Kos::BattlemerchantCao::Product
   index :price
   index :source_id
 
-  has_n(:categories).to(Tools::MiniShop::ProductCategory)
+  has_n(:categories).to(parent::ProductCategory)
 
   ImageRoot = Rails.root.join('public', 'images', 'product_images')
 
