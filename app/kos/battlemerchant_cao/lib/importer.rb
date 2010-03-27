@@ -1,16 +1,17 @@
 class Kos::BattlemerchantCao::Importer
 
-  ImportRootPath = Rails.root.join('tmp', 'products')
+  # ImportRootPath = Rails.root.join('tmp', 'products')
+  ImportRootPath = Pathname.new('/var/folders/9Z/9ZywZ9boF7SRFVjh1FKXgU+++TM/-Tmp-/cao/product_exporter')
   ProductImagePathTemplate = 'http://www.battlemerchant.com/images/product_images/popup_images/%s.jpg'
 
   def self.run
-    # Neo4j::Transaction.run { Tools::MiniShop::Product.to_a.each(&:del) }
-    # Neo4j::Transaction.run { Tools::MiniShop::ProductCategory.to_a.each(&:del) }
+    Neo4j::Transaction.run { Tools::MiniShop::Product.to_a.each(&:del) }
+    Neo4j::Transaction.run { Tools::MiniShop::ProductCategory.to_a.each(&:del) }
 
-    # import_products
+    import_products
     # import_product_categories
     # import_product_category_relationships
-    import_product_images
+    # import_product_images
     # delete_products_without_image
     # build_product_category_taxonomie
     ""
@@ -26,7 +27,7 @@ class Kos::BattlemerchantCao::Importer
 
 
   def self.import_products
-    read_yaml_file( ImportRootPath.join('yamls', 'cao_product.yaml').to_s ).each do |record|
+    read_yaml_file( ImportRootPath.join('cao_product.yaml').to_s ).each do |record|
       Neo4j::Transaction.run do
         puts iconv_instance.iconv(record['kurzname'])
         parent::Product.new(
@@ -40,7 +41,7 @@ class Kos::BattlemerchantCao::Importer
   end
 
   def self.import_product_categories
-    read_yaml_file( ImportRootPath.join('yamls', 'cao_category.yaml').to_s ).each do |record|
+    read_yaml_file( ImportRootPath.join('cao_category.yaml').to_s ).each do |record|
       Neo4j::Transaction.run do
         puts iconv_instance.iconv(record['name'])
         parent::ProductCategory.new(
@@ -53,7 +54,7 @@ class Kos::BattlemerchantCao::Importer
   end
 
   def self.import_product_category_relationships
-    read_yaml_file( ImportRootPath.join('yamls', 'cao_product_category.yaml').to_s ).each do |record|
+    read_yaml_file( ImportRootPath.join('cao_product_category.yaml').to_s ).each do |record|
       Neo4j::Transaction.run do
         putc "."
         product = parent::Product.find_first(:source_id => record['artikel_id'])

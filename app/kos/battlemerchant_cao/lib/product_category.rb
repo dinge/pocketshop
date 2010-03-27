@@ -5,6 +5,10 @@ class Kos::BattlemerchantCao::ProductCategory
 
   include Neo4j::NodeMixin
 
+  # itsa.giznode do
+  #   
+  # end
+
   property :name
   property :source_id
   property :source_parent_id

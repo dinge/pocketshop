@@ -49,7 +49,6 @@ class Kos::BattlemerchantCao::Product
 
 
   class Importer
-
-  end  
+  end
 
 end
