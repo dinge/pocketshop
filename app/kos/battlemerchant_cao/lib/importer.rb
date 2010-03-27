@@ -1,14 +1,36 @@
 class Kos::BattlemerchantCao::Importer
 
-  # ImportRootPath = Rails.root.join('tmp', 'products')
   ImportRootPath = Pathname.new('/var/folders/9Z/9ZywZ9boF7SRFVjh1FKXgU+++TM/-Tmp-/cao/product_exporter')
   ProductImagePathTemplate = 'http://www.battlemerchant.com/images/product_images/popup_images/%s.jpg'
 
   def self.run
-    Neo4j::Transaction.run { Tools::MiniShop::Product.to_a.each(&:del) }
-    Neo4j::Transaction.run { Tools::MiniShop::ProductCategory.to_a.each(&:del) }
 
-    import_products
+
+    import_sets = [
+      { :klass => parent::Product,
+        :yaml_file => ImportRootPath.join('cao_product.yaml'),
+        :external_source_id_field => :rec_id },
+      { :klass => parent::Category,
+        :yaml_file => ImportRootPath.join('cao_category.yaml'),
+        :external_source_id_field => :id },
+      { :klass => parent::ProductCategory,
+        :yaml_file => ImportRootPath.join('cao_product_category.yaml') }
+    ]
+
+    import_sets.each do |import_set|
+      importer = Kos::YamlImporter::RawImport.new(import_set[:klass], import_set[:yaml_file])
+      importer.external_source_id_field = import_set[:external_source_id_field]
+      # importer.delete_all_before.delete_unexising.update_existing.run
+      importer.delete_all_before.run
+    end
+
+    # Neo4j::Transaction.run { parent::Product.all.nodes.each(&:del) }
+    # Neo4j::Transaction.run { parent::Category.all.nodes.each(&:del) }
+    # Neo4j::Transaction.run { parent::ProductCategory.all.nodes.each(&:del) }
+
+
+
+    # import_products
     # import_product_categories
     # import_product_category_relationships
     # import_product_images
@@ -18,53 +40,49 @@ class Kos::BattlemerchantCao::Importer
   end
 
   # graph.run do
-  #   
+  #
   # end
 
-  def self.iconv_instance
-    @_iconv_instance ||= Iconv.new('utf-8', 'latin1')
-  end
 
+  # def self.import_products
+  #   read_yaml_file( ImportRootPath.join('cao_product.yaml').to_s ).each do |record|
+  #     Neo4j::Transaction.run do
+  #       puts iconv_instance.iconv(record['kurzname'])
+  #       parent::Product.new(
+  #         :name           => iconv_instance.iconv(record['kurzname']),
+  #         :article_number => record['artnum'],
+  #         :price          => record['vk5b'],
+  #         :source_id      => record['rec_id']
+  #       )
+  #     end
+  #   end
+  # end
+  #
+  # def self.import_product_categories
+  #   read_yaml_file( ImportRootPath.join('cao_category.yaml').to_s ).each do |record|
+  #     Neo4j::Transaction.run do
+  #       puts iconv_instance.iconv(record['name'])
+  #       parent::ProductCategory.new(
+  #         :name             => iconv_instance.iconv(record['name']),
+  #         :source_id        => record['id'],
+  #         :source_parent_id => record['top_id']
+  #       )
+  #     end
+  #   end
+  # end
 
-  def self.import_products
-    read_yaml_file( ImportRootPath.join('cao_product.yaml').to_s ).each do |record|
-      Neo4j::Transaction.run do
-        puts iconv_instance.iconv(record['kurzname'])
-        parent::Product.new(
-          :name           => iconv_instance.iconv(record['kurzname']),
-          :article_number => record['artnum'],
-          :price          => record['vk5b'],
-          :source_id      => record['rec_id']
-        )
-      end
-    end
-  end
-
-  def self.import_product_categories
-    read_yaml_file( ImportRootPath.join('cao_category.yaml').to_s ).each do |record|
-      Neo4j::Transaction.run do
-        puts iconv_instance.iconv(record['name'])
-        parent::ProductCategory.new(
-          :name             => iconv_instance.iconv(record['name']),
-          :source_id        => record['id'],
-          :source_parent_id => record['top_id']
-        )
-      end
-    end
-  end
-
-  def self.import_product_category_relationships
-    read_yaml_file( ImportRootPath.join('cao_product_category.yaml').to_s ).each do |record|
-      Neo4j::Transaction.run do
-        putc "."
-        product = parent::Product.find_first(:source_id => record['artikel_id'])
-        product_category = parent::ProductCategory.find_first(:source_id => record['kat_id'])
-        if product && product_category
-          product.categories << product_category
-        end
-      end
-    end
-  end
+  # def self.import_product_category_relationships
+  #   read_yaml_file( ImportRootPath.join('cao_product_category.yaml').to_s ).each do |record|
+  #     Neo4j::Transaction.run do
+  #       putc "."
+  #       product = parent::Product.find_first(:source_id => record['artikel_id'])
+  #       product_category = parent::ProductCategory.find_first(:source_id => record['kat_id'])
+  #       if product && product_category
+  #         product.categories << product_category
+  #       end
+  #     end
+  #   end
+  # end
 
   def self.import_product_images
     require "rio"
@@ -85,7 +103,7 @@ class Kos::BattlemerchantCao::Importer
 
   def self.delete_products_without_image
     Neo4j::Transaction.run do
-      Tools::MiniShop::Product.to_a.each do |product|
+      parent::Product.to_a.each do |product|
         unless File.exists?(ImportRootPath.join('images', '%s.jpg' % product.article_number))
           product.del
         end
@@ -95,22 +113,15 @@ class Kos::BattlemerchantCao::Importer
 
   def self.build_product_category_taxonomie
     Neo4j::Transaction.run do
-      Tools::MiniShop::ProductCategory.to_a.each do |category|
+      parent::ProductCategory.to_a.each do |category|
         putc "."
-        if parent_category = Tools::MiniShop::ProductCategory.find_first(:source_id => category.source_parent_id)
+        if parent_category = parent::ProductCategory.find_first(:source_id => category.source_parent_id)
           parent_category.children << category
         end
       end
     end
   end
 
-  def self.read_yaml_file(import_file)
-    returning(records = []) do
-      YAML.load_file(import_file).each do |ident, attributes|
-        records << attributes
-      end
-    end
-  end
 
 
 end
