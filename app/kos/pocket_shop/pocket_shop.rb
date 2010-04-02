@@ -1,0 +1,3 @@
+module Kos::PocketShop
+
+end

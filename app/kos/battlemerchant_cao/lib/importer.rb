@@ -4,8 +4,6 @@ class Kos::BattlemerchantCao::Importer
   ProductImagePathTemplate = 'http://www.battlemerchant.com/images/product_images/popup_images/%s.jpg'
 
   def self.run
-
-
     import_sets = [
       { :klass => parent::Product,
         :yaml_file => ImportRootPath.join('cao_product.yaml'),
@@ -24,15 +22,6 @@ class Kos::BattlemerchantCao::Importer
       importer.delete_all_before.run
     end
 
-    # Neo4j::Transaction.run { parent::Product.all.nodes.each(&:del) }
-    # Neo4j::Transaction.run { parent::Category.all.nodes.each(&:del) }
-    # Neo4j::Transaction.run { parent::ProductCategory.all.nodes.each(&:del) }
-
-
-
-    # import_products
-    # import_product_categories
-    # import_product_category_relationships
     # import_product_images
     # delete_products_without_image
     # build_product_category_taxonomie
