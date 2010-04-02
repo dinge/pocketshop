@@ -2,7 +2,7 @@ class Kos::BattlemerchantCao::Product
   # is_a_neo_node do
   #   db.meta_info true
   # end
-  # include Neo4j::NodeMixin
+  include Neo4j::NodeMixin
 
 
   # offers :product do
