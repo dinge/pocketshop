@@ -2,9 +2,11 @@ Dingdealer::Application.routes.draw do |map|
 
   namespace :kos do
     namespace :battlemerchant_cao do
-      resources :products#, :controller => 'kos/battlemerchant_cao/products_controller'
+      resources :products
     end
   end
+
+  root :to => "Kos::PocketUi::Dispatcher#init_screen"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
