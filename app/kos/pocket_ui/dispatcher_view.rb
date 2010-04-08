@@ -1,6 +1,6 @@
 class Kos::PocketUi::DispatcherView < Minimal::Template
-  Javascripts = %w(application)
-  Stylesheets = [] # %w(application)
+  Javascripts = %w(application iwebkit/functions)
+  Stylesheets = %w(iwebkit/developer-style) # %w(application)
 
   def content
     render_dtd
@@ -24,55 +24,18 @@ private
   end
 
   def render_html_body
-    javascript_tag do
-      "window.addEventListener(
-        'load',
-        function(){
-          setTimeout(scrollTo, 0, 0, 1);
-        },
-        false
-      );"
+    div :id => :topbar, :class => :black do
     end
 
-
-    # a '', :name => :top
-    div :id => :page, 
-      :style => 'width: 758px; height: 1024px; background-color: #000;' do
-      
-      select_date
-      
-      
-      # div :id => :header do
-      #   # raw_link_to('&#8734;&#9733;&#9762;&#9764;', root_path, :id => :logo, :accesskey => 'h', :title => :home)
-      #   image_tag('ajax_loading_indicator_arrows.gif',
-      #     :size => '20x20', 
-      #     :id => :ajax_loading_indicator, 
-      #     :style => 'display:none;')
-      #   render_main_navigation
-      # end
-      # 
-      # div :id => :main do
-      #   div :id => :content do
-      #     render_flash_message
-      #     render_content
-      #   end
-      #   div :id => :sidebar do
-      #     render_sidebar
-      #   end
-      #   hr :class => :clearfix
-      # end
-      # 
-      # div :id => :footer do
-      #   render_footer
-      #   hr :class => :clearfix
-      # end
+    div :id => :content do
+      select_tag('people', options_for_select([["Dollar", "$"], ["Kroner", "DKK"]]), :class => :select)
+      check_box_tag 'accept', :class => :checkbox
     end
-    p do
-      "suppe"
+
+    div :id => :footer do
     end
   end
 
-# if Me.someone? && !@discard_collection_control
 
   def render_dtd
    raw_text do 
@@ -125,5 +88,3 @@ private
 
 
 end
-
-
