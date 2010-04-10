@@ -1,8 +1,10 @@
 class Kos::PocketStore::Store
   include Neo4j::NodeMixin
 
+  has_n   :items
+  has_n   :groups
 
-  has_n(:items).to(parent::Item)
-  has_n(:groups).to(parent::Group)
+  property  :title
 
+  index :title
 end

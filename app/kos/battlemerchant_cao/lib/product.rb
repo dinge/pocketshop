@@ -1,61 +1,35 @@
 class Kos::BattlemerchantCao::Product
-  # is_a_neo_node do
-  #   db.meta_info true
-  # end
-  
   include Neo4j::NodeMixin
-  def article_number
-    self[:artnum]
+
+  has_one(:store_destination).from(Kos::PocketStore::Item, :import_source)
+
+  def self.to_store
+    Neo4j::Transaction.run do
+      Kos::PocketStore::Item.all.nodes.each(&:del)
+      all.nodes.each { |node| node.to_store }
+    end
+  end
+
+  def to_store
+    self.store_destination = Kos::PocketStore::Item.new(
+      :title           =>  self[:kurzname],
+      :desciption      =>  self[:kurzname],
+      :identifier      =>  self[:artnum],
+      :image_path      =>  image_path,
+      :price           =>  self[:vk5b]
+    )
+  end
+
+  def image_path
+    'http://www.battlemerchant.com/images/product_images/popup_images/%s.jpg' % self[:artnum]
   end
 
 
-  # include ActiveModel::Conversion
-  # include ActiveModel::Serializers
-  # include ActiveModel::Serializers
-  # include ActiveModel::Serializers::JSON
-  # include ActiveModel::Serializers::Xml
-  # 
-  # # include ActiveModel::Validations
-  # 
-  # 
-  # def persisted?
-  #   true
-  # end
-  # 
-  # def attributes
-  #   attr = props
-  #   attr.keys.each {|k| attr.delete k if k[0] == ?_}
-  #   attr
-  # end
-  # 
-  # def serializable_hash(options = nil)
-  #   options ||= {}
-  # 
-  #   options[:only]   = Array.wrap(options[:only]).map { |n| n.to_s }
-  #   options[:except] = Array.wrap(options[:except]).map { |n| n.to_s }
-  # 
-  #   attribute_names = attributes.keys.sort
-  #   if options[:only].any?
-  #     attribute_names &= options[:only]
-  #   elsif options[:except].any?
-  #     attribute_names -= options[:except]
-  #   end
-  # 
-  #   method_names = Array.wrap(options[:methods]).inject([]) do |methods, name|
-  #     methods << name if respond_to?(name.to_s)
-  #     methods
-  #   end
-  # 
-  #   (attribute_names + method_names).inject({}) { |hash, name|
-  #     hash[name] = respond_to?(name.to_s) ? send(name) : self[name]
-  #     hash
-  #   }
-  # end
-  # 
-  # 
-  # def to_json(options = {})
-  #   super(options.reverse_merge(:only => [:kurzname, :artnum, :vk5b, :rec_id]))
-  # end
+  # info_images
+  # original_images
+  # thumbnail_images
+  # popup_images
+
 
 
 
@@ -135,5 +109,57 @@ class Kos::BattlemerchantCao::Product
   #
   # class Importer
   # end
+
+
+
+  # include ActiveModel::Conversion
+  # include ActiveModel::Serializers
+  # include ActiveModel::Serializers
+  # include ActiveModel::Serializers::JSON
+  # include ActiveModel::Serializers::Xml
+  # 
+  # # include ActiveModel::Validations
+  # 
+  # 
+  # def persisted?
+  #   true
+  # end
+  # 
+  # def attributes
+  #   attr = props
+  #   attr.keys.each {|k| attr.delete k if k[0] == ?_}
+  #   attr
+  # end
+  # 
+  # def serializable_hash(options = nil)
+  #   options ||= {}
+  # 
+  #   options[:only]   = Array.wrap(options[:only]).map { |n| n.to_s }
+  #   options[:except] = Array.wrap(options[:except]).map { |n| n.to_s }
+  # 
+  #   attribute_names = attributes.keys.sort
+  #   if options[:only].any?
+  #     attribute_names &= options[:only]
+  #   elsif options[:except].any?
+  #     attribute_names -= options[:except]
+  #   end
+  # 
+  #   method_names = Array.wrap(options[:methods]).inject([]) do |methods, name|
+  #     methods << name if respond_to?(name.to_s)
+  #     methods
+  #   end
+  # 
+  #   (attribute_names + method_names).inject({}) { |hash, name|
+  #     hash[name] = respond_to?(name.to_s) ? send(name) : self[name]
+  #     hash
+  #   }
+  # end
+  # 
+  # 
+  # def to_json(options = {})
+  #   super(options.reverse_merge(:only => [:kurzname, :artnum, :vk5b, :rec_id]))
+  # end
+
+
 
 end

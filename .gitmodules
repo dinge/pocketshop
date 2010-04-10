@@ -7,3 +7,9 @@
 [submodule "vendor/gems/minimal"]
 	path = vendor/gems/minimal
 	url = git@github.com:dinge/minimal.git
+[submodule "vendor/gems/neo4j-rails"]
+	path = vendor/gems/neo4j-rails
+	url = git@github.com:dinge/neo4j-rails.git
+# [submodule "vendor/gems/kos-0.0.1"]
+#   path = vendor/gems/kos-0.0.1
+#   url = git@github.com:dinge/kos.git

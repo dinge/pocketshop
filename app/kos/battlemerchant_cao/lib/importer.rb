@@ -25,6 +25,10 @@ class Kos::BattlemerchantCao::Importer
 
     import_product_images
     delete_products_without_image
+
+    parent::Product.to_store
+    parent::Category.to_store
+
     # build_product_category_taxonomie
     ""
   end
@@ -33,13 +37,13 @@ class Kos::BattlemerchantCao::Importer
     Neo4j::Transaction.run do
       parent::Product.all.nodes.each do |product|
         putc "."
-        next if product.article_number.blank?
-        img = ProductImagePathTemplate % product.article_number
+        next if product[:artnum].blank?
+        img = ProductImagePathTemplate % product[:artnum]
         ['', 'b', 'c'].each do |image_suffix|
-          destination_file = ImportRootPath.join('images', '%s%s.jpg' % [product.article_number, image_suffix])
+          destination_file = ImportRootPath.join('images', '%s%s.jpg' % [product[:artnum], image_suffix])
           unless File.exists?(destination_file)
             puts destination_file
-            rio(img) > rio(destination_file) rescue OpenURI::HTTPError
+            # rio(img) > rio(destination_file) rescue OpenURI::HTTPError
           end
         end
       end
@@ -49,19 +53,8 @@ class Kos::BattlemerchantCao::Importer
   def self.delete_products_without_image
     Neo4j::Transaction.run do
       parent::Product.all.nodes.each do |product|
-        unless File.exists?(ImportRootPath.join('images', '%s.jpg' % product.article_number))
+        unless File.exists?(ImportRootPath.join('images', '%s.jpg' % product[:artnum]))
           product.del
-        end
-      end
-    end
-  end
-
-  def self.build_product_category_taxonomie
-    Neo4j::Transaction.run do
-      parent::ProductCategory.all.nodes.each do |category|
-        putc "."
-        if parent_category = parent::ProductCategory.find_first(:source_id => category.source_parent_id)
-          parent_category.children << category
         end
       end
     end
@@ -73,33 +66,17 @@ class Kos::BattlemerchantCao::Importer
   #
   # end
 
+  # def self.build_product_category_taxonomie
+  #   Neo4j::Transaction.run do
+  #     parent::ProductCategory.all.nodes.each do |category|
+  #       putc "."
+  #       if parent_category = parent::ProductCategory.find_first(:source_id => category.source_parent_id)
+  #         parent_category.children << category
+  #       end
+  #     end
+  #   end
+  # end
 
-  # def self.import_products
-  #   read_yaml_file( ImportRootPath.join('cao_product.yaml').to_s ).each do |record|
-  #     Neo4j::Transaction.run do
-  #       puts iconv_instance.iconv(record['kurzname'])
-  #       parent::Product.new(
-  #         :name           => iconv_instance.iconv(record['kurzname']),
-  #         :article_number => record['artnum'],
-  #         :price          => record['vk5b'],
-  #         :source_id      => record['rec_id']
-  #       )
-  #     end
-  #   end
-  # end
-  #
-  # def self.import_product_categories
-  #   read_yaml_file( ImportRootPath.join('cao_category.yaml').to_s ).each do |record|
-  #     Neo4j::Transaction.run do
-  #       puts iconv_instance.iconv(record['name'])
-  #       parent::ProductCategory.new(
-  #         :name             => iconv_instance.iconv(record['name']),
-  #         :source_id        => record['id'],
-  #         :source_parent_id => record['top_id']
-  #       )
-  #     end
-  #   end
-  # end
 
   # def self.import_product_category_relationships
   #   read_yaml_file( ImportRootPath.join('cao_product_category.yaml').to_s ).each do |record|

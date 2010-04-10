@@ -1,15 +1,19 @@
 class Kos::PocketStore::Item
   include Neo4j::NodeMixin
 
-  has_one(:source_item)
+  has_n(:groups).to(parent::Group)
+  has_one :store
 
+  has_one :import_source
 
   property :title
+  property :identifier
   property :description
-  property :price
   property :image_path
 
+  property :price
 
+  index :title
 
   # property :name
   # property :article_number
