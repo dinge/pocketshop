@@ -17,12 +17,6 @@ class Kos::BattlemerchantCao::ProductsController < ApplicationController
 
 private
 
-  def neo_transaction
-    @_neo_transaction = Neo4j::Transaction.new
-    yield
-    @_neo_transaction.finish
-  end
-
   def init_nodes
     @nodes = Kos::BattlemerchantCao::Product.all.nodes.to_json(:only => [:kurzname, :artnum, :vk5b, :rec_id])
   end

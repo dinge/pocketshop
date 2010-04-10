@@ -4,9 +4,14 @@ Dingdealer::Application.routes.draw do |map|
     namespace :battlemerchant_cao do
       resources :products
     end
+    namespace :pocket_ui do
+      resource  :screen
+      resources :groups
+      resources :items
+    end
   end
 
-  root :to => "Kos::PocketUi::Dispatcher#init_screen"
+  root :to => "Kos::PocketUi::Screens#show"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

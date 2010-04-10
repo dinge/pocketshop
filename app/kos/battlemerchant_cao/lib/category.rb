@@ -44,4 +44,8 @@ class Kos::BattlemerchantCao::Category
   #   '%s.jpg' % self_and_all_children.products.rand.article_number
   # end
 
+  def image_file_name
+    '%s.jpg' % Kos::BattlemerchantCao::Product.all.nodes.to_a.rand.article_number
+  end
+
 end

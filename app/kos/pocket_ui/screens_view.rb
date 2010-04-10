@@ -1,6 +1,8 @@
-class Kos::PocketUi::DispatcherView < Minimal::Template
-  Javascripts = %w(application iwebkit/functions)
-  Stylesheets = %w(iwebkit/developer-style) # %w(application)
+class Kos::PocketUi::ScreensView < Minimal::Template
+
+  Javascripts = %w(application jquery-1.4.2.min.js superclass supermodel underscore-min iwebkit/functions kos/pocket_ui)
+  Stylesheets = %w(iwebkit/style kos/pocket_ui) # %w(application)
+
 
   def content
     render_dtd
@@ -13,6 +15,7 @@ class Kos::PocketUi::DispatcherView < Minimal::Template
       end
     end
   end
+
 
 private
 
@@ -28,8 +31,6 @@ private
     end
 
     div :id => :content do
-      select_tag('people', options_for_select([["Dollar", "$"], ["Kroner", "DKK"]]), :class => :select)
-      check_box_tag 'accept', :class => :checkbox
     end
 
     div :id => :footer do
@@ -38,7 +39,7 @@ private
 
 
   def render_dtd
-   raw_text do 
+   raw_text do
      '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'
    end
   end
@@ -66,19 +67,20 @@ private
   end
 
   def render_other_header_informations
-    title 'dingdealer'
+    title 'pocketshop'
     meta :"http-equiv" => 'Content-Type', :content => 'text/html; charset=utf-8'
   end
 
   def render_ipad_specific_header_informations
-    meta :name => 'viewport', :content => 'width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=0;'
+    meta :name  => 'viewport',
+          :content  => 'width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=0;'
+    meta :name  => 'apple-mobile-web-app-capable',  :content => 'yes'
+    meta :name  => 'apple-mobile-web-app-status-bar-style', :content => 'black-trans-lucent'
+    meta :name  => 'apple-touch-fullscreen',        :content => 'yes'
+    link :rel   => 'apple-touch-startup-image',     :href => '/startup.png'
+    meta :name  => 'format-detection',              :content => 'telephone=no'
+    # link :rel => 'apple-touch-icon-precomposed', :href => '/startup.png'
     # meta :name => 'viewport', :content => 'width=device-width', :'user-scalable' => 'no'
-    meta :name => 'apple-mobile-web-app-capable', :content => 'yes'
-    meta :name => 'apple-mobile-web-app-status-bar-style', :content => 'black-trans-lucent'
-    meta :name => 'apple-touch-fullscreen', :content => 'yes'
-    link :rel => 'apple-touch-startup-image', :href => '/startup.png' 
-    meta :name => 'format-detection', :content => 'telephone=no'
-    # link :rel => 'apple-touch-icon-precomposed', :href => '/startup.png' 
   end
 
   # overwrite this

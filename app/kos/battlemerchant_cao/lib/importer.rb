@@ -1,6 +1,7 @@
+require "rio"
 class Kos::BattlemerchantCao::Importer
 
-  ImportRootPath = Pathname.new('/var/folders/9Z/9ZywZ9boF7SRFVjh1FKXgU+++TM/-Tmp-/cao/product_exporter')
+  ImportRootPath = Rails.root.join('tmp/import/battlemerchant_cao')
   ProductImagePathTemplate = 'http://www.battlemerchant.com/images/product_images/popup_images/%s.jpg'
 
   def self.run
@@ -22,11 +23,51 @@ class Kos::BattlemerchantCao::Importer
       importer.delete_all_before.run
     end
 
-    # import_product_images
-    # delete_products_without_image
+    import_product_images
+    delete_products_without_image
     # build_product_category_taxonomie
     ""
   end
+
+  def self.import_product_images
+    Neo4j::Transaction.run do
+      parent::Product.all.nodes.each do |product|
+        putc "."
+        next if product.article_number.blank?
+        img = ProductImagePathTemplate % product.article_number
+        ['', 'b', 'c'].each do |image_suffix|
+          destination_file = ImportRootPath.join('images', '%s%s.jpg' % [product.article_number, image_suffix])
+          unless File.exists?(destination_file)
+            puts destination_file
+            rio(img) > rio(destination_file) rescue OpenURI::HTTPError
+          end
+        end
+      end
+    end
+  end
+
+  def self.delete_products_without_image
+    Neo4j::Transaction.run do
+      parent::Product.all.nodes.each do |product|
+        unless File.exists?(ImportRootPath.join('images', '%s.jpg' % product.article_number))
+          product.del
+        end
+      end
+    end
+  end
+
+  def self.build_product_category_taxonomie
+    Neo4j::Transaction.run do
+      parent::ProductCategory.all.nodes.each do |category|
+        putc "."
+        if parent_category = parent::ProductCategory.find_first(:source_id => category.source_parent_id)
+          parent_category.children << category
+        end
+      end
+    end
+  end
+
+
 
   # graph.run do
   #
@@ -72,45 +113,6 @@ class Kos::BattlemerchantCao::Importer
   #     end
   #   end
   # end
-
-  def self.import_product_images
-    require "rio"
-    Neo4j::Transaction.run do
-      parent::Product.to_a.each do |product|
-        putc "."
-        next if product.article_number.blank?
-        img = ProductImagePathTemplate % product.article_number
-        ['', 'b', 'c'].each do |image_suffix|
-          destination_file = ImportRootPath.join('images', '%s%s.jpg' % [product.article_number, image_suffix])
-          next if File.exists?(destination_file)
-          puts destination_file
-          rio(img) > rio(destination_file) rescue OpenURI::HTTPError
-        end
-      end
-    end
-  end
-
-  def self.delete_products_without_image
-    Neo4j::Transaction.run do
-      parent::Product.to_a.each do |product|
-        unless File.exists?(ImportRootPath.join('images', '%s.jpg' % product.article_number))
-          product.del
-        end
-      end
-    end
-  end
-
-  def self.build_product_category_taxonomie
-    Neo4j::Transaction.run do
-      parent::ProductCategory.to_a.each do |category|
-        putc "."
-        if parent_category = parent::ProductCategory.find_first(:source_id => category.source_parent_id)
-          parent_category.children << category
-        end
-      end
-    end
-  end
-
 
 
 end
