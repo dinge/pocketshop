@@ -7,6 +7,8 @@ body {
   font-family: helvetica,sans-serif;
   -webkit-background-size:0.438em 100%;
   background: -webkit-gradient(linear,left top,right top,from(#c5ccd4), color-stop(71%, #c5ccd4), color-stop(72%, #cbd2d8), to(#cbd2d8));
+
+/*  background: #000000;*/
   -webkit-touch-callout: none;
 }
 .center {

@@ -13,9 +13,11 @@ private
 
   def init_resources
     @resources = Kos::PocketStore::Item.all.nodes.map do |node|
-      { :title      => node.title,
+      { :id         => node.props['_neo_id'],
+        :title      => node.title,
         :price      => node.price,
-        :imagePath  => node.image_path }
+        :image_path => node.image_path,
+        :large_image_path => node.large_image_path }
     end
   end
 

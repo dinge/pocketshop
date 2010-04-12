@@ -16,11 +16,16 @@ class Kos::BattlemerchantCao::Product
       :desciption      =>  self[:kurzname],
       :identifier      =>  self[:artnum],
       :image_path      =>  image_path,
+      :large_image_path =>  large_image_path,
       :price           =>  self[:vk5b]
     )
   end
 
   def image_path
+    'http://www.battlemerchant.com/images/product_images/thumbnail_images/%s.jpg' % self[:artnum]
+  end
+
+  def large_image_path
     'http://www.battlemerchant.com/images/product_images/popup_images/%s.jpg' % self[:artnum]
   end
 

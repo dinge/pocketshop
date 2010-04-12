@@ -12,9 +12,13 @@ class Kos::PocketUi::GroupsController < ApplicationController
 private
 
   def init_resources
-    @resources = Kos::PocketStore::Group.all.nodes.map do |node|
-      { :title      => node.title,
-        :imagePath  => node.image_path }
+    @resources = Kos::PocketStore::Group.pub.map do |node|
+      {
+        :id           => node.props['_neo_id'],
+        :title        => node.title,
+        :image_path   => node.image_path,
+        :item_ids     => node.items.map { |i| i.props['_neo_id'] }
+       }
     end
   end
 

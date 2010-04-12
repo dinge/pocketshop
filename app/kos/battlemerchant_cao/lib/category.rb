@@ -3,10 +3,6 @@ class Kos::BattlemerchantCao::Category
 
   has_one(:store_destination).from(Kos::PocketStore::Group, :import_source)
 
-  def image_path
-    Kos::BattlemerchantCao::Product.all.nodes.to_a.rand.image_path
-  end
-
   def self.to_store
     Neo4j::Transaction.run do
       Kos::PocketStore::Group.all.nodes.each(&:del)
@@ -14,13 +10,13 @@ class Kos::BattlemerchantCao::Category
     end
     self.build_taxonomie
     self.connect_items_to_groups
+    self.add_image_paths
   end
 
   def to_store
     self.store_destination = Kos::PocketStore::Group.new(
-      :title           =>  self[:name],
-      :desciption      =>  self[:name],
-      :image_path      =>  image_path
+      :title        =>  self[:name],
+      :description  =>  self[:name]
     )
   end
 
@@ -49,6 +45,19 @@ class Kos::BattlemerchantCao::Category
       end
     end
   end
+
+  def self.add_image_paths
+    Neo4j::Transaction.run do
+      (categories = all.nodes.to_a).each do |category|
+        if store_destination = category.store_destination
+          if item = store_destination.items.to_a.rand
+            store_destination.image_path = item.image_path
+          end
+        end
+      end
+    end
+  end
+
 
 
   # itsa.giznode do

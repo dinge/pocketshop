@@ -10,6 +10,7 @@ class Kos::PocketStore::Item
   property :identifier
   property :description
   property :image_path
+  property :large_image_path
 
   property :price
 

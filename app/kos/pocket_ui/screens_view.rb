@@ -1,7 +1,7 @@
 class Kos::PocketUi::ScreensView < Minimal::Template
 
   Javascripts = %w(application jquery-1.4.2.min.js superclass supermodel underscore-min iwebkit/functions kos/pocket_ui)
-  Stylesheets = %w(iwebkit/style kos/pocket_ui) # %w(application)
+  Stylesheets = %w(iwebkit/developer-style kos/pocket_ui) # %w(application)
 
 
   def content
@@ -27,10 +27,31 @@ private
   end
 
   def render_html_body
-    div :id => :topbar, :class => :black do
+    div :id => :topbar, :class => :transparent do
+      div :id => :title do
+        'Zeugs'
+      end
+      div :id => :triselectionbuttons do
+        raw_text do
+          '<a href="#">Gruppen</a><a href="#">Suppe</a><a href="#">Hersteller</a>'
+        end
+      end
     end
 
+#     raw_text do
+# ' <div class="searchbox"><form action="" method="get"><fieldset><input id="search" placeholder="search" type="text" /><input id="submit" type="hidden" /></fieldset></form></div>    '  
+#     end
+
+#     raw_text do
+#       '<div id="tributton"><div class="links">
+# <a href="A.html">AText</a><a href="B.html">BText</a><a href="C.html">CText</a>
+# </div></div>'
+#     end
+
     div :id => :content do
+      span :class => :graytitle, :id => :graytitle do
+        'loading'
+      end
     end
 
     div :id => :footer do
