@@ -29,24 +29,33 @@ private
   def render_html_body
     div :id => :topbar, :class => :transparent do
       div :id => :title do
-        'Zeugs'
+        'loading'
       end
-      div :id => :triselectionbuttons do
-        raw_text do
-          '<a href="#">Gruppen</a><a href="#">Suppe</a><a href="#">Hersteller</a>'
-        end
+    div :id => :leftnav do
+    end
+    div :id => :rightnav do
+      raw_text do
+        '<a href="#">Classic list</a>
+        <a href="#">Classic list</a>'
       end
+    end
+
+      # div :id => :triselectionbuttons do
+      #   raw_text do
+      #     '<a href="#">Übersicht</a><a href="#">Suppe</a><a href="#">Hersteller</a>'
+      #   end
+      # end
     end
 
 #     raw_text do
 # ' <div class="searchbox"><form action="" method="get"><fieldset><input id="search" placeholder="search" type="text" /><input id="submit" type="hidden" /></fieldset></form></div>    '  
 #     end
 
-#     raw_text do
-#       '<div id="tributton"><div class="links">
-# <a href="A.html">AText</a><a href="B.html">BText</a><a href="C.html">CText</a>
-# </div></div>'
-#     end
+    raw_text do
+      '<div id="tributton"><div class="links">
+<a href="#">AText</a><a href="#">BText</a><a href="#">CText</a>
+</div></div>'
+    end
 
     div :id => :content do
       span :class => :graytitle, :id => :graytitle do
@@ -54,8 +63,8 @@ private
       end
     end
 
-    div :id => :footer do
-    end
+    # div :id => :footer do
+    # end
   end
 
 

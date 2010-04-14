@@ -20,7 +20,7 @@ class Kos::BattlemerchantCao::Importer
       importer = Kos::YamlImporter::RawImport.new(import_set[:klass], import_set[:yaml_file])
       importer.external_source_id_field = import_set[:external_source_id_field]
       # importer.delete_all_before.delete_unexising.update_existing.run
-      importer.delete_all_before.run
+      importer.use_iconv.delete_all_before.run
     end
 
     import_product_images
