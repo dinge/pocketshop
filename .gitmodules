@@ -1,5 +1,5 @@
 [submodule "vendor/gems/neo4j"]
-	path = vendor/plugins/neo4j
+	path = vendor/gems/neo4j
 	url = git@github.com:dinge/neo4j.git
 [submodule "vendor/rails"]
 	path = vendor/rails
@@ -10,6 +10,6 @@
 [submodule "vendor/gems/neo4j-rails"]
 	path = vendor/gems/neo4j-rails
 	url = git@github.com:dinge/neo4j-rails.git
-# [submodule "vendor/gems/kos-0.0.1"]
-#   path = vendor/gems/kos-0.0.1
-#   url = git@github.com:dinge/kos.git
+[submodule "vendor/gems/kos-0.0.1"]
+  path = vendor/gems/kos-0.0.1
+  url = git@github.com:dinge/kos.git
