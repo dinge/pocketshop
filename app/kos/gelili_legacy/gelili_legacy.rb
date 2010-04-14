@@ -1,0 +1,2 @@
+module Kos::GeliliLegacy
+end
