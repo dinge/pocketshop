@@ -1,4 +1,4 @@
-class Kos::GeliliLegacy::Device < ActiveResource::Base
+class Kos::GeliliLegacyRemote::Device < ActiveResource::Base
   self.site = "http://gelili.de/exports/"
 end
 

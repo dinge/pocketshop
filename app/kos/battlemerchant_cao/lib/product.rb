@@ -5,7 +5,7 @@ class Kos::BattlemerchantCao::Product
 
   def self.to_store
     Neo4j::Transaction.run do
-      Kos::PocketStore::Item.all.nodes.each(&:del)
+      # Kos::PocketStore::Item.all.nodes.each(&:del)
       all.nodes.each { |node| node.to_store }
     end
   end

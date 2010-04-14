@@ -1,0 +1,2 @@
+module Kos::GeliliLegacyRemote
+end

@@ -17,7 +17,8 @@ class Kos::PocketStore::Group
 
   def self.pub
     all.nodes.select do |group|
-      group.image_path.present?
+      group.image_path.present? &&
+      group.items.any?
     end
   end
 

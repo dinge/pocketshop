@@ -5,7 +5,7 @@ class Kos::BattlemerchantCao::Category
 
   def self.to_store
     Neo4j::Transaction.run do
-      Kos::PocketStore::Group.all.nodes.each(&:del)
+      # Kos::PocketStore::Group.all.nodes.each(&:del)
       all.nodes.each { |node| node.to_store }
     end
     self.build_taxonomie
