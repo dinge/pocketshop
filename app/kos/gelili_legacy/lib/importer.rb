@@ -14,7 +14,7 @@ class Kos::GeliliLegacy::Importer
       Kos::GeliliLegacyRemote::Device.all.each do |remote_device|
         device = parent::Device.new
         remote_device.attributes.each do |key, value|
-          device[key] = value.to_s
+          device[key] = typecast_value(value)
         end
         device[:raw_import_external_source_id] = remote_device.id
       end
@@ -41,4 +41,14 @@ class Kos::GeliliLegacy::Importer
     end
   end
 
+  def self.typecast_value(value)
+    case value
+    when Date, Time, DateTime
+      value.to_s
+#    when String
+#      @use_iconv ? iconv_instance.iconv(value) : value
+    else
+      value
+    end
+  end
 end
