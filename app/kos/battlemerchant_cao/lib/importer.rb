@@ -43,7 +43,7 @@ class Kos::BattlemerchantCao::Importer
           destination_file = ImportRootPath.join('images', '%s%s.jpg' % [product[:artnum], image_suffix])
           unless File.exists?(destination_file)
             puts destination_file
-            # rio(img) > rio(destination_file) rescue OpenURI::HTTPError
+            rio(img) > rio(destination_file) rescue OpenURI::HTTPError
           end
         end
       end
