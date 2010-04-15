@@ -26,7 +26,7 @@ class Kos::GeliliLegacy::Importer
       Kos::GeliliLegacyRemote::DeviceGroup.all.each do |remote_device_group|
         device_group = parent::DeviceGroup.new
         remote_device_group.attributes.each do |key, value|
-          device_group[key] = typecast_value(value)
+          device_group[key] = value.to_s
         end
         device_group[:raw_import_external_source_id] = remote_device_group.id
       end
@@ -36,19 +36,8 @@ class Kos::GeliliLegacy::Importer
   def self.delete_devices_without_image
     Neo4j::Transaction.run do
       parent::Device.all.nodes.each do |device|
-        unless device[:path_of_attached_teaser_image]
-          device.del
-        end
+        device.del unless device[:path_of_attached_teaser_image]
       end
-    end
-  end
-
-  def self.typecast_value(value)
-    case value
-    when Date, Time, DateTime
-      value.to_s
-    else
-      value
     end
   end
 
