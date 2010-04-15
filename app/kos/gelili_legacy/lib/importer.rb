@@ -45,8 +45,6 @@ class Kos::GeliliLegacy::Importer
     case value
     when Date, Time, DateTime
       value.to_s
-#    when String
-#      @use_iconv ? iconv_instance.iconv(value) : value
     else
       value
     end
