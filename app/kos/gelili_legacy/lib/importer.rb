@@ -41,4 +41,14 @@ class Kos::GeliliLegacy::Importer
     end
   end
 
+  def self.typecast_value(value)
+    case value
+    when Date, Time, DateTime
+      value.to_s
+#    when String
+#      @use_iconv ? iconv_instance.iconv(value) : value
+    else
+      value
+    end
+  end
 end
