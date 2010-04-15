@@ -14,7 +14,7 @@ class Kos::GeliliLegacy::Importer
       Kos::GeliliLegacyRemote::Device.all.each do |remote_device|
         device = parent::Device.new
         remote_device.attributes.each do |key, value|
-          device[key] = typecast_value(value)
+          device[key] = value.to_s
         end
         device[:raw_import_external_source_id] = remote_device.id
       end
