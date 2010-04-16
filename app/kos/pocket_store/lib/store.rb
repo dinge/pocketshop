@@ -24,9 +24,19 @@ class Kos::PocketStore::Store
     end
   end
 
+  def self.dump
+    all.nodes.map do |store|
+      { :title => store.title,
+        :ident => store.ident,
+        :groups => store.dump }
+    end
+  end
+
   def dump
     groups.map do |group|
-      [ group.title, { :items => group.items.map(&:title), :children => group.children.map(&:title) } ]
+      { :title    => group.title,
+        :items    => group.items.map(&:title),
+        :children => group.children.map(&:title) }
     end
   end
 

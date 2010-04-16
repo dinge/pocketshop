@@ -2,23 +2,27 @@ class Kos::BattlemerchantCao::Category
   include Neo4j::NodeMixin
 
   has_one(:store_destination).from(Kos::PocketStore::Group, :import_source)
+  has_one(:import_set).from(Kos::PocketStore::ImportSet, :groups)
 
   def self.to_store
-    Neo4j::Transaction.run do
-      # Kos::PocketStore::Group.all.nodes.each(&:del)
-      all.nodes.each { |node| node.to_store }
-    end
+    parent::store.create_groups_from_import_set(parent::import_set)
     self.build_taxonomie
     self.connect_items_to_groups
     self.add_image_paths
   end
 
-  def to_store
-    self.store_destination = Kos::PocketStore::Group.new(
-      :title        =>  self[:name],
-      :description  =>  self[:name]
-    )
+
+  def title
+    self[:name]
   end
+
+  def description
+    self[:name]
+  end
+
+  def image_path
+  end
+
 
   def self.build_taxonomie
     Neo4j::Transaction.run do

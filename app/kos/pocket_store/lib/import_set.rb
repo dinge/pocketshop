@@ -4,6 +4,7 @@ class Kos::PocketStore::ImportSet
   has_one(:store).from(parent::Store, :import_sets)
   has_n(:groups)
   has_n(:items)
+  has_n(:things)
 
   property  :title
   property  :ident

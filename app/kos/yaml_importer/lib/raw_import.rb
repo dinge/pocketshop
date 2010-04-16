@@ -1,7 +1,6 @@
 require "iconv"
 class Kos::YamlImporter::RawImport
-
-  attr_accessor :counter_hops, :external_source_id_field
+  attr_accessor :counter_hops
 
   def initialize(klass, yaml_file)
     @klass, @yaml_file = klass, yaml_file
@@ -10,6 +9,8 @@ class Kos::YamlImporter::RawImport
     @counter_hops = 100
     @delete_all_before = false
     @external_source_id_field = nil
+    @import_set = nil
+    @connected_to_import_set_as = nil
 
     @use_iconv = false
     @iconv_to = 'utf-8'
@@ -21,6 +22,16 @@ class Kos::YamlImporter::RawImport
   end
 
   def update_existing
+    self
+  end
+
+  def external_source_id_field(id_field)
+    @external_source_id_field = id_field
+    self
+  end
+
+  def connect_to_import_set(import_set, connected_as = :thing)
+    @import_set, @connect_to_import_set = import_set, connected_as
     self
   end
 
@@ -46,6 +57,9 @@ class Kos::YamlImporter::RawImport
     puts 'read %s records from %s' % [@records.size, @yaml_file]
     import_to_nodespace
   end
+
+
+private
 
   def import_to_nodespace
     counter = 0
@@ -80,9 +94,10 @@ class Kos::YamlImporter::RawImport
   end
 
   def post_process_node(node)
-    if @external_source_id_field && id_value = node[external_source_id_field]
+    if @external_source_id_field && id_value = node[@external_source_id_field]
       node[:raw_import_external_source_id] = id_value
     end
+    @import_set.send(@connect_to_import_set.to_s.pluralize) << node if @import_set
   end
 
   def delete_all_from_nodespace
