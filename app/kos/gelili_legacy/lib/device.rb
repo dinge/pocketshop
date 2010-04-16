@@ -2,23 +2,23 @@ class Kos::GeliliLegacy::Device
   include Neo4j::NodeMixin
 
   has_one(:store_destination).from(Kos::PocketStore::Item, :import_source)
+  has_one(:import_set).from(Kos::PocketStore::ImportSet, :items)
 
   def self.to_store
-    Neo4j::Transaction.run do
-      # Kos::PocketStore::Item.all.nodes.each(&:del)
-      all.nodes.each { |node| node.to_store }
-    end
+    parent::store.create_items_from_import_set(parent::import_set)
   end
 
-  def to_store
-    self.store_destination = Kos::PocketStore::Item.new(
-      :title           =>  self[:name_with_manufacturer_name],
-      :desciption      =>  self[:description],
-      :identifier      =>  self[:id],
-      :image_path      =>  image_path,
-      :large_image_path =>  large_image_path,
-      :price           =>  nil
-    )
+
+  def title
+    self[:name_with_manufacturer_name]
+  end
+
+  def description
+    self[:description]
+  end
+
+  def identifier
+    self[:id]
   end
 
   def image_path
@@ -32,6 +32,9 @@ class Kos::GeliliLegacy::Device
     # if image_path = self[:path_of_attached_main_image]
     #   'http://gelili.de/public_assets/%s' % image_path
     # end
+  end
+
+  def price
   end
 
 end

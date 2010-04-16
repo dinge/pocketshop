@@ -1,5 +1,6 @@
 module Kos::BattlemerchantCao
 
+  StoreIdent = 'battlemerchant'
 
   # itsa.giznode_hub do
   #

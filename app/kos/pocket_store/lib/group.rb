@@ -2,9 +2,8 @@ class Kos::PocketStore::Group
   include Neo4j::NodeMixin
 
   has_n(:items).from(parent::Item, :groups)
-  has_one :store
-
-  has_one :import_source
+  has_one(:store).from(parent::Store, :groups)
+  has_one(:import_source)
 
   property :title
   property :description
@@ -14,6 +13,23 @@ class Kos::PocketStore::Group
 
   has_n(:children).from(self, :parent)
   has_one(:parent).to(self)
+
+
+  def self.create_from_import_set(store, import_set)
+    Neo4j::Transaction.run do
+      import_set.groups.each do |import_group|
+        group = new(
+          :title        =>  import_group.title,
+          :description  =>  import_group.description,
+          :image_path   =>  import_group.image_path
+        )
+        group.import_source = import_group
+        group.store         = store
+      end
+    end
+  end
+
+
 
   def self.pub
     all.nodes.select do |group|
@@ -38,6 +54,9 @@ class Kos::PocketStore::Group
 
     all_children
   end
+
+
+
 
 
   include ActiveModel::Conversion

@@ -1,3 +1,4 @@
+require "iconv"
 class Kos::YamlImporter::RawImport
 
   attr_accessor :counter_hops, :external_source_id_field

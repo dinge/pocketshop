@@ -262,11 +262,12 @@ Kos.PocketUi.Templates = {
 
 
 $(function(){
+  // prevent scrolling via touch/swipe
   // $('body').bind('touchmove', function(e) { e.preventDefault(); });
   Kos.PocketUi.init();
 });
 
 
-
+// for debugging
 var Item = Kos.PocketUi.Item;
 var Group = Kos.PocketUi.Group;

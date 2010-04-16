@@ -2,26 +2,29 @@ class Kos::GeliliLegacy::DeviceGroup
   include Neo4j::NodeMixin
 
   has_one(:store_destination).from(Kos::PocketStore::Group, :import_source)
+  has_one(:import_set).from(Kos::PocketStore::ImportSet, :groups)
 
   def self.to_store
-    Neo4j::Transaction.run do
-      # Kos::PocketStore::Group.all.nodes.each(&:del)
-      all.nodes.each { |node| node.to_store }
-    end
-    self.build_taxonomie
+    parent::store.create_groups_from_import_set(parent::import_set)
+    self.build_taxonomy
     self.connect_items_to_groups
     self.add_image_paths
   end
 
-  def to_store
-    self.store_destination = Kos::PocketStore::Group.new(
-      :title        =>  self[:name],
-      :description  =>  self[:name],
-      :image_path   =>  nil
-    )
+
+  def title
+    self[:name]
   end
 
-  def self.build_taxonomie
+  def description
+    self[:name]
+  end
+
+  def image_path
+  end
+
+
+  def self.build_taxonomy
     Neo4j::Transaction.run do
       (device_groups = all.nodes.to_a).each do |device_group|
         if parent_group = device_groups.find { |dg| device_group[:parent_id] == dg[:raw_import_external_source_id] }
