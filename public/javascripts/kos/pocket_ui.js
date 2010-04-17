@@ -47,27 +47,15 @@ Kos.PocketUi = {
 
   initEventListeners: function() {
     var self = this;
-    $('div.group').
-      live('touchstart', function(event) {
-        self.displayGroupItems($(this));
-      }).
-      live('click', function(event) {
+    $('div.group').live('touchstart click', function(event) {
         self.displayGroupItems($(this));
       });
 
-    $('div.group_item').
-      live('touchstart', function(event) {
-        self.displayItem($(this));
-      }).
-      live('click', function(event) {
+    $('div.group_item').live('touchstart click', function(event) {
         self.displayItem($(this));
       });
 
-    $('#overview_link').
-      live('touchstart', function(event) {
-        self.displayGroups();
-      }).
-      live('click', function(event) {
+    $('#overview_link').live('touchstart click', function(event) {
         self.displayGroups();
       });
   },
@@ -138,8 +126,10 @@ Kos.PocketUi = {
 
   rotateCards: function(cards) {
     cards.each(function() {
-      $(this).css('-webkit-transform-origin', (Math.random() * 40 + 30) + '% ' + (Math.random() * 40 + 30) + '%' );
-      $(this).css('-webkit-transform', 'rotate(' + (Math.random() * 5 - 2.5) + 'deg)' );
+      $(this).css({
+        '-webkit-transform':        'rotate(' + (Math.random() * 5 - 2.5) + 'deg)',
+        '-webkit-transform-origin': (Math.random() * 40 + 30) + '% ' + (Math.random() * 40 + 30) + '%'
+      });
     });
   },
 
