@@ -14,7 +14,6 @@ class Kos::PocketStore::Group
   has_n(:children).from(self, :parent)
   has_one(:parent).to(self)
 
-
   def self.create_from_import_set(store, import_set)
     Neo4j::Transaction.run do
       import_set.groups.each do |import_group|
@@ -28,8 +27,6 @@ class Kos::PocketStore::Group
       end
     end
   end
-
-
 
   def self.pub
     all.nodes.select do |group|

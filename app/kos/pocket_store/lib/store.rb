@@ -5,7 +5,6 @@ class Kos::PocketStore::Store
   has_n(:items).to(parent::Item)
   # using store_groups as @to_type here to avoid naming clash with Item#groups aka. Store#Items
   has_n(:groups).to(parent::Group, :store_groups)
-
   property  :title
   property  :ident
 
@@ -24,10 +23,18 @@ class Kos::PocketStore::Store
     end
   end
 
+  def create_groups_from_import_set(import_set)
+    Kos::PocketStore::Group.create_from_import_set(self, import_set)
+  end
+
+  def create_items_from_import_set(import_set)
+    Kos::PocketStore::Item.create_from_import_set(self, import_set)
+  end
+
   def self.dump
     all.nodes.map do |store|
-      { :title => store.title,
-        :ident => store.ident,
+      { :title  => store.title,
+        :ident  => store.ident,
         :groups => store.dump }
     end
   end
@@ -39,14 +46,5 @@ class Kos::PocketStore::Store
         :children => group.children.map(&:title) }
     end
   end
-
-  def create_groups_from_import_set(import_set)
-    Kos::PocketStore::Group.create_from_import_set(self, import_set)
-  end
-
-  def create_items_from_import_set(import_set)
-    Kos::PocketStore::Item.create_from_import_set(self, import_set)
-  end
-
 
 end

@@ -4,7 +4,6 @@ class Kos::PocketUi::ScreensController < ApplicationController
   def show
     respond_to do |format|
       format.html { render :template => 'screens_view' }
-      # format.js   { render :template => 'screens_view' }
     end
   end
 

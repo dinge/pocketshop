@@ -23,6 +23,7 @@ private
     render_stylesheets
     render_other_header_informations
     render_ipad_specific_header_informations
+    render_pocket_store_header_informations
     render_javascripts
   end
 
@@ -104,14 +105,19 @@ private
   def render_ipad_specific_header_informations
     meta :name  => 'viewport',
           :content  => 'width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=0;'
-    meta :name  => 'apple-mobile-web-app-capable',  :content => 'yes'
+    meta :name  => 'apple-mobile-web-app-capable',  :content  => 'yes'
+    meta :name  => 'apple-touch-fullscreen',        :content  => 'yes'
+    link :rel   => 'apple-touch-startup-image',     :href     => '/startup.png'
+    meta :name  => 'format-detection',              :content  => 'telephone=no'
     meta :name  => 'apple-mobile-web-app-status-bar-style', :content => 'black-trans-lucent'
-    meta :name  => 'apple-touch-fullscreen',        :content => 'yes'
-    link :rel   => 'apple-touch-startup-image',     :href => '/startup.png'
-    meta :name  => 'format-detection',              :content => 'telephone=no'
     # link :rel => 'apple-touch-icon-precomposed', :href => '/startup.png'
     # meta :name => 'viewport', :content => 'width=device-width', :'user-scalable' => 'no'
   end
+
+  def render_pocket_store_header_informations
+    meta :name => 'pocket-store-current-ident', :content => current_store.ident
+  end
+
 
   # overwrite this
   def render_content

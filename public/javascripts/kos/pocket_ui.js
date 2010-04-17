@@ -2,6 +2,7 @@ var Kos = {};
 
 Kos.PocketUi = {
   init: function() {
+    this.storeIdent = $('meta[name=pocket-store-current-ident]').attr("content");
     this.initContainers();
     this.loadGroups();
     this.loadItems();
@@ -12,6 +13,7 @@ Kos.PocketUi = {
     var self = this;
     $.getJSON(
       '/kos/pocket_ui/groups',
+      { store_ident: this.storeIdent },
       function(json) {
         $.each(json, function(group) {
           self.Group.create(json[group]);
@@ -27,6 +29,7 @@ Kos.PocketUi = {
     var self = this;
     $.getJSON(
       '/kos/pocket_ui/items',
+      { store_ident: this.storeIdent },
       function(json) {
         $.each(json, function(item) {
           self.Item.create(json[item]);
