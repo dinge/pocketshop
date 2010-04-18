@@ -1,6 +1,6 @@
-module Kos::GeliliLegacy
-  ImportSetIdent  = 'gelili_legacy'
-  StoreIdent      = 'gelili'
+module Kos::FestivalfieberLegacy
+  ImportSetIdent  = 'festivalfieber_legacy'
+  StoreIdent      = 'festivalfieber'
 
   def self.import_set
     @import_set ||= Kos::PocketStore.init_import_set(ImportSetIdent)

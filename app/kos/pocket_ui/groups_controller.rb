@@ -3,7 +3,7 @@ class Kos::PocketUi::GroupsController < ApplicationController
 
   def index
     respond_to do |format|
-      format.json { render :json => @resources.to_pocket_ui }
+      format.json { render :json => @resources.to_public_pocket_ui }
     end
   end
 

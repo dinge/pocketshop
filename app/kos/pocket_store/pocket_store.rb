@@ -2,25 +2,26 @@ module Kos::PocketStore
 
   class << self
 
+    def init_import_set(import_set_ident)
+      ImportSet.init(import_set_ident)
+    end
+
+    def init_store_with_import_set(store_ident, import_set)
+      Store.init_with_import_set(store_ident, import_set)
+    end
+
     def store_by_ident(ident)
       Store.by_ident(ident)
     end
 
     def public_groups_by_store(store)
-      groups = store.groups do
-        image_path.present? && items.any?
-      end
-      groups.extend GroupPresenter
-      groups
+      store.public_groups.extend(GroupPresenter)
     end
 
     def public_items_by_store(store)
-      returning(items = store.items) do
-        items.extend ItemPresenter
-      end
+      store.public_items.extend(ItemPresenter)
     end
 
   end
-
 
 end

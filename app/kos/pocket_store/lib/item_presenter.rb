@@ -1,6 +1,6 @@
 module Kos::PocketStore::ItemPresenter
 
-  def to_pocket_ui
+  def to_public_pocket_ui
     map do |item|
       { :id               => item.neo_id,
         :title            => item.title,

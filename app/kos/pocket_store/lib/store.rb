@@ -11,9 +11,28 @@ class Kos::PocketStore::Store
   index :title
   index :ident
 
-  def self.by_ident(ident)
-    all.nodes.find { |n| n.ident == ident }
+  # def self.filter_nodes
+  #   Neo4j::IndexNode.instance.outgoing(self).filter { yield }
+  # end
+
+  def self.by_ident(store_ident)
+    Neo4j::IndexNode.instance.outgoing(self).filter{ ident == store_ident  }.first
+    # filter_nodes { ident == store_ident }.first
   end
+
+  def public_groups
+    groups do
+      image_path.present? && items.any?
+    end
+  end
+
+  def public_items
+    items do
+      image_path.present?
+    end
+  end
+
+
 
   def self.init_with_import_set(ident, import_set)
     Neo4j::Transaction.run do

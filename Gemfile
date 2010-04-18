@@ -6,6 +6,7 @@ gem 'neo4j-rails', :path => 'vendor/gems/neo4j-rails'
 gem 'minimal', :path => 'vendor/gems/minimal'
 # gem 'ding_dealer', :path => 'vendor/gems/ding_dealer'
 gem 'kos', :path => 'vendor/gems/kos-0.0.1'
+# gem 'ap'
 
 # gem 'sqlite3-ruby', :require => 'sqlite3'
 
