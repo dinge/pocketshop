@@ -2,6 +2,7 @@ var Kos = {};
 
 Kos.PocketUi = {
   init: function() {
+    this.cardsPerScreen = 100;
     this.storeIdent = $('meta[name=pocket-store-current-ident]').attr("content");
     this.initContainers();
     this.loadGroups();
@@ -45,23 +46,72 @@ Kos.PocketUi = {
     image.src = imagePath;
   },
 
+
   initEventListeners: function() {
     var self = this;
-    $('div.group').live('touchstart click', function(event) {
-        self.displayGroupItems($(this));
-      });
-
-    $('div.group_item').live('touchstart click', function(event) {
-        self.displayItem($(this));
-      });
 
     $('#overview_link').live('touchstart click', function(event) {
         self.displayGroups();
       });
+    
+    
+    $('div.group').live('touchend click', function(event) {
+        self.displayGroupItems($(this));
+      });
+
+    $('div.group').live('touchstart click', function(event) {
+        self.hoverGroup($(this));
+      });
+
+
+    $('div.group_item').live('touchend click', function(event) {
+        self.displayItem($(this));
+      });
+    
+
+    // $('#flicker_container')[0].addEventListener("touchstart", self.touchHandler, false);
+    // $('#flicker_container')[0].addEventListener("touchmove", self.touchHandler, false);
+
+
+    // $('#swipe_container').multiswipe({
+    //   fingers: 2,
+    //   threshold: 10,
+    //   swipeLeft: function() {
+    //     alert("left");
+    //   },
+    //   swipeRight: function() {
+    //     alert("right");
+    //   }// ,
+    //   // swipeUp: function() {
+    //   //   alert("up");
+    //   // },
+    //   // swipeDown: function() {
+    //   //   alert("down");
+    //   // }
+    // });
+
   },
 
+  // touchHandler: function(event) {
+  //   switch(event.type) {
+  //     case 'touchstart':
+  //       FlickerManager.initStartPosition(event);
+  //       break;
+  //     case 'touchmove':
+  //       FlickerManager.move(event, $(this));
+  //       break;
+  //     default:
+  //   }
+  // },
+
+
+  hoverGroup: function($group) {
+    $group.css('background:', '#111111');
+  },
+
+
   initGroupsContainer: function() {
-    this.$groupsContainer.html(this.Templates.groups( this.Group.all() ));
+    this.$groupsContainer.html(this.Templates.groups( _.inGroupsOf( this.Group.all(), this.cardsPerScreen)[0] ));
     this.rotateCards($('.group'));
   },
 
@@ -74,7 +124,7 @@ Kos.PocketUi = {
     var group = this.Group.find( groupId );
     this.$groupItemsContainer.html( this.Templates.groupItems(group) );
     this.rotateCards($('.group_item'));
-    this.displayInFrontScreen(this.$groupItemsContainer, group.title);
+    this.displayInFrontScreen( this.$groupItemsContainer, group.title );
     this.addHomeButtonToLeftNav();
   },
 
@@ -84,12 +134,13 @@ Kos.PocketUi = {
 
     this.$detailContainer.html( this.Templates.largeItem(item) );
     this.rotateCards($('.item'));
-    this.displayInFrontScreen(this.$detailContainer, item.title);
+    this.displayInFrontScreen( this.$detailContainer, item.title );
     // this.displayInDetailScreen(this.$detailContainer, item.title);
     this.addGroupsButtonToLeftNav(item);
   },
 
   displayInFrontScreen: function($element, title) {
+    // $("body").animate({ scrollTop: 0 }, 0);
     var $oldFrontScreen = $('.front_screen');
     $('.detail_screen').removeClass('detail_screen');
     $element.toggleClass('front_screen back_screen');
@@ -126,9 +177,10 @@ Kos.PocketUi = {
 
   rotateCards: function(cards) {
     cards.each(function() {
+      var rotateDegree = $(this).hasClass('middle') ? (Math.random() * 10 - 5) : (Math.random() * 5 - 2.5);
       $(this).css({
-        '-webkit-transform':        'rotate(' + (Math.random() * 5 - 2.5) + 'deg)',
-        '-webkit-transform-origin': (Math.random() * 40 + 30) + '% ' + (Math.random() * 40 + 30) + '%'
+        '-webkit-transform-origin': (Math.random() * 40 + 30) + '% ' + (Math.random() * 40 + 30) + '%',
+        '-webkit-transform': 'rotate(' + rotateDegree + 'deg)'
       });
     });
   },
@@ -187,9 +239,12 @@ Kos.PocketUi.Item.include({
 Kos.PocketUi.Templates = {
 
   containers: function() {
-    return "<div id='groups_container' class='back_screen'></div>" +
-           "<div id='group_items_container' class='back_screen'></div>" +
-           "<div id='detail_container' class='back_screen'></div>";
+    // return  "<div id ='debug'><span id='x'>x</span> <span id='y'>y</span></div>"+
+    return   "<div id='flicker_container'>" +
+               "<div id='groups_container' class='back_screen'></div>" +
+               "<div id='group_items_container' class='back_screen'></div>" +
+               "<div id='detail_container' class='back_screen'></div>" +
+             "</div>";
   },
 
   leftNavHomeButton: function() {
@@ -198,7 +253,7 @@ Kos.PocketUi.Templates = {
 
   groups: function(groups) {
     var templ =
-      "<ul id='groups' class='pageitemX'>" +
+      "<ul id='groups'>" +
         "<% _.each(groups, function(group) { %>" +
           "<li><%= Kos.PocketUi.Templates.group(group) %></li>" +
         "<% }); %>" +
@@ -207,11 +262,28 @@ Kos.PocketUi.Templates = {
   },
 
   group: function(group) {
+    // var templ =
+    //   "<div class='card_stack'>" +
+    //     "<div class='group small_card under'>" +
+    //       "<img src='<%= image_path %>'/><br/><%= title %>" +
+    //     "</div>" +
+    //     "<div class='group small_card upper' id='group_<%= id %>'>" +
+    //       "<img src='<%= image_path %>'/><br/><%= title %>" +
+    //     "</div>" +
+    //   "</div>";
+    // item_ids.length
     var templ =
       "<div class='card_stack'>" +
         "<div class='group small_card under'>" +
           "<img src='<%= image_path %>'/><br/><%= title %>" +
         "</div>" +
+        "<% if(item_ids.length > 1) { %>" +
+          "<% for (i = 1; i <= 2; i++) { %>" +
+            "<div class='group small_card middle'>" +
+              "<img src='<%= image_path %>'/><br/><%= title %>" +
+            "</div>" +
+          "<% }; %>" +
+        "<% }; %>" +
         "<div class='group small_card upper' id='group_<%= id %>'>" +
           "<img src='<%= image_path %>'/><br/><%= title %>" +
         "</div>" +
@@ -222,7 +294,7 @@ Kos.PocketUi.Templates = {
   groupItems: function(group) {
     var templ =
       "<div class='group_items' id='group_item_<%= group.id %>'>" +
-        "<ul class='pageitemX'>" +
+        "<ul>" +
           "<% _.each(group.items(), function(item) { %>" +
             "<li><%= Kos.PocketUi.Templates.smallItem(item) %></li>" +
           "<% }); %>" +
@@ -253,6 +325,18 @@ Kos.PocketUi.Templates = {
 // Kos.PocketUi.Template = _.template("<%= id %> <%= title %> <%= price %> <img src='<%= imagePath %>' /> <br />");
 
 
+_.extend(_, {
+  inGroupsOf: function(obj, number) {
+    var results = [];
+    _.each(obj, function(value, index, list) {
+      if( (index % number) === 0 ) {
+        results.push( list.slice(index, index + number) );
+      }
+    });
+    return results;
+  }
+});
+
 
 $(function(){
   // prevent scrolling via touch/swipe
@@ -264,3 +348,39 @@ $(function(){
 // for debugging
 var Item = Kos.PocketUi.Item;
 var Group = Kos.PocketUi.Group;
+
+// FlickerManager = {
+//   initStartPosition: function(event) {
+//     var touch = event.touches[0];
+//     this.started = true;
+//     this.startX = touch.pageX;
+//     this.startY = touch.pageY;
+//     this.threshold =  100;
+//   },
+//   
+//   move: function(event, $container) {
+//     var touch = event.touches[0];
+// 
+//     $('#x').html(touch.pageX);
+//     var currentPosition = $container.offset().left;
+// 
+//     if(touch.pageX > this.startX) {
+//       // right
+//       var nextPosition = currentPosition + touch.pageX - this.startX;
+//     }
+//     
+//     if(touch.pageX < this.startX) {
+//       // left
+//       var nextPosition = currentPosition + touch.pageX + this.startX;
+//     }
+//     
+//     $container.offset({left: nextPosition });
+// 
+// 
+//     // $($container).css({left: nextPosition + 'px'});
+//     $('#y').html(nextPosition);
+//     // $('#y').html($container.css('left'));
+// 
+//   }
+// };
+// 

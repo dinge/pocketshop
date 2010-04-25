@@ -1,6 +1,7 @@
 class Kos::PocketUi::ScreensView < Minimal::Template
 
-  Javascripts = %w(application jquery-1.4.2.min.js superclass supermodel underscore-min iwebkit/functions kos/pocket_ui)
+  Javascripts = %w( application jquery-1.4.2.min.js superclass supermodel 
+                    underscore-min jquery.multiswipe iwebkit/functions kos/pocket_ui)
   Stylesheets = %w(iwebkit/developer-style kos/pocket_ui) # %w(application)
 
 

@@ -41,7 +41,6 @@ class Kos::FestivalfieberLegacy::Tag
       parent.store.groups.each do |group|
         if (images = group.public_items).any?
           group.image_path = images.to_a.rand.image_path
-          puts group.image_path
         end
       end
     end

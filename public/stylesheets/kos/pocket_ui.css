@@ -1,3 +1,14 @@
+/*<link rel="stylesheet" media="all and (orientation:portrait)" href="portrait.css">
+<link rel="stylesheet" media="all and (orientation:landscape)" href="landscape.css">
+*/
+
+* { -webkit-user-select: none; }
+
+#flicker_container {
+/*  position: absolute;*/
+/*  background: #222222;*/
+}
+
 #groups_container {
 }
 
@@ -47,7 +58,8 @@
   -webkit-box-shadow: 1px 1px 2px #555555;
 }
 
-.small_card.under {
+.small_card.under,
+.small_card.middle {
   position: absolute;
 }
 
@@ -57,7 +69,6 @@
   height: 150px;
   /* 200px;*/
   -webkit-border-radius: 5px;
-  webkit-user-select: none;
 }
 
 .large_card {
@@ -87,7 +98,6 @@
 
 
 #content {
-  webkit-user-select: none;
 /*  -webkit-perspective: 500;*/
 /*  -webkit-transform-style: preserve-3d;*/
 

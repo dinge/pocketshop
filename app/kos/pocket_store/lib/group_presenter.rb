@@ -6,7 +6,9 @@ module Kos::PocketStore::GroupPresenter
         :title        => group.title,
         :image_path   => group.image_path,
         :item_ids     => group.public_items.map { |item| item.neo_id } }
-    end
+    end.sort_by do |group|
+      group[:item_ids].size
+    end.reverse
   end
 
 end
